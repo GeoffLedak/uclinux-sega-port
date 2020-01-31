@@ -1,1 +1,0 @@
-# uclinux-sega-port
