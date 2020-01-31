@@ -1,0 +1,76 @@
+fddi.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fddidevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/arp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h
+p8022.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/datalink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+p8022tr.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/datalink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022tr.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+p8023.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/datalink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h
+psnap.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/datalink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/psnap.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+sysctl_net_802.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sysctl.h
+tr.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/trdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/arp.h

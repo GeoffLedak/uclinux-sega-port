@@ -1,0 +1,19 @@
+namei.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/msdos_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nls.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   ../fat/msbuffer.h
+vfatfs_syms.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/msdos_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h

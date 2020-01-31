@@ -3,15 +3,15 @@
  * IE	//#define TLG_BLAH
  */
 
-//#define TLG_ADDUSER
-//#define TLG_ADDGROUP
-//#define TLG_DELUSER
-//#define TLG_DELGROUP
-//#define TLG_LOGIN
-//#define TLG_SU
+#define TLG_ADDUSER
+#define TLG_ADDGROUP
+#define TLG_DELUSER
+#define TLG_DELGROUP
+#define TLG_LOGIN
+#define TLG_SU
 //#define TLG_SULOGIN
-//#define TLG_PASSWD
-//#define TLG_GETTY
+#define TLG_PASSWD
+#define TLG_GETTY
 //#define TLG_VLOCK
 //
 //
@@ -22,7 +22,7 @@
 //
 //
 // Enable using shadow passwords
-//#define TLG_FEATURE_SHADOWPASSWDS
+#define TLG_FEATURE_SHADOWPASSWDS
 //
 // Enable checking of /etc/securetty by login
 //#define TLG_FEATURE_SECURETTY

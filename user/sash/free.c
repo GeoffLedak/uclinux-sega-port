@@ -30,7 +30,7 @@ do_free(argc, argv)
 	char buf[256];
 
 	f = fopen("/proc/meminfo", "r");
-	
+
 	if (!f) {
 		perror("Unable to open /proc/meminfo: ");
 		return;
@@ -41,6 +41,8 @@ do_free(argc, argv)
 		fputs(buf, stdout);
 	}
 	
+
 	fclose(f);
+
 }
 

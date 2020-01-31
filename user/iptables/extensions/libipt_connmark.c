@@ -1,35 +1,44 @@
-/* Shared library add-on to iptables to add CONNMARK matching support. */
+/* Shared library add-on to iptables to add CONNMARK target support. */
 #include <stdio.h>
-#include <netdb.h>
 #include <string.h>
 #include <stdlib.h>
 #include <getopt.h>
 
 #include <iptables.h>
-#include <linux/netfilter_ipv4/ipt_connmark.h>
+#include <linux/netfilter_ipv4/ip_tables.h>
+#include <linux/netfilter_ipv4/ipt_CONNMARK.h>
+
+#if 0
+struct markinfo {
+	struct ipt_entry_target t;
+	struct ipt_connmark_target_info mark;
+};
+#endif
 
 /* Function which prints out usage message. */
 static void
 help(void)
 {
 	printf(
-"CONNMARK match v%s options:\n"
-"[!] --mark value[/mask]         Match nfmark value with optional mask\n"
+"CONNMARK target v%s options:\n"
+"  --set-mark value              Set conntrack mark value\n"
+"  --save-mark                   Save the packet nfmark on the connection\n"
+"  --restore-mark                Restore saved nfmark value\n"
 "\n",
 IPTABLES_VERSION);
 }
 
 static struct option opts[] = {
-	{ "mark", 1, 0, '1' },
-	{0}
+	{ "set-mark", 1, 0, '1' },
+	{ "save-mark", 0, 0, '2' },
+	{ "restore-mark", 0, 0, '3' },
+	{ 0 }
 };
 
-/* Initialize the match. */
+/* Initialize the target. */
 static void
-init(struct ipt_entry_match *m, unsigned int *nfcache)
+init(struct ipt_entry_target *t, unsigned int *nfcache)
 {
-	/* Can't cache this. */
-	*nfcache |= NFC_UNKNOWN;
 }
 
 /* Function which parses command options; returns true if it
@@ -37,85 +46,113 @@ init(struct ipt_entry_match *m, unsigned int *nfcache)
 static int
 parse(int c, char **argv, int invert, unsigned int *flags,
       const struct ipt_entry *entry,
-      unsigned int *nfcache,
-      struct ipt_entry_match **match)
+      struct ipt_entry_target **target)
 {
-	struct ipt_connmark_info *markinfo = (struct ipt_connmark_info *)(*match)->data;
+	struct ipt_connmark_target_info *markinfo
+		= (struct ipt_connmark_target_info *)(*target)->data;
 
 	switch (c) {
 		char *end;
 	case '1':
-		check_inverse(optarg, &invert, &optind, 0);
+		markinfo->mode = IPT_CONNMARK_SET;
 		markinfo->mark = strtoul(optarg, &end, 0);
-		if (*end == '/') {
-			markinfo->mask = strtoul(end+1, &end, 0);
-		} else
-			markinfo->mask = 0xffffffff;
 		if (*end != '\0' || end == optarg)
 			exit_error(PARAMETER_PROBLEM, "Bad MARK value `%s'", optarg);
-		if (invert)
-			markinfo->invert = 1;
+		if (*flags)
+			exit_error(PARAMETER_PROBLEM,
+			           "CONNMARK target: Can't specify --set-mark twice");
 		*flags = 1;
 		break;
-
+	case '2':
+		markinfo->mode = IPT_CONNMARK_SAVE;
+		if (*flags)
+			exit_error(PARAMETER_PROBLEM,
+			           "CONNMARK target: Can't specify --save-mark twice");
+		*flags = 1;
+		break;
+	case '3':
+		markinfo->mode = IPT_CONNMARK_RESTORE;
+		if (*flags)
+			exit_error(PARAMETER_PROBLEM,
+			           "CONNMARK target: Can't specify --restore-mark twice");
+		*flags = 1;
+		break;
 	default:
 		return 0;
 	}
+
 	return 1;
 }
 
-static void
-print_mark(unsigned long mark, unsigned long mask, int numeric)
-{
-	if(mask != 0xffffffff)
-		printf("0x%lx/0x%lx ", mark, mask);
-	else
-		printf("0x%lx ", mark);
-}
-
-/* Final check; must have specified --mark. */
 static void
 final_check(unsigned int flags)
 {
 	if (!flags)
 		exit_error(PARAMETER_PROBLEM,
-			   "MARK match: You must specify `--mark'");
+		           "CONNMARK target: Parameter --set-mark is required");
 }
 
-/* Prints out the matchinfo. */
+static void
+print_mark(unsigned long mark, int numeric)
+{
+	printf("0x%lx ", mark);
+}
+
+/* Prints out the targinfo. */
 static void
 print(const struct ipt_ip *ip,
-      const struct ipt_entry_match *match,
+      const struct ipt_entry_target *target,
       int numeric)
 {
-	struct ipt_connmark_info *info = (struct ipt_connmark_info *)match->data;
-
-	printf("CONNMARK match ");
-	if (info->invert)
-		printf("!");
-	print_mark(info->mark, info->mask, numeric);
+	const struct ipt_connmark_target_info *markinfo =
+		(const struct ipt_connmark_target_info *)target->data;
+	switch (markinfo->mode) {
+	case IPT_CONNMARK_SET:
+	    printf("CONNMARK set ");
+	    print_mark(markinfo->mark, numeric);
+	    break;
+	case IPT_CONNMARK_SAVE:
+	    printf("CONNMARK save ");
+	    break;
+	case IPT_CONNMARK_RESTORE:
+	    printf("CONNMARK restore ");
+	    break;
+	default:
+	    printf("ERROR: UNKNOWN CONNMARK MODE ");
+	    break;
+	}
 }
 
-/* Saves the union ipt_matchinfo in parsable form to stdout. */
+/* Saves the union ipt_targinfo in parsable form to stdout. */
 static void
-save(const struct ipt_ip *ip, const struct ipt_entry_match *match)
+save(const struct ipt_ip *ip, const struct ipt_entry_target *target)
 {
-	struct ipt_connmark_info *info = (struct ipt_connmark_info *)match->data;
+	const struct ipt_connmark_target_info *markinfo =
+		(const struct ipt_connmark_target_info *)target->data;
 
-	if (info->invert)
-		printf("! ");
-
-	printf("--mark ");
-	print_mark(info->mark, info->mask, 0);
+	switch (markinfo->mode) {
+	case IPT_CONNMARK_SET:
+	    printf("--set-mark 0x%lx ", markinfo->mark);
+	    break;
+	case IPT_CONNMARK_SAVE:
+	    printf("--save-mark ");
+	    break;
+	case IPT_CONNMARK_RESTORE:
+	    printf("--restore-mark ");
+	    break;
+	default:
+	    printf("ERROR: UNKNOWN CONNMARK MODE ");
+	    break;
+	}
 }
 
 static
-struct iptables_match mark
+struct iptables_target mark
 = { NULL,
-    "connmark",
+    "CONNMARK",
     IPTABLES_VERSION,
-    IPT_ALIGN(sizeof(struct ipt_connmark_info)),
-    IPT_ALIGN(sizeof(struct ipt_connmark_info)),
+    IPT_ALIGN(sizeof(struct ipt_connmark_target_info)),
+    IPT_ALIGN(sizeof(struct ipt_connmark_target_info)),
     &help,
     &init,
     &parse,
@@ -127,5 +164,5 @@ struct iptables_match mark
 
 void _init(void)
 {
-	register_match(&mark);
+	register_target(&mark);
 }

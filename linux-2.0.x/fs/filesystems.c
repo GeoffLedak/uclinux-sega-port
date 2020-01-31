@@ -41,7 +41,9 @@ asmlinkage int sys_setup(void)
 	static int callable = 1;
 
 	if (!callable)
+	{
 		return -1;
+	}
 	callable = 0;
 
 	device_setup();
@@ -132,5 +134,6 @@ asmlinkage int sys_setup(void)
 	init_autofs_fs();
 #endif
 	mount_root();
+
 	return 0;
 }

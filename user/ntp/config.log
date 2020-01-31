@@ -1393,3 +1393,199 @@ This file was extended by config.status 2.52, executed with
 on goober
 
 config.status:15340: creating Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = util/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating util/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = kernel/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating kernel/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = kernel/sys/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating kernel/sys/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = clockstuff/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating clockstuff/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = adjtimed/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating adjtimed/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = parseutil/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating parseutil/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = ntptrace/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating ntptrace/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = ntpq/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating ntpq/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = ntpdc/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating ntpdc/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = ntpdate/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating ntpdate/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = ntpd/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating ntpd/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = libparse/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating libparse/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = libntp/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating libntp/Makefile
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by config.status 2.52, executed with
+  CONFIG_FILES    = librsaref/Makefile
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  > ./config.status 
+on ubuntu-VirtualBox
+
+config.status:15340: creating librsaref/Makefile

@@ -2111,6 +2111,9 @@ int tty_init(void)
         /* 2002-05-23 gc: */
         mpsc_init();
 #endif
+#ifdef CONFIG_FT245_SERIAL
+	ft245_init();
+#endif
 #ifdef CONFIG_SC28L91
 	rs_sc28l91_init();
 #endif

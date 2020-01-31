@@ -198,6 +198,7 @@ fi
 
 if [ "$CONFIG_M68000" = "y" ]; then
 	bool 'Weiss-Electronic SM2010 support' CONFIG_SM2010
+	bool 'BMOW 68Katy support' CONFIG_68KATY
 fi
 
 if [ "$CONFIG_PILOT3" = "y" -o \
@@ -486,6 +487,7 @@ fi
 
 if [ "$CONFIG_M68000" = "y" ]; then
 	bool 'NEC uPD72001-11 MPSC serial support' CONFIG_72001_SERIAL
+	bool 'FTDI FT245 serial support' CONFIG_FT245_SERIAL
 fi
 
 bool 'DS1743/DS1743P NVRAM/Clock support' CONFIG_DS1743

@@ -1,0 +1,106 @@
+b1capi.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/capi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/b1lli.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernelcapi.h \
+   compat.h \
+   capicmd.h \
+   capiutil.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+b1lli.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/capi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/b1lli.h \
+   compat.h \
+   capicmd.h \
+   capiutil.h
+b1pci.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   compat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/capi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/b1lli.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+capi.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/wait.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/capi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernelcapi.h \
+   compat.h \
+   capiutil.h \
+   capicmd.h \
+   capidev.h
+capidrv.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/wait.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdnif.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/capi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernelcapi.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h \
+   compat.h \
+   capiutil.h \
+   capicmd.h \
+   capidrv.h
+capiutil.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   compat.h \
+   capiutil.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/drv/avmb1/verbose/reason.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+capiutil.h: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/types.h
+	@touch capiutil.h
+compat.h: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdnif.h
+	@touch compat.h
+.PRECIOUS:	capiutil.h \
+	compat.h \
+

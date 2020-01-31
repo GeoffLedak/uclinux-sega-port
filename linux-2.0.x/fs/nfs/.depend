@@ -1,0 +1,140 @@
+bio.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfsiod.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pagemap.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h
+dir.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h
+file.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pagemap.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h
+inode.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfsiod.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/smp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/smp_lock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/unistd.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/smp.h)
+nfsiod.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/rpcsock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfsiod.h
+nfsroot.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/random.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/param.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/utsname.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/if.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/if_arp.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ax25.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ax25/module.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/ax25.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/route.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_mount.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/route.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/rnfs/bootp.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/rnfs/rarp.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ip/multicast.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/rnfs/dynamic.h)
+proc.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/param.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/utsname.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pagemap.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h
+rpcsock.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/rpcsock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/udp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h
+sock.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/rpcsock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h
+symlink.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/nfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h

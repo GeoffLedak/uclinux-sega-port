@@ -1,0 +1,54 @@
+af_unix.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/un.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/termios.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sockios.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/tcp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/af_unix.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/proc/fs.h)
+garbage.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/un.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/termios.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sockios.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/tcp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/af_unix.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h
+sysctl_net_unix.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sysctl.h

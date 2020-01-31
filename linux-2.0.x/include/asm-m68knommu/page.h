@@ -104,8 +104,12 @@ typedef unsigned long pgprot_t;
 #endif
 
 #ifdef CONFIG_M68000
+#ifdef CONFIG_68KATY
+#define PAGE_OFFSET		0x00080000
+#else
 /* 2002-05-14 gc: */
 #define PAGE_OFFSET		0x00000000
+#endif
 #endif
 
 #define MAP_NR(addr)		((((unsigned long)(addr)) - PAGE_OFFSET) >> PAGE_SHIFT)

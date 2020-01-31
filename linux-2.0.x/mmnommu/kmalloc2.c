@@ -333,7 +333,7 @@ no_bucket_page:
 			goto no_free_page;
 found_cached_page:
 
-		bucket->npages++;
+		bucket->npages++; /* SLC - bucket->npages += realpages? */
 
 		page->order = order | (realpages * PAGE_SIZE);
 		/* Loop for all but last block: */

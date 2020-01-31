@@ -1,0 +1,10 @@
+pci.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ptrace.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pcidevlist.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci/optimize.h)

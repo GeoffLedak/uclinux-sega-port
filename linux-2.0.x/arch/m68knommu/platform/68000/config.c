@@ -4,9 +4,10 @@
  * 
  *  linux/arch/m68knommu/platform/68000/config.c
  *
- *  uClinux version 2.0.x MC68000 SM2010 board initalization
+ *  uClinux version 2.0.x MC68000 board initalization
  *
  *  Author:     Guido Classen (classeng@clagi.de)
+ *              Steve Chamberlin (steve.chamberlin@gmail.com)
  *
  *  This program is free software;  you can redistribute it and/or modify it
  *  under the  terms of the GNU  General Public License as  published by the
@@ -26,6 +27,7 @@
  *
  *  Change history:
  *       2002-05-15 G. Classen: initial version for MC68000
+ *       2014-11-09 S. Chamberlin: cleaned up SM2010-specific code
  *
  */
  /****************************************************************************/
@@ -44,9 +46,19 @@
 #include <asm/irq.h>
 #include <asm/machdep.h>
 
+#ifdef CONFIG_SM2010
 #include "SM2010/sm2010_hw.h"
+void mpsc_console_initialize(void);
+#endif
+
+#ifdef CONFIG_68KATY
+#include "68Katy/68Katy_hw.h"
+void ft245_console_initialize(void);
+#endif
+
 void config_M68000_irq(void);
 
+#ifdef CONFIG_SM2010
 /* initialize timer hardware */
 static void sm2010_init_timer_hw(void)
 {
@@ -65,15 +77,19 @@ static void sm2010_init_timer_hw(void)
         SM2010_TIMER.counter1   = (SM2010_SIO_CLOCK_SYS / 1000) & 0xff;
         SM2010_TIMER.counter1   = (SM2010_SIO_CLOCK_SYS / 1000) >> 8;
 }
+#endif
 
+#ifdef CONFIG_SM2010
 static void timer1_interrupt(int irq, void *dummy, struct pt_regs * regs)
 {
         SM2010_RESET_TIMER_INT1 = 0;
 }
+#endif
 
 static void 
 BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
 {
+#ifdef CONFIG_SM2010
         /* initialize timer */
         sm2010_init_timer_hw();
         request_irq(SM2010_INT_NUM_TIMER2-VEC_SPUR, 
@@ -83,12 +99,27 @@ BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
 
         printk("\nMC68000 SM2010 support (C) 2002 Weiss-Electronic GmbH, "
                "Guido Classen\n");
+#endif
+#ifdef CONFIG_68KATY
+        request_irq(M68KATY_INT_NUM_TIMER-VEC_SPUR, 
+                    timer_routine, IRQ_FLG_LOCK, "timer", NULL);
+        request_irq(M68KATY_INT_NUM_SERIAL_AND_TIMER-VEC_SPUR, 
+                    timer_routine, IRQ_FLG_LOCK, "timer-and-serial", NULL);
+
+        printk("MC68000 68 Katy support by Big Mess o' Wires, "
+               "Steve Chamberlin\n");
+#endif
 }
 
 void BSP_tick(void)
 {
+#ifdef CONFIG_SM2010
         /* Reset Timer2 */
         SM2010_RESET_TIMER_INT2 = 0;
+#endif
+#ifdef CONFIG_68KATY
+	/* reset the timer interrupt */
+#endif
 }
 
 unsigned long BSP_gettimeoffset(void)
@@ -130,12 +161,16 @@ void BSP_reset (void)
         HARD_RESET_NOW();
 }
 
-void mpsc_console_initialize(void);
 
 
 void config_BSP(char *command, int len)
 {
+#ifdef CONFIG_SM2010
         mpsc_console_initialize();
+#endif
+#ifdef CONFIG_FT245_SERIAL
+	ft245_console_initialize();
+#endif
 
         mach_sched_init      = BSP_sched_init;
         mach_tick            = BSP_tick;
@@ -149,24 +184,8 @@ void config_BSP(char *command, int len)
 
         config_M68000_irq();
 
+#ifdef CONFIG_SM2010
         /* enable interrupts :-) */
         SM2010_BOARD_CONTROL = 0x1f;  
+#endif
 }
-
-/*
- *Local Variables:
- * mode: c
- * c-indent-level: 8
- * c-brace-imaginary-offset: 0
- * c-brace-offset: -8
- * c-argdecl-indent: 8
- * c-label-offset: -8
- * c-continued-statement-offset: 8
- * c-continued-brace-offset: 0
- * indent-tabs-mode: nil
- * c-file-style: "Linux"
- * fill-column: 76
- * tab-width: 8
- * time-stamp-pattern: "4/<%%>"
- * End:
- */

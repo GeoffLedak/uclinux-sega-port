@@ -1,0 +1,77 @@
+suncons.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty_flip.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kd.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   ../../char/kbd_kern.h \
+   ../../char/vt_kern.h \
+   ../../char/consolemap.h \
+   ../../char/selection.h \
+   ../../char/console_struct.h
+sunkbd.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty_flip.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ptrace.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/delay.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
+   ../../char/kbd_kern.h \
+   ../../char/diacr.h \
+   ../../char/vt_kern.h
+sunkeymap.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/keyboard.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kd.h
+sunmouse.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/miscdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/random.h
+sunserial.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty_flip.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/delay.h \
+   sunserial.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ap1000.h)

@@ -75,11 +75,11 @@ malloc(size_t len)
   * (size_t *) result = len;
   return result + 4;
 #else
-  void * result = mmap((void *)0, len, PROT_READ | PROT_WRITE,
+  void * result;
+  result = mmap((void *)0, len, PROT_READ | PROT_WRITE,
                  MAP_SHARED | MAP_ANONYMOUS, 0, 0);
   if (result == (void*)-1)
     return 0;
-    
   return result;
 #endif
 }

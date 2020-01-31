@@ -1131,6 +1131,13 @@ int is_in_rom(unsigned long addr)
 		return 0;
 #endif
 
+#ifdef CONFIG_68KATY
+	if (addr >= 0x00000000 && addr < 0x00080000)
+		return 1;
+	else
+		return 0;
+#endif
+
 	return(0); /* default case, not in ROM */
 }
 

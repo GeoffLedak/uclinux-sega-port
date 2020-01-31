@@ -1,0 +1,10 @@
+inode.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/romfs_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h

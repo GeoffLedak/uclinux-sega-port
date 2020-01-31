@@ -38,7 +38,7 @@ asmlinkage int do_page_fault(struct pt_regs *regs, unsigned long address,
 #ifdef DEBUG
 	printk ("regs->sr=%#x, regs->pc=%#lx, address=%#lx, %ld, %p\n",
 		regs->sr, regs->pc, address, error_code,
-		tsk->mm->pgd);
+		0 /*tsk->mm->pgd*/);
 #endif
 
 /*

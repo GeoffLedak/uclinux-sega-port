@@ -245,7 +245,7 @@ main(argc, argv, env)
 	char	*cp;
 /*	char	buf[PATHLEN];*/
 	int dofile = 0;
-	
+
 	if ((argc > 1) && !strcmp(argv[1], "-c")) {
 		/* We are that fancy a shell */
 		buf[0] = '\0';
@@ -469,7 +469,8 @@ command(cmd)
 		bg = 0;
 
 	/* Set the last exit code */
-	setenv("?", last_exit_code, 1);
+	/* SLC - disabled - setenv leaks memory */
+	/*setenv("?", last_exit_code, 1);*/
 	
 	if ((cmd = expandenvvar(cmd)) == NULL)
 		return;
@@ -508,15 +509,21 @@ command(cmd)
 		}
 	}
 		
+
 	/*
 	 * Now look for the command in the builtin table, and execute
 	 * the command if found.
 	 */
 #ifdef FAVOUR_EXTERNAL_COMMANDS
 	if (!command_in_path(argv[0]))
+	{
 #endif
 	if (trybuiltin(argc, argv))
 		return;
+#ifdef FAVOUR_EXTERNAL_COMMANDS
+	}
+#endif
+
 
 	/*
 	 * Not found, run the program along the PATH list.
@@ -592,7 +599,7 @@ trybuiltin(argc, argv)
 			return FALSE;
 
 	} while (strcmp(argv[0], cmdptr->name));
-	
+
 	/*
 	 * Give a usage string if the number of arguments is too large
 	 * or too small.

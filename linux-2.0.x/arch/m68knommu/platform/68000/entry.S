@@ -527,6 +527,33 @@ ENTRY(reschedule)
 
 ENTRY(system_call)
 	SAVE_ALL
+	/*moveb	#'Y',0x07A000
+	movel	%d0,%d2
+	asrb	#4,%d2
+	cmpb	#10,%d2
+	jcc	1f
+	addb	#'0',%d2
+	moveb	%d2,0x07A000
+	jmp	2f
+1:
+	addb	#'A'-10,%d2
+	moveb	%d2,0x07A000
+2:
+	movel	%d0,%d2
+	andb	#0xF,%d2
+	cmpb	#10,%d2
+	jcc	1f
+	addb	#'0',%d2
+	moveb	%d2,0x07A000
+	jmp	2f
+1:
+	addb	#'A'-10,%d2
+	moveb	%d2,0x07A000
+2:
+	movel	%d0,%d2
+	andb	#0xF,%d2*/
+
+
 	movel	#-LENOSYS,LD0(%sp)	/* default return value in d0 */
 					/* original D0 is in orig_d0 */
 	movel	%d0,%d2
@@ -549,6 +576,9 @@ ENTRY(system_call)
 	movel	%d3,%a0
 	jbsr	%a0@
 	movel	%d0,%sp@(LD0)		/* save the return value */
+
+	/*moveb	#'!',0x07A000*/
+
 	jra	SYMBOL_NAME(ret_from_exception)
 1:
 	subql	#4,%sp

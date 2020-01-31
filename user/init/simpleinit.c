@@ -239,6 +239,7 @@ static int do_rc(void)
 	int rc;
 
 	rc = do_command(_PATH_BSHELL, _PATH_RC, 1);
+
 	if (rc)
 		return(rc);
 #ifdef CONFIG_USER_INIT_RUN_FIREWALL
@@ -325,7 +326,10 @@ int main(int argc, char *argv[])
 	 * start up in single user mode if /etc/singleboot exists or if
 	 * argv[1] is "single".
 	 */
-	if(boot_single(0, argc, argv)) enter_single();
+	if(boot_single(0, argc, argv)) 
+	{
+		enter_single();
+	}
 
 #ifdef RUN_RC
 	/* Register console if defined by boot */

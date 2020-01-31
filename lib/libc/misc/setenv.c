@@ -35,6 +35,7 @@ static int extras = 0;
       {
          if (!overwrite)
          	return -1;
+	 /*free(*p);*/ /* SLC */
          while( p[0] = p[1] ) p++;
          extras++;
          break;

@@ -5,6 +5,10 @@ ifdef CONFIG_M68000
 PLATFORM := 68000
 endif
 
+ifdef CONFIG_68KATY
+BOARD := 68Katy
+endif
+
 ifdef CONFIG_SM2010
 BOARD := SM2010
 endif

@@ -1,0 +1,52 @@
+fault.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mman.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ptrace.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h
+init.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/swap.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/blk/dev/ram.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/setup.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/machdep.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/shglcore.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/net.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/coldfire.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/shglcore.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/blk/dev/initrd.h)
+memory.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/setup.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/traps.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/shglcore.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/m5407.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/coldfire.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/mwi.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pilot.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ucsimm.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pilot/incromfs.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ramkernel.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/m68ez328ads.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/shglcore.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/sm2010.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/68katy.h)

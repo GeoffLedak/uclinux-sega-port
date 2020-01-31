@@ -1,0 +1,16 @@
+bzero.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h
+checksum.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/checksum.h
+memcmp.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+memcpy.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/autoconf.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/coldfire.h)
+memset.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+semaphore.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/linkage.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/coldfire.h)

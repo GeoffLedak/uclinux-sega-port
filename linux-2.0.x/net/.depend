@@ -1,0 +1,122 @@
+netlink.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/lp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/netlink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h
+netsyms.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/trdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fddidevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/sock.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/inet.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ip.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/etherdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/protocol.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/arp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/ip.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/udp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/tcp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/icmp.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/route.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net_alias.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/netlink.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/netlink.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/net/alias.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net_alias.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ultra.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/wd80x3.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/el2.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ne2000.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/e2100.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hplan/plus.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hplan.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ac3200.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ultra32.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ne2k/pci.h) \
+   ../drivers/net/8390.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ipx/module.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/dlci/module.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/tr.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/fddi.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net_alias.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+protocols.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/unix.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/af_unix.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/inet.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ipx.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ipx/module.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/ipxcall.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022call.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022trcall.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ax25.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/ax25call.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/netrom.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/nrcall.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/rose.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/rosecall.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atalk.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atalk/module.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022call.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/p8022trcall.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/atalkcall.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/psnapcall.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/tr.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/trdevice.h
+socket.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/file.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/firewall.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/kerneld.h) \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kerneld.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/netlink.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/modules.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/net.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/netlink.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/rtnetlink.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/firewall.h)
+sysctl_net.o: \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sysctl.h \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/inet.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/ipx.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atalk.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/net.h) \
+   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/bridge.h)

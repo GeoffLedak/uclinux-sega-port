@@ -57,7 +57,7 @@ int try_to_free_page(int priority, int dma, int wait)
 		i--;
         } while ((i - stop) >= 0);
 
-	printk("Failed to free page\n");
+	printk("Can't find a free page for pid %d\n", current->pid);
 	return 0;
 }
 

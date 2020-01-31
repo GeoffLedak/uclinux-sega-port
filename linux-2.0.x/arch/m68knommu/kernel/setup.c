@@ -224,7 +224,7 @@ void setup_console(void)
 #endif
 }
 
-#if defined( CONFIG_TELOS) || defined( CONFIG_UCSIMM ) || (defined( CONFIG_PILOT ) && defined( CONFIG_M68328 ))
+#if defined( CONFIG_TELOS) || defined( CONFIG_UCSIMM ) || (defined( CONFIG_PILOT ) && defined( CONFIG_M68328 )) || defined( CONFIG_68KATY )
 #define CAT_ROMARRAY
 #endif
 
@@ -367,8 +367,11 @@ void setup_arch(char **cmdline_p,
 #endif
 	*memory_start_p = memory_start;
 	*memory_end_p = memory_end;
-	/*rom_length = (unsigned long)&_flashend - (unsigned long)&_romvec;*/
-	
+	{
+		extern char _flashend, _romvec;
+		rom_length = (unsigned long)&_flashend - (unsigned long)&_romvec;
+	}
+
 #ifdef CONFIG_CONSOLE
 #ifdef CONFIG_FRAMEBUFFER
 	conswitchp = &fb_con;

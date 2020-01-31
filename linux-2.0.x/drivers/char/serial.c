@@ -1503,7 +1503,7 @@ static int rs_write(struct tty_struct * tty, int from_user,
 	int	c, total = 0;
 	struct async_struct *info = (struct async_struct *)tty->driver_data;
 	unsigned long flags;
-				
+	
 	if (serial_paranoia_check(info, tty->device, "rs_write"))
 		return 0;
 

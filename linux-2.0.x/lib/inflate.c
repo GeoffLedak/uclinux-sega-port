@@ -1,3 +1,8 @@
+#ifdef DEBUG
+/* SLC */
+int stderr = 2;
+#endif
+
 #define DEBG(x)
 #define DEBG1(x)
 /* inflate.c -- Not copyrighted 1992 by Mark Adler
@@ -990,7 +995,7 @@ STATIC int inflate()
 
   /* return success */
 #ifdef DEBUG
-  fprintf(stderr, "<%u> ", h);
+  /* SLC: fprintf(stderr, "<%u> ", h); */
 #endif /* DEBUG */
   return 0;
 }

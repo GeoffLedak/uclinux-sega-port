@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /* 
- *  ints.c v1.0 <2003-07-28 17:50:24 gc>
+ *  ints.c v1.0
  * 
  *  linux/arch/m68knommu/platform/68000/ints.c
  *
@@ -26,7 +26,7 @@
  *
  *  Change history:
  *       2002-05-15 G. Classen: initial version for MC68000
- *
+ *       2014-11-09 S. Chamberlin: 68Katy support
  */
  /****************************************************************************/
 
@@ -105,10 +105,51 @@ static void int_badint(int irq, void *dev_id, struct pt_regs *fp)
  * the IRQ handling routines.
  */
 
+#ifdef CONFIG_68KATY
+struct jtable_entry 
+{
+	unsigned short opcode;
+	unsigned long address;
+};
+#endif
+
 static void M68000_init_IRQ(void)
 {
 	int i;
 
+#ifdef CONFIG_68KATY
+	/* 68Katy uses a 33-entry jump table for vector indirection */
+	struct jtable_entry* jtable = (struct jtable_entry*)_ramvec;
+	for (i=0; i<33; ++i)
+	{
+	  /* 4EF9 is opcode for jmp long */
+	  jtable[i].opcode = 0x4EF9;
+	  /*TEST, leave monitor mappings. jtable[i].address = (unsigned long) bad_interrupt;*/
+	}
+
+	/* set up the vectors */
+	/*jtable[32].address     = buserr;*/
+	/*jtable[31].address    = trap3; /* address error */
+	/*jtable[30].address    = trap4; /* illegal */
+	/*jtable[29].address    = trap5; /* zero div */
+	/*jtable[28].address        = trap6; /* chk */
+	/*jtable[27].address       = trap7; /* trapv */
+	/*jtable[26].address       = trap8; /* privilege */
+	/*jtable[25].address      = trap9; /* trace */
+	/*jtable[24].address     = trap10; /* line A */
+	/*jtable[23].address     = trap11; /* line F */
+        
+	jtable[22].address       = inthandler1;
+	jtable[21].address       = inthandler2;
+	jtable[20].address       = inthandler3;
+	jtable[19].address       = inthandler4;
+	jtable[18].address       = inthandler5;
+	jtable[17].address       = inthandler6;
+	jtable[16].address       = inthandler7;
+        
+	jtable[15].address       = system_call;
+	
+#else
 #if 1
         for (i=2; i<=0xff; ++i) {
           _ramvec[i] = bad_interrupt;
@@ -139,8 +180,8 @@ static void M68000_init_IRQ(void)
 	_ramvec[VEC_INT7]       = inthandler7;
         
 	_ramvec[VEC_SYS]        = system_call;
+#endif
 
- 
 	/* initialize handlers */
 	for (i = 0; i < INTERNAL_IRQS; i++) {
 		int_irq_list[i] = NULL;
