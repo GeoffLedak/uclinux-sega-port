@@ -35,8 +35,8 @@ MEMORY
     /* interrupt vectors in RAM */
     ramvec   : ORIGIN = 0x000fff3a, LENGTH = 198
 
-    rom (rx) : ORIGIN = 0x00000000, LENGTH = 0x00400000
-    ram (wx) : ORIGIN = 0x00FF0000, LENGTH = 0x00010000
+    rom (rx) : ORIGIN = 0x00000000, LENGTH = 0x00300000
+    ram (wx) : ORIGIN = 0x00300000, LENGTH = 0x00100000
 }
 
 /*
@@ -44,7 +44,7 @@ MEMORY
  * grows down
  */
 
-PROVIDE (__stack = 0x01000000);
+PROVIDE (__stack = 0x00400000);
 
 SECTIONS
 {
@@ -123,7 +123,7 @@ SECTIONS
     _ramvec = . ;
     } > ramvec
 
-  .data 0x00FF0000 :
+  .data 0x00300000 :
   AT ( LOADADDR (.text) + SIZEOF (.text) )
   {
     __data_start = .;
@@ -142,7 +142,7 @@ SECTIONS
 
     _edata = . ;
     edata = ALIGN( 0x10 ) ;
-    
+
   } > ram
   __data_size = __data_end - __data_start;
 
