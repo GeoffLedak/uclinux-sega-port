@@ -1,28 +1,28 @@
 br.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/socket.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/net.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/inet.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/netdevice.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/if_arp.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/br.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/socket.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/net.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/inet.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/netdevice.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/if_arp.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/net/br.h
 br_tree.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/skbuff.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/br.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/skbuff.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/net/br.h
 sysctl_net_bridge.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sysctl.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sysctl.h

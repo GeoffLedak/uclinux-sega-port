@@ -5,6 +5,16 @@
 # removes any old dependencies. DON'T put your own dependencies here
 # unless it's something special (ie not a .c file).
 #
+
+
+AS = m68k-elf-as
+ASFLAGS = -m68000 --register-prefix-optional
+
+
+$(BOARD)/crt0_rom.o: $(BOARD)/crt0_rom.S
+	$(AS) $(ASFLAGS) $< -o $@
+
+
 .S.o:
 	$(CC) -D__ASSEMBLY__ $(AFLAGS) -c $< -o $*.o
 

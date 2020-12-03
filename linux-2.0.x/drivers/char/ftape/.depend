@@ -1,35 +1,35 @@
 calibr.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    tracing.h \
    calibr.h \
    fdc-io.h
 calibr.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timex.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timex.h
 	@touch calibr.h
 ecc.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/errno.h \
    tracing.h \
    ecc.h
 fc-10.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    tracing.h \
    fdc-io.h \
    fc-10.h
 fdc-io.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    tracing.h \
    fdc-io.h \
    fdc-isr.h \
@@ -39,12 +39,12 @@ fdc-io.o: \
    fc-10.h \
    qic117.h
 fdc-io.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fdreg.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fdreg.h
 	@touch fdc-io.h
 fdc-isr.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
    tracing.h \
    fdc-isr.h \
    qic117.h \
@@ -55,17 +55,17 @@ fdc-isr.o: \
    calibr.h \
    ftape-bsm.h
 ftape-bsm.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
    tracing.h \
    ftape-bsm.h \
    ftape-ctl.h \
    ftape-rw.h
 ftape-ctl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
    tracing.h \
    ftape-eof.h \
    ftape-io.h \
@@ -76,14 +76,14 @@ ftape-ctl.o: \
    qic117.h \
    ftape-bsm.h
 ftape-ctl.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mtio.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mtio.h \
    vendors.h
 	@touch ftape-ctl.h
 ftape-eof.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
    tracing.h \
    ftape-eof.h \
    ftape-write.h \
@@ -92,14 +92,14 @@ ftape-eof.o: \
    ftape-ctl.h \
    ftape-bsm.h
 ftape-io.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mtio.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mtio.h \
    tracing.h \
    fdc-io.h \
    qic117.h \
@@ -115,11 +115,11 @@ ftape-io.h: \
    vendors.h
 	@touch ftape-io.h
 ftape-read.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
    tracing.h \
    ftape-read.h \
    qic117.h \
@@ -131,9 +131,9 @@ ftape-read.o: \
    ecc.h \
    ftape-bsm.h
 ftape-rw.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
    tracing.h \
    ftape-rw.h \
    fdc-io.h \
@@ -150,11 +150,11 @@ ftape-rw.h: \
    kernel-interface.h
 	@touch ftape-rw.h
 ftape-write.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
    tracing.h \
    ftape-write.h \
    ftape-read.h \
@@ -166,17 +166,17 @@ ftape-write.o: \
    ecc.h \
    ftape-bsm.h
 kernel-interface.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
    tracing.h \
    kernel-interface.h \
    ftape-read.h \
@@ -186,14 +186,14 @@ kernel-interface.o: \
    ftape-rw.h \
    fdc-io.h
 kernel-interface.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/linkage.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/linkage.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h
 	@touch kernel-interface.h
 tracing.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ftape.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ftape.h \
    tracing.h
 tracing.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h
 	@touch tracing.h
 .PRECIOUS:	calibr.h \
 	fdc-io.h \

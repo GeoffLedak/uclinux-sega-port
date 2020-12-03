@@ -1,42 +1,42 @@
 msg.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/msg.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kerneld.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/kerneld.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/msg.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kerneld.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/kerneld.h)
 sem.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sem.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ipc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sem.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ipc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h
 shm.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ipc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/shm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/swap.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/swapctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ipc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/shm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/swap.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/swapctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h
 util.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sem.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/msg.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/shm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/sysvipc.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/kerneld.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sem.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/msg.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/shm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/sysvipc.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/kerneld.h)

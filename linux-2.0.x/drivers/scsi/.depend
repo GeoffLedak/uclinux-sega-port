@@ -1,262 +1,262 @@
 53c7,8xx.o:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c7xx/sync.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c7xx/disconnect.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/time.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c7xx/sync.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c7xx/disconnect.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/time.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    53c7,8xx.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c7xx/fast.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stddef.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c7xx/fast.h) \
    53c8xx_d.h \
    53c8xx_u.h \
    scsi_module.c
 53c7,8xx.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 	@touch 53c7,8xx.h
 AM53C974.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
    scsi.h \
    hosts.h \
    AM53C974.h \
    constants.h \
    sd.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    scsi_module.c
 AM53C974.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 	@touch AM53C974.h
 BusLogic.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blkdev.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blkdev.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
    scsi.h \
    hosts.h \
    sd.h \
    BusLogic.h \
    FlashPoint.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/omit/flashpoint.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/omit/flashpoint.h) \
    scsi_module.c
 BusLogic.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/omit/flashpoint.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/omit/flashpoint.h)
 	@touch BusLogic.h
 FlashPoint.o:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/omit/flashpoint.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/omit/flashpoint.h)
 NCR5380.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h
 NCR53c406a.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
    NCR53c406a.h \
    scsi_module.c
 a2091.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bootinfo.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bootinfo.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    scsi.h \
    hosts.h \
    wd33c93.h \
    a2091.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 a2091.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h
 	@touch a2091.h
 a3000.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bootinfo.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bootinfo.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    scsi.h \
    hosts.h \
    wd33c93.h \
    a3000.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 a3000.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h
 	@touch a3000.h
 advansys.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi.h \
    hosts.h \
    sd.h \
    advansys.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
    scsi_module.c
 advansys.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch advansys.h
 aha152x.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    sd.h \
    hosts.h \
    constants.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/wait.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/wait.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
    aha152x.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
    scsi_module.c
 aha152x.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h
 	@touch aha152x.h
 aha1542.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    aha1542.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    sd.h \
    scsi_module.c
 aha1542.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch aha1542.h
 aha1740.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
    aha1740.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi_module.c
 aha1740.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch aha1740.h
 aic7xxx.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tasks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tasks.h \
    sd.h \
    scsi.h \
    hosts.h \
@@ -264,690 +264,690 @@ aic7xxx.o: \
    aic7xxx/sequencer.h \
    aic7xxx/scsi_message.h \
    aic7xxx_reg.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/smp.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/aic7xxx/cmds/per/device.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/aic7xxx/reset/delay.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/aic7xxx/proc/stats.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/aic7xxx/tcq/on/by/default.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/smp.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/aic7xxx/cmds/per/device.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/aic7xxx/reset/delay.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/aic7xxx/proc/stats.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/aic7xxx/tcq/on/by/default.h) \
    aic7xxx_seq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    aic7xxx_proc.c \
    scsi_module.c
 aic7xxx.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch aic7xxx.h
 aic7xxx_proc.o:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/aic7xxx/tcq/on/by/default.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/aic7xxx/tcq/on/by/default.h)
 atari_NCR5380.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atari/scsi/toshiba/delay.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/atari/scsi/toshiba/delay.h)
 atari_scsi.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bootinfo.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/traps.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stddef.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bootinfo.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/traps.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
    scsi.h \
    hosts.h \
    atari_scsi.h \
    NCR5380.h \
    constants.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atari/scsi/toshiba/delay.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/atari/scsi/toshiba/delay.h) \
    atari_NCR5380.c \
    scsi_module.c
 atp870u.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    atp870u.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    sd.h \
    scsi_module.c
 atp870u.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch atp870u.h
 constants.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
    scsi.h \
    hosts.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/constants.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/constants.h)
 dc390.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 	@touch dc390.h
 dtc.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    scsi.h \
    hosts.h \
    dtc.h \
    NCR5380.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
    NCR5380.c \
    scsi_module.c
 eata.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    eata.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata/tagged/queue.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata/linked/commands.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata/max/tags.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata/tagged/queue.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata/linked/commands.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata/max/tags.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    scsi_module.c
 eata.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch eata.h
 eata_dma.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    sd.h \
    hosts.h \
    eata_dma.h \
    eata_dma_proc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    eata_dma_proc.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    scsi_module.c
 eata_dma.h: \
    eata_generic.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 	@touch eata_dma.h
 eata_pio.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    eata_pio.h \
    eata_dma_proc.h \
    scsi.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    eata_pio_proc.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    scsi_module.c
 eata_pio.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
    eata_generic.h
 	@touch eata_pio.h
 esp.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi.h \
    hosts.h \
    esp.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/ptrace.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/ptrace.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h
 esp.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h
 	@touch esp.h
 fdomain.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    fdomain.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    scsi_module.c
 g_NCR5380.o:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/generic/ncr53c400.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/g/ncr5380/port.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/g/ncr5380/mem.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/generic/ncr53c400.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/g/ncr5380/port.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/g/ncr5380/mem.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    g_NCR5380.h \
    NCR5380.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    NCR5380.c \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
    scsi_module.c
 g_NCR5380.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/g/ncr5380/port.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/g/ncr5380/port.h)
 	@touch g_NCR5380.h
 gdth.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/in.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/time.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/in.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/time.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
    gdth.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    gdth_proc.h \
    gdth_proc.c \
    scsi_module.c
 gdth.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h
 	@touch gdth.h
 gdth_proc.o: \
    gdth_ioctl.h
 gvp11.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/pgtable.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bootinfo.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bootinfo.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    scsi.h \
    hosts.h \
    wd33c93.h \
    gvp11.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 gvp11.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h
 	@touch gvp11.h
 hosts.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
    scsi.h \
    hosts.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/a3000/scsi.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/a3000/scsi.h) \
    a3000.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/a2091/scsi.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/a2091/scsi.h) \
    a2091.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/gvp11/scsi.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/gvp11/scsi.h) \
    gvp11.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atari/scsi.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/atari/scsi.h) \
    atari_scsi.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/advansys.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/advansys.h) \
    advansys.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/aha152x.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/aha152x.h) \
    aha152x.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/aha1542.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/aha1542.h) \
    aha1542.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/aha1740.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/aha1740.h) \
    aha1740.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/aic7xxx.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/aic7xxx.h) \
    aic7xxx.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/buslogic.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/buslogic.h) \
    BusLogic.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata/dma.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata/dma.h) \
    eata_dma.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata/pio.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata/pio.h) \
    eata_pio.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/u14/34f.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/u14/34f.h) \
    u14-34f.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/future/domain.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/future/domain.h) \
    fdomain.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/generic/ncr5380.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/generic/ncr5380.h) \
    g_NCR5380.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/in2000.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/in2000.h) \
    in2000.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/pas16.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/pas16.h) \
    pas16.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/qlogic/fas.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/qlogic/fas.h) \
    qlogicfas.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/qlogic/isp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/qlogic/isp.h) \
    qlogicisp.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/seagate.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/seagate.h) \
    seagate.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/t128.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/t128.h) \
    t128.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/dtc3280.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/dtc3280.h) \
    dtc.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c7xx.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c7xx.h) \
    53c7,8xx.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx.h) \
    ncr53c8xx.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ultrastor.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ultrastor.h) \
    ultrastor.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/7000fasst.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/7000fasst.h) \
    wd7000.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/eata.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/eata.h) \
    eata.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c406a.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c406a.h) \
    NCR53c406a.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/sym53c416.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/sym53c416.h) \
    sym53c416.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/dc390t.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/dc390t.h) \
    dc390.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/am53c974.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/am53c974.h) \
    AM53C974.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/megaraid.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/megaraid.h) \
    megaraid.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ppa.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ppa.h) \
    ppa.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/acard.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/acard.h) \
    atp870u.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/sunesp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/sunesp.h) \
    esp.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/blk/dev/idescsi.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/blk/dev/idescsi.h) \
    ide-scsi.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/gdth.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/gdth.h) \
    gdth.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/initio.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/initio.h) \
    ini9100u.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/tc2550.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/tc2550.h) \
    tripace.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/inia100.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/inia100.h) \
    inia100.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/pci2000.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/pci2000.h) \
    pci2000.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/pci2220i.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/pci2220i.h) \
    pci2220i.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/psi240i.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/psi240i.h) \
    psi240i.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/debug.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/debug.h) \
    scsi_debug.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/amiga.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/atari.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/proc/fs.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/blk/dev/sd.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/blk/dev/sr.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/chr/dev/st.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/chr/dev/sg.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/amiga.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/atari.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/proc/fs.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/blk/dev/sd.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/blk/dev/sr.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/chr/dev/st.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/chr/dev/sg.h)
 hosts.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h
 	@touch hosts.h
 i60uscsi.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    i60uscsi.h
 i60uscsi.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/adr.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/adr.h)
 	@touch i60uscsi.h
 i91uscsi.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    i91uscsi.h
 i91uscsi.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/adr.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/adr.h)
 	@touch i91uscsi.h
 ide-scsi.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blkdev.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/hdreg.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blkdev.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/hdreg.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
    ../block/ide.h \
    scsi.h \
    hosts.h \
    sd.h \
    ide-scsi.h
 in2000.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blkdev.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blkdev.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi.h \
    sd.h \
    hosts.h \
    in2000.h \
    scsi_module.c
 in2000.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch in2000.h
 ini9100u.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    sd.h \
    scsi.h \
    hosts.h \
    ini9100u.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    scsi.h \
    sd.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
    ini9100u.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
    scsi_module.c
 ini9100u.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
    sd.h
 	@touch ini9100u.h
 inia100.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    sd.h \
    scsi.h \
    hosts.h \
    inia100.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    scsi.h \
    sd.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
    inia100.h \
    scsi_module.c
 inia100.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
    sd.h
 	@touch inia100.h
 megaraid.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/wait.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/wait.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    sd.h \
    scsi.h \
    hosts.h \
    megaraid.h \
    scsi_module.c
 megaraid.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch megaraid.h
 ncr53c8xx.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/time.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/time.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    scsi.h \
    hosts.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
    ncr53c8xx.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    scsi_module.c
 ncr53c8xx.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/nvram/detect.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/profile.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/max/tags.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/default/tags.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/tagged/queue.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/iomapped.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/sync.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/no/disconnect.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/force/sync/nego.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/disable/mparity/check.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/disable/parity/check.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ncr53c8xx/symbios/compat.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/nvram/detect.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/profile.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/max/tags.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/default/tags.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/tagged/queue.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/iomapped.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/sync.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/no/disconnect.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/force/sync/nego.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/disable/mparity/check.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/disable/parity/check.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ncr53c8xx/symbios/compat.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 	@touch ncr53c8xx.h
 pas16.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    pas16.h \
    NCR5380.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    NCR5380.c \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
    scsi_module.c
 pci2000.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    pci2000.h \
    psi_roy.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 pci2000.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch pci2000.h
 pci2220i.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    scsi.h \
    hosts.h \
    pci2220i.h
@@ -955,334 +955,334 @@ pci2220i.h: \
    psi_dale.h
 	@touch pci2220i.h
 ppa.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    sd.h \
    hosts.h \
    ppa.h \
    scsi_module.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ppa/have/pedantic.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ppa/have/pedantic.h)
 ppa.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/ppa/have/pedantic.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/ppa/have/pedantic.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stddef.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
    sd.h \
    hosts.h
 	@touch ppa.h
 psi240i.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    psi240i.h \
    psi_chip.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    sd.h \
    scsi_module.c
 psi240i.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch psi240i.h
 qlogicfas.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/unistd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/unistd.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    sd.h \
    hosts.h \
    qlogicfas.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi_module.c
 qlogicisp.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/unistd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/unistd.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    sd.h \
    hosts.h \
    qlogicisp.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
    qlogicisp_asm.c \
    scsi_module.c
 scsi.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
    scsi.h \
    hosts.h \
    constants.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/kerneld.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kerneld.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/modules.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/proc/fs.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/multi/lun.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/kerneld.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kerneld.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/modules.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/proc/fs.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/multi/lun.h)
 scsi.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/random.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/random.h \
    hosts.h
 	@touch scsi.h
 scsi_debug.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/genhd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/genhd.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi_debug.h \
    scsi_module.c
 scsi_debug.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch scsi_debug.h
 scsi_ioctl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/page.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/page.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h
 scsi_module.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h
 scsi_proc.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h
 scsi_syms.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/modules.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/modules.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
    scsi.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    hosts.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/proc/fs.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/proc/fs.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h
 scsicam.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/genhd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/unaligned.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/genhd.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/unaligned.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 sd.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    constants.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/genhd.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/genhd.h
 sd.h: \
    scsi.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/genhd.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/genhd.h
 	@touch sd.h
 sd_ioctl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/hdreg.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/hdreg.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h
 seagate.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    seagate.h \
    constants.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/seagate.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/seagate/module.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/seagate.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/seagate/module.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    scsi_module.c
 seagate.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch seagate.h
 sg.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mtio.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mtio.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/sg.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/sg.h
 sr.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/cdrom.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/cdrom.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sr.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    constants.h
 sr.h: \
    scsi.h
 	@touch sr.h
 sr_ioctl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sr.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/cdrom.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/cdrom.h
 st.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mtio.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mtio.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsi_ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsi_ioctl.h \
    st.h \
    constants.h \
    st_options.h
@@ -1290,192 +1290,192 @@ st.h: \
    scsi.h
 	@touch st.h
 sym53c416.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
    sym53c416.h \
    scsi_module.c
 sym53c416.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch sym53c416.h
 t128.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    t128.h \
    NCR5380.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    NCR5380.c \
    scsi_module.c
 tmscsim.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    constants.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    dc390.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/smp.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/smp.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    tmscsim.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/dc390t/nogensupp.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/multi/lun.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/dc390t/tradmap.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/unaligned.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/dc390t/nogensupp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/multi/lun.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/dc390t/tradmap.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/unaligned.h \
    scsiiom.c \
    scsi_module.c
 tmscsim.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/smp.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/smp.h)
 	@touch tmscsim.h
 tripace.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    tripace.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
    tripace_mcode.h \
    sd.h
 u14-34f.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/irq.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/irq.h \
    u14-34f.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/u14/34f/linked/commands.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/scsi/u14/34f/max/tags.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/u14/34f/linked/commands.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/scsi/u14/34f/max/tags.h) \
    scsi_module.c
 u14-34f.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h
 	@touch u14-34f.h
 ultrastor.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stddef.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    ultrastor.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi_module.c
 ultrastor.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch ultrastor.h
 wd33c93.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
    scsi.h \
    hosts.h \
    wd33c93.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
    scsi_module.c
 wd7000.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/head.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/dma.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/proc_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/blk.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/head.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/dma.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/proc_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/blk.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
    scsi.h \
    hosts.h \
    sd.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/scsi/scsicam.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/scsi/scsicam.h \
    wd7000.h \
    scsi_module.c
 wd7000.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kdev_t.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kdev_t.h
 	@touch wd7000.h
 .PRECIOUS:	53c7,8xx.h \
 	AM53C974.h \

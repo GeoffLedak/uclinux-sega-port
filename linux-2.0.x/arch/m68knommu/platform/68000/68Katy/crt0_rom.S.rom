@@ -1,90 +1,177 @@
-/*****************************************************************************/
-/* 
- *  crt0_rom.S v1.0 <2003-07-28 17:43:30 gc>
- * 
- *  linux/arch/m68knommu/platform/68000/68Katy/crt0_rom.S
- *
- *  boot code for 68Katy board
- *  you probably need an own version of this file for your board
- *
- *  Author:     Steve Chamberlin (steve.chamberlin@gmail.com)
- *
- *  This program is free software;  you can redistribute it and/or modify it
- *  under the  terms of the GNU  General Public License as  published by the
- *  Free Software Foundation.  See the file COPYING in the main directory of
- *  this archive for more details.
- *
- *  This program  is distributed  in the  hope that it  will be  useful, but
- *  WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
- *  MERCHANTABILITY  or  FITNESS FOR  A  PARTICULAR  PURPOSE.   See the  GNU
- *  General Public License for more details.
- * *
- *  Change history:
- *
- */
- /****************************************************************************/
+| SEGA MegaDrive support code
+| by Chilly Willy
 
-#define M68KATY_LED 0x07E000
-        
-	
-.global _stext
-.global _start
-.global _boot_stack
-.global boot_entry        
-        	.text
-_start:
-_stext:
-#        movew #0, %d0
-#loop:
-#        movew %d0, 68KATY_LED
-#        addqw #1, %d0
-#        movel #50000, %d1
-#loop1:  
-#        dbf %d1, loop1
-#        bra loop
+        .text
 
-	nop
-	movew	#0x2700, %sr		/* disable interrupts: */
-	moveal	#_boot_stack, %sp	/* set up stack at the end of RAM: */
+| Initial exception vectors
 
+        .long   0x01000000,initialize,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,hblank,exception,vblank,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
 
+| Standard MegaDrive ROM header at 0x100
 
-#if 1
-	/* Copy data segment from ROM to RAM */
-	moveal	#__data_rom_start, %a0
-	moveal	#__data_start, %a1
-	moveal	#__data_end, %a2
+        .ascii  "SEGA MD Keyboard"      /* SEGA must be the first four chars for TMSS */
+        .ascii  "(C)2018         "
+        .ascii  "XBAND Keyboard  "      /* export name */
+        .ascii  "test ROM        "
+        .ascii  "                "
+        .ascii  "XBAND Keyboard  "      /* domestic (Japanese) name */
+        .ascii  "test ROM        "
+        .ascii  "                "
+        .ascii  "GM MK-0000 -00"
+        .word   0x0000                  /* checksum - not needed */
+        .ascii  "J6              "
+        .long   0x00000000,0x0007FFFF   /* ROM start, end */
+        .long   0x00FF0000,0x00FFFFFF   /* RAM start, end */
 
-	/* Copy %a0 to %a1 until %a1 == %a2 */
-LD1:
-	movel	%a0@+, %d0
-	movel	%d0, %a1@+
-	cmpal	%a1, %a2
-	bhi	LD1
-#endif
+        .ifdef  HAS_SAVE_RAM
+        .ascii  "RA"                    /* External RAM */
+        .byte   0xF8                    /* don't clear + odd bytes */
+        .byte   0x20                    /* SRAM */
+        .long   0x00200001,0x0020FFFF   /* SRAM start, end */
+        .else
+        .ascii  "            "          /* no SRAM */
+        .endif
 
-	moveal	#__bss_start, %a0
-	moveal	#end, %a1
+        .ascii  "    "
+        .ascii  "        "
 
-	/* Copy 0 to %a0 until %a0 == %a1 */
-L1:
-	movel	#0, %a0@+
-	cmpal	%a0, %a1
-	bhi	L1
+        .ifdef  MYTH_HOMEBREW
+        .ascii  "MYTH3900"              /* memo indicates Myth native executable */
+        .else
+        .ascii  "        "              /* memo */
+        .endif
+
+        .ascii  "                "
+        .ascii  "                "
+        .ascii  "F               "      /* enable any hardware configuration */
 
 
-	pea	0
-	pea	env
-	pea	%sp@(4)
-	pea	0
+| Standard MegaDrive startup at 0x200
+
+initialize:
+        move    #0x2700,sr              /* disable interrupts */
+
+        tst.l   0xA10008                /* check CTRL1 and CTRL2 setup */
+        bne.b   1f
+        tst.w   0xA1000C                /* check CTRL3 setup */
+1:
+        bne.b   skip_tmss               /* if any controller control port is setup, skip TMSS handling */
+
+| Check Hardware Version Number
+        move.b  0xA10001,d0
+        andi.b  #0x0F,d0                /* VERS */
+        beq     2f                      /* 0 = original hardware, TMSS not present */
+        move.l  #0x53454741,0xA14000    /* Store Sega Security Code "SEGA" to TMSS */
+2:
+        move.w  0xC00004,d0             /* read VDP Status reg */
+
+skip_tmss:
+        move.w  #0x8104,0xC00004        /* display off, vblank disabled */
+        move.w  0xC00004,d0             /* read VDP Status reg */
+
+| Clear Work RAM
+        lea     0xFF0000,a0
+        moveq   #0,d0
+        move.w  #0x3FFF,d1
+1:
+        move.l  d0,(a0)+
+        dbra    d1,1b
+
+| Copy initialized variables from ROM to Work RAM
+        lea     _stext,a0
+        lea     0xFF0000,a1
+        move.l  #_sdata,d0
+        lsr.l   #1,d0
+        subq.w  #1,d0
+2:
+        move.w  (a0)+,(a1)+
+        dbra    d0,2b
+
+        lea     0x01000000,a0
+        movea.l a0,sp                   /* set stack pointer to top of Work RAM */
+        link.w  a6,#-8                  /* set up initial stack frame */
+
+        jsr     init_hardware           /* initialize the console hardware */
+
+        jsr     __INIT_SECTION__        /* do all program initializers */
+        jsr     main                    /* call program main() */
+        jsr     __FINI_SECTION__        /* do all program finishers */
+3:
+        bra.b   3b
 
 
-        jsr start_kernel
-
-_exit:
-        bra	_exit
+| put redirection vectors and gTicks at start of Work RAM
 
         .data
-env:
-	.long	0
-        
+
+        .global exception_vector
+exception_vector:
+        .long   0
+        .global exception_vector
+hblank_vector:
+        .long   0
+        .global exception_vector
+vblank_vector:
+        .long   0
+        .global gTicks
+gTicks:
+        .long   0
+
+
+
+| System Call Globals
+
+        .global xCursor
+xCursor:
+        .long   2
+
+        .global yCursor
+yCursor:
+        .long   2
+
+        .global vScrollPos
+vScrollPos:
+        .long   0
+
+        .global scrollFlag
+scrollFlag:
+        .long   0
+
+
+
+| Exception handlers
+
+exception:
+        move.l  exception_vector,-(sp)
+        beq.b   1f
+        rts
+1:
+        addq.l  #4,sp
+        rte
+
+hblank:
+        move.l  hblank_vector,-(sp)
+        beq.b   1f
+        rts
+1:
+        addq.l  #4,sp
+        rte
+
+vblank:
+        movem.l d0-d1/a0-a1,-(sp)
+        jsr _vint_callback
+        movem.l (sp)+, d0-d1/a0-a1
+        addq.l  #1,gTicks
+        rte
+
+
+        .text
+
+

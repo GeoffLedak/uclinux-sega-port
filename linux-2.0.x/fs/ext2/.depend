@@ -1,115 +1,115 @@
 acl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 balloc.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/secureedgemp3.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/secureedgemp3.h)
 bitmap.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h
 dir.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 file.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pagemap.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pagemap.h
 fsync.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h
 ialloc.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/byteorder.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/byteorder.h
 inode.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h
 ioctl.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioctl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioctl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h
 namei.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h
 super.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/bitops.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/system.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/bitops.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h
 symlink.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h
 truncate.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ext2_fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fcntl.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/sched.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/locks.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ext2_fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/locks.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h

@@ -1,70 +1,70 @@
 isdn_audio.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
    isdn_audio.h \
    isdn_common.h
 isdn_cards.o:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/drv/icn.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/drv/hisax.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/drv/pcbit.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/drv/avmb1.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/drv/icn.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/drv/hisax.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/drv/pcbit.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/drv/avmb1.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 isdn_common.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
    isdn_common.h \
    isdn_tty.h \
    isdn_net.h \
    isdn_ppp.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/audio.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/audio.h) \
    isdn_audio.h \
    isdn_cards.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/ppp.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/timeout/rules.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/mpp.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/netdevices.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/ppp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/timeout/rules.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/mpp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/netdevices.h)
 isdn_common.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/timeout/rules.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/timeout/rules.h)
 	@touch isdn_common.h
 isdn_net.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/if_arp.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/arp.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/net/icmp.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/if_arp.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/net/arp.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/net/icmp.h \
    isdn_common.h \
    isdn_net.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/ppp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/ppp.h) \
    isdn_ppp.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/inet.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/inet.h)
 isdn_ppp.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
    isdn_common.h \
    isdn_ppp.h \
    isdn_net.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/mpp.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/ppp/vj.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/mpp.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/ppp/vj.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h
 isdn_ppp.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ppp_defs.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ppp_defs.h
 	@touch isdn_ppp.h
 isdn_syms.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
    isdn_common.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h
 isdn_tty.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdn.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdn.h \
    isdn_common.h \
    isdn_tty.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/isdn/audio.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/isdn/audio.h) \
    isdn_audio.h
 .PRECIOUS:	isdn_common.h \
 	isdn_ppp.h \

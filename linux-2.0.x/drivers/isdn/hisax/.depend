@@ -25,62 +25,62 @@ avm_pci.o: \
    hisax.h \
    isac.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 callc.o: \
    hisax.h \
    ../avmb1/capicmd.h
 cert.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h
 config.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/stddef.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/stddef.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
    hisax.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel_stat.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tqueue.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/elsa.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/avm/a1.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/avm/a1/pcmcia.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/fritzpci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/16/3.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/s0box.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/16/0.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/telespci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/ix1micror2.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/diehldiva.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/asuscom.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/teleint.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/sedlbauer.h) \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_begin.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/symtab_end.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/sportster.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/mic.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/netjet.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/teles3c.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/amd7930.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/niccy.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/1tr6.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/euro.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/ni1.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel_stat.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tqueue.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/elsa.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/avm/a1.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/avm/a1/pcmcia.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/fritzpci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/16/3.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/s0box.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/16/0.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/telespci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/ix1micror2.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/diehldiva.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/asuscom.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/teleint.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/sedlbauer.h) \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_begin.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/symtab_end.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/sportster.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/mic.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/netjet.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/teles3c.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/amd7930.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/niccy.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/1tr6.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/euro.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/ni1.h)
 diva.o: \
    hisax.h \
    isac.h \
    hscx.h \
    ipac.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    hscx_irq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 elsa.o: \
    hisax.h \
    arcofi.h \
@@ -88,94 +88,94 @@ elsa.o: \
    ipac.h \
    hscx.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/serial.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/serial_reg.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial_reg.h \
    elsa_ser.c \
    hscx_irq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 elsa.h:  \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/elsa/pcmcia.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/elsa/pcmcia.h)
 	@touch elsa.h
 elsa_ser.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/serial.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/serial_reg.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/serial/nopause/io.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial_reg.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/serial/nopause/io.h)
 fsm.o: \
    hisax.h
 hfc_2bds0.o: \
    hisax.h \
    hfc_2bds0.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h
 hfc_2bs0.o: \
    hisax.h \
    hfc_2bs0.h \
    isac.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h
 hisax.h: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/module.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/errno.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/fs.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/major.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/segment.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/asm/io.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/delay.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/kernel.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/signal.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/malloc.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mm.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/mman.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ioport.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/timer.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/wait.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/isdnif.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/tty.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/serial_reg.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/16/0.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/16/3.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/telespci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/avm/a1.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/avm/a1/pcmcia.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/fritzpci.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/elsa.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/ix1micror2.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/diehldiva.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/asuscom.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/teleint.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/sedlbauer.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/sportster.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/mic.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/netjet.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/teles3c.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/amd7930.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/niccy.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/s0box.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/1tr6.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/euro.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/no/sendcomplete.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/no/llc.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/de/aoc.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fs.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/io.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/delay.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/malloc.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mman.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ioport.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/wait.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/isdnif.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tty.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial_reg.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/16/0.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/16/3.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/telespci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/avm/a1.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/avm/a1/pcmcia.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/fritzpci.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/elsa.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/ix1micror2.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/diehldiva.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/asuscom.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/teleint.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/sedlbauer.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/sportster.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/mic.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/netjet.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/teles3c.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/amd7930.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/niccy.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/s0box.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/1tr6.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/euro.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/no/sendcomplete.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/no/llc.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/de/aoc.h)
 	@touch hisax.h
 hscx.o: \
    hisax.h \
    hscx.h \
    isac.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h
 isac.o: \
    hisax.h \
    isac.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h
 isar.o: \
    hisax.h \
    isar.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h
 isdnl1.o: \
    hisax.h \
    isdnl1.h
@@ -185,9 +185,9 @@ isdnl2.o: \
 isdnl3.o: \
    hisax.h \
    isdnl3.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/euro.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/ni1.h) \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/hisax/1tr6.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/euro.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/ni1.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/hisax/1tr6.h)
 ix1_micro.o: \
    hisax.h \
    isac.h \
@@ -198,12 +198,12 @@ l3_1tr6.o: \
    hisax.h \
    l3_1tr6.h \
    isdnl3.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h
 l3dss1.o: \
    hisax.h \
    isdnl3.h \
    l3dss1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h
 lmgr.o: \
    hisax.h
 mic.o: \
@@ -217,20 +217,20 @@ netjet.o: \
    isac.h \
    hscx.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/interrupt.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ppp_defs.h \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/interrupt.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ppp_defs.h \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 niccy.o: \
    hisax.h \
    isac.h \
    hscx.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    hscx_irq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 q931.o: \
    hisax.h \
    l3_1tr6.h
@@ -247,10 +247,10 @@ sedlbauer.o: \
    hscx.h \
    isar.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    hscx_irq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 sportster.o: \
    hisax.h \
    isac.h \
@@ -260,7 +260,7 @@ sportster.o: \
 tei.o: \
    hisax.h \
    isdnl2.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/random.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/random.h
 teleint.o: \
    hisax.h \
    isac.h \
@@ -287,10 +287,10 @@ telespci.o: \
    isac.h \
    hscx.h \
    isdnl1.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/pci.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/bios32.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/pci.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/bios32.h \
    hscx_irq.c \
-   $(wildcard /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/config/pci.h)
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pci.h)
 .PRECIOUS:	elsa.h \
 	hisax.h \
 

@@ -1,126 +1,135 @@
-/*****************************************************************************/
-/* 
- *  crt0_rom.S
- * 
- *  linux/arch/m68knommu/platform/68000/68Katy/rom.ld
- *
-*   68Katy GNU ld command file for running kernel directly from ROM
- *  you probably need an own version of this file for your board
- *
- *  Author:     Steve Chamberlin (steve.chamberlin@gmail.com)
- *
- *  This program is free software;  you can redistribute it and/or modify it
- *  under the  terms of the GNU  General Public License as  published by the
- *  Free Software Foundation.  See the file COPYING in the main directory of
- *  this archive for more details.
- *
- *  This program  is distributed  in the  hope that it  will be  useful, but
- *  WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
- *  MERCHANTABILITY  or  FITNESS FOR  A  PARTICULAR  PURPOSE.   See the  GNU
- *  General Public License for more details.
- * *
- *  Change history:
- *
+OUTPUT_ARCH(m68k)
+EXTERN (_start)
+ENTRY (_start)
+__DYNAMIC  =  0;
+
+/*
+ * The memory map look like this:
+ * +--------------------+ <- 0x00000000
+ * | .text              |
+ * |                    |
+ * |          _text_end |
+ * +--------------------+
+ * .                    .
+ * .                    .
+ * .                    .
+ * +--------------------+ <- 0x00FF0000
+ * | .data              | initialized data goes here
+ * |                    |
+ * |          _data_end |
+ * +--------------------+
+ * | .bss               |
+ * |         _bss_start | start of bss, cleared by crt0
+ * |                    |
+ * |          _bss__end | start of heap, used by sbrk()
+ * +--------------------+
+ * .                    .
+ * .                    .
+ * .                    .
+ * |             _stack | top of stack
+ * +--------------------+ <- 0x01000000
  */
- /****************************************************************************/
 
-MEMORY 
-	{
-          /* romvec only used to determinate size of ROM */
-          romvec   : ORIGIN = 0x00000000, LENGTH = 0x00000000 
-            
-          /* 68Katy flash memory (480k) */
-          flash    : ORIGIN = 0x00003000, LENGTH = 0x00078000 - 0x3000
-        
-	  /* 68Katy flash memory end */
-          eflash   : ORIGIN = 0x00078000, LENGTH = 1
-
-          /* interrupt vectors in RAM */
-	  ramvec   : ORIGIN = 0x000fff3a, LENGTH = 198
-
-          /* user RAM memory */
-	  ram      : ORIGIN = 0x00080000, LENGTH = 0x00080000 - 0x200
-
-          /* end of RAM (used to set %sp) */
-	  eram     : ORIGIN = 0x000ffe00, LENGTH = 1
-	}
-
-SECTIONS
+MEMORY
 {
- 	.romvec :
-	{
-	_romvec = . ;
-	__rom_start = . ;
-	} > romvec
-
-        .text :
-	{
-	text_start = . ;
-        *(.text)
-        . = ALIGN(4) ;
-	_etext = . ;
-        *(.rodata)
-        . = ALIGN(4) ;
-	__data_rom_start = ALIGN ( 4 ) ;
-        } > flash
-
-	.eflash :
-	{
-	_flashend = . ;
-	} > eflash
-
-	.ramvec :
-	{
-	__ram_start = . ;
-	_ramvec = . ;
-	} > ramvec
-
-        .data :
-	{
-	_sdata = . ;
-	__data_start = . ;
-        *(.data)
-        . = ALIGN(16) ;
-	_edata = . ;
-	edata = ALIGN( 0x10 ) ;
-        } > ram
-
-        .bss :
-        {
-	_sbss = ALIGN( 0x10 ) ;
-	__bss_start = ALIGN( 0x10 ) ;
-	__data_end = ALIGN( 0x10 ) ;
-	*(.bss)
-        . = ALIGN(4);
-	*(COMMON)
-	_ebss = . ;
-	__bss_end = . ;
-        . = ALIGN(16) ;
-	end = ALIGN( 0x10 ) ;
-	_end = ALIGN( 0x10 ) ;
-	} > ram
-
-	.eram :
-	{
-	_boot_stack = . - 4;
-	_ramend = . ;
-	} > eram
+    rom (rx) : ORIGIN = 0x00000000, LENGTH = 0x00400000
+    ram (wx) : ORIGIN = 0x00FF0000, LENGTH = 0x00010000
 }
 
 /*
- *Local Variables:
- * mode: c
- * c-indent-level: 8
- * c-brace-imaginary-offset: 0
- * c-brace-offset: -8
- * c-argdecl-indent: 8
- * c-label-offset: -8
- * c-continued-statement-offset: 8
- * c-continued-brace-offset: 0
- * indent-tabs-mode: nil
- * c-file-style: "Linux"
- * fill-column: 76
- * tab-width: 8
- * time-stamp-pattern: "4/<%%>"
- * End:
+ * Allocate the stack to be at the top of memory, since the stack
+ * grows down
  */
+
+PROVIDE (__stack = 0x01000000);
+
+SECTIONS
+{
+  .text 0x00000000 :
+  {
+    __text_start = .;
+    *(.text)
+    *(.text.*)
+    *(.gnu.linkonce.t.*)
+
+    . = ALIGN(16);
+    __INIT_SECTION__ = .;
+    KEEP (*(.init))
+    SHORT (0x4E75)	/* rts */
+    . = ALIGN(16);
+    __FINI_SECTION__ = .;
+    KEEP (*(.fini))
+    SHORT (0x4E75)	/* rts */
+
+    *(.eh_frame_hdr)
+    KEEP (*(.eh_frame))
+    *(.gcc_except_table)
+    KEEP (*(.jcr))
+
+    . = ALIGN(16);
+     __CTOR_LIST__ = .;
+    ___CTOR_LIST__ = .;
+    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+    LONG(0)
+    __CTOR_END__ = .;
+
+    . = ALIGN(16);
+    __DTOR_LIST__ = .;
+    ___DTOR_LIST__ = .;
+    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+     LONG(0)
+    __DTOR_END__ = .;
+
+    *(.rdata)
+    *(.rodata)
+    *(.rodata.*)
+    *(.gnu.linkonce.r.*)
+    . = ALIGN(16);
+    __text_end = .;
+  } > rom
+  __text_size = __text_end - __text_start;
+
+  .data 0x00FF0000 :
+  AT ( LOADADDR (.text) + SIZEOF (.text) )
+  {
+    __data_start = .;
+    *(.data)
+    *(.data.*)
+    *(.gnu.linkonce.d.*)
+    CONSTRUCTORS
+
+    *(.lit8)
+    *(.lit4)
+    *(.sdata)
+    *(.sdata.*)
+    *(.gnu.linkonce.s.*)
+    . = ALIGN(8);
+    __data_end = .;
+  } > ram
+  __data_size = __data_end - __data_start;
+
+  .bss :
+  {
+    __bss_start = .;
+    *(.bss)
+    *(.bss.*)
+    *(.gnu.linkonce.b.*)
+    *(.sbss)
+    *(.sbss.*)
+    *(.gnu.linkonce.sb.*)
+    *(.scommon)
+    *(COMMON)
+    . = ALIGN(8);
+    end = .;
+    _end = end;
+    __end = _end;
+    __bss_end = .;
+  } > ram
+  __bss_size = __bss_end - __bss_start;
+
+}
+

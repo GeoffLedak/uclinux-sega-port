@@ -1,9 +1,9 @@
 ctype.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h
 string.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h
 vsprintf.o: \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/types.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/string.h \
-   /home/ubuntu/uClinux-20040218-dist/linux-2.0.x/include/linux/ctype.h
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/types.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/ctype.h

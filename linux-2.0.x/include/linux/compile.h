@@ -1,0 +1,6 @@
+#define UTS_VERSION "157 Thu Dec 3 01:15:35 CET 2020"
+#define LINUX_COMPILE_TIME "01:15:35"
+#define LINUX_COMPILE_BY "ubuntu"
+#define LINUX_COMPILE_HOST "ubuntu-VirtualBox"
+#define LINUX_COMPILE_DOMAIN ""
+#define LINUX_COMPILER "gcc version 2.95.3 20010315 (release)(ColdFire patches - 20010318 from http://fiddes.net/coldfire/)(uClinux XIP and shared lib patches from http://www.snapgear.com/)"
