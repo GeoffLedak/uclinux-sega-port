@@ -367,16 +367,10 @@ void setup_arch(char **cmdline_p,
 #endif
 	*memory_start_p = memory_start;
 	*memory_end_p = memory_end;
-
-
-/*
 	{
 		extern char _flashend, _romvec;
 		rom_length = (unsigned long)&_flashend - (unsigned long)&_romvec;
 	}
-*/
-
-
 
 #ifdef CONFIG_CONSOLE
 #ifdef CONFIG_FRAMEBUFFER

@@ -1,5 +1,5 @@
-#define UTS_VERSION "157 Thu Dec 3 01:15:35 CET 2020"
-#define LINUX_COMPILE_TIME "01:15:35"
+#define UTS_VERSION "179 Thu Dec 3 09:04:22 CET 2020"
+#define LINUX_COMPILE_TIME "09:04:22"
 #define LINUX_COMPILE_BY "ubuntu"
 #define LINUX_COMPILE_HOST "ubuntu-VirtualBox"
 #define LINUX_COMPILE_DOMAIN ""

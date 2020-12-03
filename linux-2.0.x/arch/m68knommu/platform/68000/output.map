@@ -1,0 +1,110 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+rom              0x00000000         0x00400000         xr
+ram              0x00ff0000         0x00010000         xw
+
+Linker script and memory map
+
+LOAD 68Katy/crt0_rom.o
+LOAD 68Katy/hw_md.o
+                0x00000000                __DYNAMIC=0x0
+                0x01000000                PROVIDE (__stack, 0x1000000)
+
+.text           0x00000000      0x6f0
+                0x00000000                __text_start=.
+ *(.text)
+ .text          0x00000000      0x294 68Katy/crt0_rom.o
+ .text          0x00000294      0x416 68Katy/hw_md.o
+                0x00000560                syscall_PRINT_STRING
+                0x00000452                get_pad
+                0x00000688                syscall_SCROLL
+                0x000004e2                put_str
+                0x0000054c                delay
+                0x00000446                set_sr
+                0x00000294                init_hardware
+                0x00000518                put_chr
+                0x000004be                clear_screen
+ *(.text.*)
+ *(.gnu.linkonce.t.*)
+ *fill*         0x000006aa        0x6
+                0x000006b0                .=ALIGN(0x10)
+                0x000006b0                __INIT_SECTION__=.
+ *(.init)
+                0x000006b0        0x2 SHORT 0x4e75
+ *fill*         0x000006b2        0xe
+                0x000006c0                .=ALIGN(0x10)
+                0x000006c0                __FINI_SECTION__=.
+ *(.fini)
+                0x000006c0        0x2 SHORT 0x4e75
+ *(.eh_frame_hdr)
+ *(.eh_frame)
+ *(.gcc_except_table)
+ *(.jcr)
+ *fill*         0x000006c2        0xe
+                0x000006d0                .=ALIGN(0x10)
+                0x000006d0                __CTOR_LIST__=.
+                0x000006d0                ___CTOR_LIST__=.
+                0x000006d0        0x4 LONG 0x0 (((__CTOR_END__-__CTOR_LIST__)/0x4)-0x2)
+ *(SORT(.ctors.*))
+ *(.ctors)
+                0x000006d4        0x4 LONG 0x0
+                0x000006d8                __CTOR_END__=.
+ *fill*         0x000006d8        0x8
+                0x000006e0                .=ALIGN(0x10)
+                0x000006e0                __DTOR_LIST__=.
+                0x000006e0                ___DTOR_LIST__=.
+                0x000006e0        0x4 LONG 0x0 (((__DTOR_END__-__DTOR_LIST__)/0x4)-0x2)
+ *(SORT(.dtors.*))
+ *(.dtors)
+                0x000006e4        0x4 LONG 0x0
+                0x000006e8                __DTOR_END__=.
+ *(.rdata)
+ *(.rodata)
+ *(.rodata.*)
+ *(.gnu.linkonce.r.*)
+ *fill*         0x000006e8        0x8
+                0x000006f0                .=ALIGN(0x10)
+                0x000006f0                __text_end=.
+                0x000006f0                __text_size=(__text_end-__text_start)
+
+.data           0x00ff0000       0x50 load address 0x000006f0
+                0x00ff0000                __data_start=.
+ *(.data)
+ .data          0x00ff0000       0x4e 68Katy/crt0_rom.o
+                0x00ff000c                gTicks
+                0x00ff001c                scrollFlag
+                0x00ff0014                yCursor
+                0x00ff0010                xCursor
+                0x00ff0018                vScrollPos
+                0x00ff0000                exception_vector
+ *fill*         0x00ff004e        0x2
+ *(.data.*)
+ *(.gnu.linkonce.d.*)
+ *(.lit8)
+ *(.lit4)
+ *(.sdata)
+ *(.sdata.*)
+ *(.gnu.linkonce.s.*)
+                0x00ff0050                .=ALIGN(0x8)
+                0x00ff0050                __data_end=.
+                0x00000050                __data_size=(__data_end-__data_start)
+
+.bss            0x00ff0050        0x0
+                0x00ff0050                __bss_start=.
+ *(.bss)
+ *(.bss.*)
+ *(.gnu.linkonce.b.*)
+ *(.sbss)
+ *(.sbss.*)
+ *(.gnu.linkonce.sb.*)
+ *(.scommon)
+ *(COMMON)
+                0x00ff0050                .=ALIGN(0x8)
+                0x00ff0050                end=.
+                0x00ff0050                _end=end
+                0x00ff0050                __end=_end
+                0x00ff0050                __bss_end=.
+                0x00000000                __bss_size=(__bss_end-__bss_start)
+OUTPUT(68Katy/crt0_romm.o elf32-m68k)

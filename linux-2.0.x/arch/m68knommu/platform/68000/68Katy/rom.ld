@@ -1,7 +1,4 @@
-OUTPUT_ARCH(m68k)
-EXTERN (_start)
-ENTRY (_start)
-__DYNAMIC  =  0;
+
 
 /*
  * The memory map look like this:
@@ -32,6 +29,12 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
+    /* romvec only used to determinate size of ROM */
+    romvec   : ORIGIN = 0x00000000, LENGTH = 0x00000000 
+
+    /* interrupt vectors in RAM */
+    ramvec   : ORIGIN = 0x000fff3a, LENGTH = 198
+
     rom (rx) : ORIGIN = 0x00000000, LENGTH = 0x00400000
     ram (wx) : ORIGIN = 0x00FF0000, LENGTH = 0x00010000
 }
@@ -45,12 +48,25 @@ PROVIDE (__stack = 0x01000000);
 
 SECTIONS
 {
+
+    .romvec :
+    {
+    _romvec = . ;
+    __rom_start = . ;
+    } > romvec
+
   .text 0x00000000 :
   {
     __text_start = .;
     *(.text)
     *(.text.*)
     *(.gnu.linkonce.t.*)
+
+    _stext = .;
+
+
+
+
 
     . = ALIGN(16);
     __INIT_SECTION__ = .;
@@ -90,8 +106,22 @@ SECTIONS
     *(.gnu.linkonce.r.*)
     . = ALIGN(16);
     __text_end = .;
+
+
+    _etext = . ;
+        *(.rodata)
+        . = ALIGN(4) ;
+    __data_rom_start = ALIGN ( 4 ) ;
+
+
   } > rom
   __text_size = __text_end - __text_start;
+
+.ramvec :
+    {
+    __ram_start = . ;
+    _ramvec = . ;
+    } > ramvec
 
   .data 0x00FF0000 :
   AT ( LOADADDR (.text) + SIZEOF (.text) )
@@ -109,6 +139,10 @@ SECTIONS
     *(.gnu.linkonce.s.*)
     . = ALIGN(8);
     __data_end = .;
+
+    _edata = . ;
+    edata = ALIGN( 0x10 ) ;
+    
   } > ram
   __data_size = __data_end - __data_start;
 
@@ -131,5 +165,10 @@ SECTIONS
   } > ram
   __bss_size = __bss_end - __bss_start;
 
-}
+  .eram :
+    {
+    _boot_stack = . - 4;
+    _ramend = . ;
+    } > eram
 
+}
