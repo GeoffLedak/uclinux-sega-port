@@ -10,13 +10,15 @@
 
 #OBJECTS=
 
-all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o entry.o platform.o
+all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o $(BOARD)/font_cga.o entry.o platform.o
 O_TARGET := platform.o
-O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(OBJECTS)
+O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(OBJECTS)
 
 $(BOARD)/crt0_$(MODEL).o: $(BOARD)/crt0_$(MODEL).S
 
 $(BOARD)/hw_md.o: $(BOARD)/hw_md.S
+
+$(BOARD)/font_cga.o: $(BOARD)/font_cga.c
 
 entry.o: entry.S
 

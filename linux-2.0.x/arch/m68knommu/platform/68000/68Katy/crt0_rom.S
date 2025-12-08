@@ -29,10 +29,14 @@
         .ascii  "GM MK-0000 -00"
         .word   0x0000                  /* checksum - not needed */
         .ascii  "J6              "
-        .long   0x00000000,0x003FFFFF   /* ROM start, end (4MB) */
-        .long   0x00FF0000,0x00FFFFFF   /* RAM start, end */
+        .long   0x00000000,0x001FFFFF   /* ROM start, end (2MB) */
+        .long   0x00FF0000,0x00FFFFFF   /* Work RAM start, end */
 
-        .ascii  "            "          /* no SRAM */
+        .ascii  "RA"                    /* SRAM indicator */
+        .byte   0xF8                    /* SRAM flags: backup RAM, odd+even bytes */
+        .byte   0x20                    /* SRAM type */
+        .long   0x00200000              /* SRAM start */
+        .long   0x0027FFFF              /* SRAM end (512KB) */
 
         .ascii  "    "
         .ascii  "        "
@@ -77,6 +81,32 @@ skip_tmss:
         move.l  d0,(a0)+
         dbra    d1,1b
 
+/* Copy initialized data from ROM to cartridge RAM */
+        lea     __data_rom_start,a0     /* source: ROM */
+        lea     __data_start,a1         /* dest: cartridge RAM at 0x200000 */
+        move.l  #__data_size,d0         /* size in bytes */
+        beq.b   2f                      /* skip if no data */
+        addq.l  #3,d0                   /* round up to longword */
+        lsr.l   #2,d0                   /* convert to longwords */
+1:
+        move.l  (a0)+,(a1)+
+        subq.l  #1,d0
+        bne.b   1b
+2:
+
+/* Clear BSS section in cartridge RAM */
+        lea     __bss_start,a0
+        move.l  #__bss_size,d0          /* size in bytes */
+        beq.b   4f                      /* skip if no bss */
+        addq.l  #3,d0                   /* round up to longword */
+        lsr.l   #2,d0                   /* convert to longwords */
+        moveq   #0,d1
+3:
+        move.l  d1,(a0)+
+        subq.l  #1,d0
+        bne.b   3b
+4:
+
 /* Set stack pointer to top of Work RAM */
         lea     0x01000000,a0
         movea.l a0,sp
@@ -85,13 +115,27 @@ skip_tmss:
 /* Initialize the console hardware */
         jsr     init_hardware
 
-/* Jump to Linux kernel */
-        jmp     start_kernel
+/* Sanity check - display "test" on screen */
+        move.l  #2,-(sp)                /* y = 2 */
+        move.l  #2,-(sp)                /* x = 2 */
+        move.l  #0,-(sp)                /* color = 0 (normal) */
+        pea     test_string             /* string pointer */
+        jsr     put_str
+        lea     16(sp),sp               /* clean up stack (4 args * 4 bytes) */
 
-/* Should never return, but just in case... */
+/* TEMPORARY: Loop forever for sanity test - remove this when kernel is ready */
 3:
         bra.b   3b
 
+/* Jump to Linux kernel (uncomment when ready to test kernel boot) */
+/*      jmp     start_kernel */
+
+
+/* Test string in ROM */
+        .text
+test_string:
+        .asciz  "test"
+        .align  2
 
 /* Data section - vectors and tick counter */
 

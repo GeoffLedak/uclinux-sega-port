@@ -19,7 +19,7 @@
 
 
 
-/* Initialize the hardware - minimal version for kernel boot */
+/* Initialize the hardware & load font tiles */
         .global init_hardware
 init_hardware:
         movem.l d2-d7/a2-a6,-(sp)
@@ -125,9 +125,22 @@ init_hardware:
         move.b  (a5)+,0x0011(a0)
         move.b  (a5),0x0011(a0)
 
-/* For kernel boot, we skip font loading - kernel will handle console init */
+/* load font tile data */
+        move.w  #0x8F02,(a4)            /* INC = 2 */
+        move.l  #0x40000000,(a4)        /* write VRAM address 0 */
+        lea     font_data,a0
+        move.w  #0x100*8-1,d2           /* 0x100 = 256, 256 = number of characters in the CGA font */
+7:
+        move.l  (a0)+,d0                /* font fg mask */
+        move.l  d0,d1
+        not.l   d1                      /* font bg mask */
+        andi.l  #0x11111111,d0          /* set font fg color */
+        andi.l  #0x00000000,d1          /* set font bg color */
+        or.l    d1,d0
+        move.l  d0,(a3)                 /* set tile line */
+        dbra    d2,7b
 
-/* set a basic palette so we can see something */
+/* set the default palette for text */
         move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
         move.l  #0x00000AAA,(a3)        /* entry 0 (black) and 1 (lt gray) BGR */
         move.l  #0xC0200000,(a4)        /* write CRAM address 32 */
@@ -135,8 +148,9 @@ init_hardware:
         move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
         move.l  #0x0000000A,(a3)        /* entry 32 (black) BGR and 33 (red) */
 
-        move.w  #0x8104,(a4)            /* display off, vblank disabled for now */
-        /* Kernel will enable interrupts when ready */
+        move.w  #0x8164,(a4)            /* display on, vblank DISABLED */
+        /* Don't enable CPU interrupts yet - linker script needs fixing first */
+        /* move    #0x2000,sr */
 
         movem.l (sp)+,d2-d7/a2-a6
         rts
@@ -295,6 +309,57 @@ clear_screen:
         dbra    d1,1b
         rts
 
+/* void put_str(char *str, int color, int x, int y); */
+/* put string characters to the screen */
+/* entry: first arg = string address */
+/*        second arg = 0 for normal color font, N * 0x0200 for alternate color font (use CP bits for different colors) */
+/*        third arg = column at which to start printing */
+/*        fourth arg = row at which to start printing */
+        .global put_str
+put_str:
+        movea.l 4(sp),a0                /* string pointer */
+        move.l  8(sp),d0                /* color palette */
+        lea     0xC00000,a1
+        move.w  #0x8F02,4(a1)           /* set INC to 2 */
+        move.l  16(sp),d1               /* y coord */
+        lsl.l   #6,d1
+        or.l    12(sp),d1               /* cursor y<<6 | x */
+        add.w   d1,d1                   /* pattern names are words */
+        swap    d1
+        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
+        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
+1:
+        move.b  (a0)+,d0
+        move.w  d0,(a1)                 /* set pattern name for character */
+        tst.b   (a0)
+        bne.b   1b
+        rts
+
+/* void put_chr(char chr, int color, int x, int y); */
+/* put a character to the screen */
+/* entry: first arg = character */
+/*        second arg = 0 for normal color font, N * 0x0200 for alternate color font (use CP bits for different colors) */
+/*        third arg = column at which to start printing */
+/*        fourth arg = row at which to start printing */
+        .global put_chr
+put_chr:
+        movea.l 4(sp),a0                /* character */
+        move.l  8(sp),d0                /* color palette */
+        lea     0xC00000,a1
+        move.w  #0x8F02,4(a1)           /* set INC to 2 */
+        move.l  16(sp),d1               /* y coord */
+        lsl.l   #6,d1
+        or.l    12(sp),d1               /* cursor y<<6 | x */
+        add.w   d1,d1                   /* pattern names are words */
+        swap    d1
+        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
+        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
+
+        move.l  a0,d1
+        move.b  d1,d0
+        move.w  d0,(a1)                 /* set pattern name for character */
+        rts
+
 /* void delay(int count); */
 /* wait count number of vertical blank periods - relies on vblank running */
 /* entry: arg = count */
@@ -308,9 +373,135 @@ delay:
         rts
 
 
+
+/* void syscall_PRINT_STRING(char *str, int color); */
+
+/* entry: first arg = string address */
+/*        second arg = 0 for normal color font, N * 0x0200 for alternate color font */
+
+        .global syscall_PRINT_STRING
+syscall_PRINT_STRING:
+
+
+        movea.l 4(sp),a0                /* string pointer */
+        move.l  8(sp),d0                /* color palette */
+        lea     0xC00000,a1
+        move.w  #0x8F02,4(a1)           /* set INC to 2 */
+        move.l  yCursor,d1              /* y coord */
+        lsl.l   #6,d1
+        or.l    xCursor,d1              /* cursor y<<6 | x */
+        add.w   d1,d1                   /* pattern names are words */
+        swap    d1
+        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
+        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
+1:
+        move.b  (a0)+,d0
+        
+        cmpi.b #0x0A, d0                /* check if it is the enter key (0xA) */
+        beq.s newline                   /* if it is, then jump to newline subroutine */
+        
+        move.w  d0,(a1)                 /* set pattern name for character */
+
+        addi.l #1, xCursor
+        cmpi.l #SCREEN_RIGHT_EDGE, xCursor              /* if xCursor is greater than SCREEN_RIGHT_EDGE */
+        bcc.s  newline                                  /* jump to newline */
+
+testend:
+        tst.b   (a0)
+        bne.b   1b
+        rts
+
+newline:
+        move.l  #SCREEN_LEFT_EDGE, xCursor              /*  set X cursor to zero     */
+        addi.l  #1, yCursor                             /*  advance Y cursor         */
+                
+        cmpi.l  #0, scrollFlag                          /* if scrollFlag is greater than zero */
+        bhi.s   scrollPlaneB                            /* jump to scrollPlaneB */
+
+        cmpi.l #SCREEN_BOTTOM_EDGE, yCursor             /* if yCursor is less than or equal to SCREEN_BOTTOM_EDGE */
+        bls     shouldResetYcursor                      /* jump to shouldResetYcursor */
+                                                        /* ..otherwise scroll the screen down */
+scrollPlaneB:
+
+        /* clear top line */
+        moveq   #0,d0
+        move.l  yCursor,d1
+
+        cmpi.l  #24,yCursor             /* if yCursor is greater than or equal to 24 */
+        bcc.s   sub24                   /* jump to sub24 */
+        addi.l  #8,d1                   /* otherwise add 8... */
+        jmp    continueLineClear        /* and jump to continueLineClear */
+
+sub24:
+        subi.l  #24,d1
+        
+continueLineClear:
+        lsl.l   #6,d1
+        or.l    #0,d1
+        add.w   d1,d1
+        swap    d1
+        ori.l   #0x60000003,d1
+        move.l  d1,4(a1)                /* write VRAM at plane B start */
+        move.w  #64,d1                  /* 64 equals one row */
+1:
+        move.w  d0,(a1)                 /* clear name pattern */
+        dbra    d1,1b
+
+        addi.l  #8, vScrollPos                          /* Increment vertical scroll position */
+        move.l  vScrollPos, d6
+        move.l  #0x40020010, (VDP_CONTROL)              /* put Scroll Plane B into VDP control */
+        move.w  d6, (VDP_DATA)                          /* put incremented scroll location into VDP data */
+        move.b  #1, scrollFlag                          /* set scrollFlag to true */
+
+shouldResetYcursor:
+        cmpi.l  #PLANE_VERTICAL_EDGE, yCursor           /* if yCursor is less than or equal to PLANE_VERTICAL_EDGE */
+        bls.s   set_cursor                              /* jump to set_cursor */
+        move.l  #0, yCursor                             /* otherwise reset yCursor to zero */
+
+set_cursor:
+        move.l  yCursor,d1                              /* y coord */
+        lsl.l   #6,d1
+        or.l    xCursor,d1                              /* cursor y<<6 | x */
+        add.w   d1,d1                                   /* pattern names are words */
+        swap    d1
+        ori.l   #0x60000003,d1                          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
+        move.l  d1,4(a1)                                /* write VRAM at location of cursor in plane B */
+
+        jmp     testend
+
+
+
+
+/* void syscall_SCROLL(); */
+
+        .global syscall_SCROLL
+syscall_SCROLL:
+        addi.l  #8, vScrollPos                  /* Increment vertical scroll position */
+        move.l  vScrollPos, d6
+        move.l  #0x40020010, (VDP_CONTROL)      /* put Scroll Plane B into VDP control */
+        move.w  d6, (VDP_DATA)                  /* put incremented scroll location into VDP data */
+        rts
+
+
+
         .data
 
         .global gTicks
 gTicks:
         .long   0
 
+        .global xCursor
+xCursor:
+        .long   2
+
+        .global yCursor
+yCursor:
+        .long   2
+
+        .global vScrollPos
+vScrollPos:
+        .long   0
+
+        .global scrollFlag
+scrollFlag:
+        .long   0
