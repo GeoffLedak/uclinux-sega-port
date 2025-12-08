@@ -298,6 +298,7 @@ void setup_arch(char **cmdline_p,
 #endif
 #endif
 	printk("Flat model support (C) 1998,1999 Kenneth Albanowski, D. Jeff Dionne\n");
+	printk("[BOOT] About to init task memory regions\n");
 
 #if defined( CONFIG_PILOT ) && defined( CONFIG_M68328 )
 	printk("TRG SuperPilot FLASH card support <info@trgnet.com>\n");
@@ -342,10 +343,14 @@ void setup_arch(char **cmdline_p,
 				(unsigned) _ramend : (unsigned) &_ramend);
 #endif
 
+	printk("[BOOT] Setting init_task.mm pointers\n");
 	init_task.mm->start_code = (unsigned long) &_stext;
 	init_task.mm->end_code = (unsigned long) &_etext;
 	init_task.mm->end_data = (unsigned long) &_edata;
 	init_task.mm->brk = (unsigned long) &_end;
+	printk("[BOOT] init_task.mm set: code=%lx-%lx data_end=%lx brk=%lx\n",
+		init_task.mm->start_code, init_task.mm->end_code,
+		init_task.mm->end_data, init_task.mm->brk);
 
 #ifdef CONFIG_BLK_DEV_BLKMEM
 	ROOT_DEV = MKDEV(BLKMEM_MAJOR,0);
@@ -367,7 +372,8 @@ void setup_arch(char **cmdline_p,
 #endif
 	*memory_start_p = memory_start;
 	*memory_end_p = memory_end;
-
+	printk("[BOOT] setup_arch complete: mem_start=%lx mem_end=%lx\n",
+		memory_start, memory_end);
 
 /*
 	{

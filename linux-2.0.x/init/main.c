@@ -1001,14 +1001,28 @@ asmlinkage void start_kernel(void)
  * Interrupts are still disabled. Do necessary setups, then
  * enable them
  */
+	printk("[BOOT] start_kernel entered\n");
 
 	setup_arch(&command_line, &memory_start, &memory_end);
+	printk("[BOOT] setup_arch done\n");
+
 	memory_start = paging_init(memory_start,memory_end);
+	printk("[BOOT] paging_init done\n");
+
 	trap_init();
+	printk("[BOOT] trap_init done\n");
+
 	init_IRQ();
+	printk("[BOOT] init_IRQ done\n");
+
 	sched_init();
+	printk("[BOOT] sched_init done\n");
+
 	time_init();
+	printk("[BOOT] time_init done\n");
+
 	parse_options(command_line);
+	printk("[BOOT] parse_options done\n");
 #ifdef CONFIG_MODULES
 	init_modules();
 #endif
@@ -1028,16 +1042,25 @@ asmlinkage void start_kernel(void)
 		memory_start += prof_len * sizeof(unsigned int);
 		memset(prof_buffer, 0, prof_len * sizeof(unsigned int));
 	}
+	printk("[BOOT] calling console_init\n");
 	memory_start = console_init(memory_start,memory_end);
+	printk("[BOOT] console_init done\n");
 #ifdef CONFIG_PCI
 	memory_start = pci_init(memory_start,memory_end);
 #endif
+	printk("[BOOT] calling kmalloc_init\n");
 	memory_start = kmalloc_init(memory_start,memory_end);
+	printk("[BOOT] kmalloc_init done, calling sti\n");
 	sti();
+	printk("[BOOT] interrupts enabled, calibrating delay\n");
 	calibrate_delay();
+	printk("[BOOT] calibrate_delay done\n");
 	memory_start = inode_init(memory_start,memory_end);
+	printk("[BOOT] inode_init done\n");
 	memory_start = file_table_init(memory_start,memory_end);
+	printk("[BOOT] file_table_init done\n");
 	memory_start = name_cache_init(memory_start,memory_end);
+	printk("[BOOT] name_cache_init done\n");
 #if defined(CONFIG_BLK_DEV_INITRD) && !defined(CONFIG_UCLINUX)
 	if (initrd_start && initrd_start < memory_start) {
 		printk(KERN_CRIT "initrd overwritten (0x%08lx < 0x%08lx) - "
@@ -1045,16 +1068,24 @@ asmlinkage void start_kernel(void)
 		initrd_start = 0;
 	}
 #endif
+	printk("[BOOT] calling mem_init\n");
 	mem_init(memory_start,memory_end);
+	printk("[BOOT] mem_init done\n");
 	buffer_init();
+	printk("[BOOT] buffer_init done\n");
 	sock_init();
+	printk("[BOOT] sock_init done\n");
 #if defined(CONFIG_SYSVIPC) || defined(CONFIG_KERNELD)
 	ipc_init();
+	printk("[BOOT] ipc_init done\n");
 #endif
 	dquot_init();
+	printk("[BOOT] dquot_init done\n");
 	arch_syms_export();
+	printk("[BOOT] arch_syms_export done\n");
 	sti();
 	check_bugs();
+	printk("[BOOT] check_bugs done, kernel init complete!\n");
 
 #if defined(CONFIG_MTRR) && defined(__SMP__)
 	init_mtrr_config();

@@ -54,6 +54,15 @@ void mpsc_console_initialize(void);
 #ifdef CONFIG_68KATY
 #include "68Katy/68Katy_hw.h"
 void ft245_console_initialize(void);
+
+/* Genesis VDP console output - calls assembly routine in hw_md.S */
+extern void syscall_PRINT_STRING(const char *str, int color);
+
+/* Wrapper for register_console - always uses default color (gray on black) */
+static void genesis_console_print(const char *str)
+{
+    syscall_PRINT_STRING(str, 0);  /* 0 = palette 0 (gray text) */
+}
 #endif
 
 void config_M68000_irq(void);
@@ -170,6 +179,10 @@ void config_BSP(char *command, int len)
 #endif
 #ifdef CONFIG_FT245_SERIAL
 	ft245_console_initialize();
+#endif
+#ifdef CONFIG_68KATY
+        /* Register Genesis VDP as the console output device */
+        register_console(genesis_console_print);
 #endif
 
         mach_sched_init      = BSP_sched_init;

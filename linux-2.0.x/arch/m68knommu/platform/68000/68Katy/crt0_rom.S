@@ -123,12 +123,8 @@ skip_tmss:
         jsr     put_str
         lea     16(sp),sp               /* clean up stack (4 args * 4 bytes) */
 
-/* TEMPORARY: Loop forever for sanity test - remove this when kernel is ready */
-3:
-        bra.b   3b
-
-/* Jump to Linux kernel (uncomment when ready to test kernel boot) */
-/*      jmp     start_kernel */
+/* Jump to Linux kernel */
+        jmp     start_kernel
 
 
 /* Test string in ROM */

@@ -122,5 +122,4 @@ init/main.o: \
 init/version.o: \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/utsname.h \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/version.h \
-   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/compile.h \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/bogus.h)
