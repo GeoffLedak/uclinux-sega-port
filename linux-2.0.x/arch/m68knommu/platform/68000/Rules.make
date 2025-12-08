@@ -19,7 +19,7 @@ CROSS_COMPILE = m68k-coff-
 LIBGCC = `$(CC) -v 2>&1 | grep specs | sed -e "s/Reading specs from //" | sed -e s/specs/m68000\\\/libgcc.a/`
 
 CFLAGS := $(CFLAGS) -pipe -DNO_MM -DNO_FPU -m68000 -D__COFF__ -DMAGIC_ROM_PTR -DNO_FORGET -DUTS_SYSNAME='"uClinux"'
-AFLAGS := $(AFLAGS) -pipe -DNO_MM -DNO_FPU -m68000 -D__COFF__ -DMAGIC_ROM_PTR -DUTS_SYSNAME='"uClinux"'  -Wa,--bitwise-or
+AFLAGS := $(AFLAGS) -pipe -DNO_MM -DNO_FPU -m68000 -D__COFF__ -DMAGIC_ROM_PTR -DUTS_SYSNAME='"uClinux"'  -Wa,--bitwise-or -Wa,--register-prefix-optional
 
 LINKFLAGS = -T arch/$(ARCH)/platform/$(PLATFORM)/$(BOARD)/$(MODEL).ld
 

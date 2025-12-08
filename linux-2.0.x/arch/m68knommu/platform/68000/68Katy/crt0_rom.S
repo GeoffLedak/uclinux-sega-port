@@ -1,171 +1,142 @@
+/* SEGA MegaDrive startup code for uClinux */
+/* Based on code by Chilly Willy */
+/* Adapted for uClinux kernel boot */
+
+        .text
+
+/* Initial exception vectors */
+
+        .long   0x01000000,initialize,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,hblank,exception,vblank,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,exception,exception,exception,exception,exception,exception,exception
+
+/* Standard MegaDrive ROM header at 0x100 */
+
+        .ascii  "SEGA MD uClinux"       /* SEGA must be the first four chars for TMSS */
+        .ascii  " "
+        .ascii  "(C)2024         "
+        .ascii  "uClinux for     "      /* export name */
+        .ascii  "Sega Genesis    "
+        .ascii  "                "
+        .ascii  "uClinux for     "      /* domestic (Japanese) name */
+        .ascii  "Sega Genesis    "
+        .ascii  "                "
+        .ascii  "GM MK-0000 -00"
+        .word   0x0000                  /* checksum - not needed */
+        .ascii  "J6              "
+        .long   0x00000000,0x003FFFFF   /* ROM start, end (4MB) */
+        .long   0x00FF0000,0x00FFFFFF   /* RAM start, end */
+
+        .ascii  "            "          /* no SRAM */
+
+        .ascii  "    "
+        .ascii  "        "
+
+        .ascii  "        "              /* memo */
+
+        .ascii  "                "
+        .ascii  "                "
+        .ascii  "F               "      /* enable any hardware configuration */
+
+
+/* Standard MegaDrive startup at 0x200 */
+
 .global _stext
-.text
+_stext:
+initialize:
+        move    #0x2700,sr              /* disable interrupts */
 
-	.org	0x0000
+        tst.l   0xA10008                /* check CTRL1 and CTRL2 setup */
+        bne.b   1f
+        tst.w   0xA1000C                /* check CTRL3 setup */
+1:
+        bne.b   skip_tmss               /* if any controller control port is setup, skip TMSS handling */
 
-	dc.l	0,0x200
-	dc.l	INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,HBL,INT,VBL,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT,INT
-	dc.l	INT,INT,INT,INT,INT,INT,INT
+/* Check Hardware Version Number */
+        move.b  0xA10001,d0
+        andi.b  #0x0F,d0                /* VERS */
+        beq     2f                      /* 0 = original hardware, TMSS not present */
+        move.l  #0x53454741,0xA14000    /* Store Sega Security Code "SEGA" to TMSS */
+2:
+        move.w  0xC00004,d0             /* read VDP Status reg */
 
-        /* "SEGA EVERDRIVE" it is mark for OS. access for everdrive registers will be stay unlocked if this mark will be detected by OS*/
-	.ascii	"SEGA SSF        "				    /* Console Name (16) 1 or nothing=ROM, 2=ROM+DATAFILE, 3=RAM*/
-	.ascii	"KRIKzz 2012.MAR "				    /* Copyright Information (16) */
-	.ascii	"MEGA-ED app-template                            "  /* Domestic Name (48) */
-	.ascii	"MEGA-ED app-template                            "  /* Overseas Name (48) */
-	.ascii	"GM 00000000-00"				    /* Serial Number (2, 14) */
-	dc.w	0x0000						    /* Checksum (2) */
-	.ascii	"JD              "				    /* I/O Support (16) */
-	dc.l	0xffffffff 					    /* ROM Start Address (4) */
-	dc.l	0x20000 					    /* ROM End Address (4) */
-	dc.l	0x00FF0000					    /* Start of Backup RAM (4) */
-	dc.l	0x00FFFFFF					    /* End of Backup RAM (4) */
-	.ascii	"B                       "                          
-	.ascii	"http://krikzz.com  biokrik@gmail.com    "	    /* Memo (40) */
-	.ascii	"W               "				    /* Country Support (16) */
-.org 0x200
-.equ vdp_dat, 0xC00000
-.equ vdp_cnt, 0xC00004
+skip_tmss:
+        move.w  #0x8104,0xC00004        /* display off, vblank disabled */
+        move.w  0xC00004,d0             /* read VDP Status reg */
 
-/*magic init*/
-RST:
+/* Clear Work RAM */
+        lea     0xFF0000,a0
+        moveq   #0,d0
+        move.w  #0x3FFF,d1
+1:
+        move.l  d0,(a0)+
+        dbra    d1,1b
 
+/* Set stack pointer to top of Work RAM */
+        lea     0x01000000,a0
+        movea.l a0,sp
+        link.w  a6,#-8                  /* set up initial stack frame */
 
-    tst.l 0xa10008
-    bne SkipJoyDetect
-    tst.w 0xa1000c
-SkipJoyDetect:
-	bne	SkipSetup
+/* Initialize the console hardware */
+        jsr     init_hardware
 
-	lea	Table,%a5
-	movem.w (%a5)+,%d5-%d7
-	movem.l (%a5)+,%a0-%a4
-* Check Version Number
-	move.b	-0x10ff(%a1),%d0
-	andi.b	#0x0f,%d0
-	beq	WrongVersion
-* Sega Security Code (SEGA)
-	move.l	#0x53454741,0x2f00(%a1)
-WrongVersion:
-	move.w	(%a4),%d0
-	moveq	#0x00,%d0
-	movea.l %d0,%a6
-	move	%a6,%usp
+/* Jump to Linux kernel */
+        jmp     start_kernel
 
-* Set VDP registers
-	moveq	#0x17,%d1
-FillLoop:
-	move.b	(%a5)+,%d5
-	move.w	%d5,(%a4)
-	add.w	%d7,%d5
-	dbra	%d1,FillLoop
-
-	move.l	(%a5)+,(%a4)
-	move.w	%d0,(%a3)
-	move.w	%d7,(%a1)
-	move.w	%d7,(%a2)
-L0250:
-	btst	%d0,(%a1)
-	bne	L0250
-* Put initial values into a00000
-	moveq	#0x25,%d2
-Filla:
-	move.b	(%a5)+,(%a0)+
-	dbra	%d2,Filla
-	move.w	%d0,(%a2)
-	move.w	%d0,(%a1)
-	move.w	%d7,(%a2)
-L0262:
-	move.l	%d0,-(%a6)
-	dbra	%d6,L0262
-	move.l	(%a5)+,(%a4)
-	move.l	(%a5)+,(%a4)
-* Put initial values into c00000
-	moveq	#0x1f,%d3
-Filc0:
-	move.l	%d0,(%a3)
-	dbra	%d3,Filc0
-	move.l	(%a5)+,(%a4)
-* Put initial values into c00000
-	moveq	#0x13,%d4
-Fillc1:
-	move.l	%d0,(%a3)
-	dbra	%d4,Fillc1
-* Put initial values into c00011
-	moveq	#0x03,%d5
-Fillc2:
-	move.b	(%a5)+,0x0011(%a3)
-	dbra	%d5,Fillc2
-	move.w	%d0,(%a2)
-	movem.l (%a6),%d0-%d7/%a0-%a6
-	move	#0x2700,%sr
-SkipSetup:
-	bra	Continue
-Table:
-	dc.w	0x8000, 0x3fff, 0x0100, 0x00a0, 0x0000, 0x00a1, 0x1100, 0x00a1
-	dc.w	0x1200, 0x00c0, 0x0000, 0x00c0, 0x0004, 0x0414, 0x302c, 0x0754
-	dc.w	0x0000, 0x0000, 0x0000, 0x812b, 0x0001, 0x0100, 0x00ff, 0xff00
-	dc.w	0x0080, 0x4000, 0x0080, 0xaf01, 0xd91f, 0x1127, 0x0021, 0x2600
-	dc.w	0xf977, 0xedb0, 0xdde1, 0xfde1, 0xed47, 0xed4f, 0xd1e1, 0xf108
-	dc.w	0xd9c1, 0xd1e1, 0xf1f9, 0xf3ed, 0x5636, 0xe9e9, 0x8104, 0x8f01
-	dc.w	0xc000, 0x0000, 0x4000, 0x0010, 0x9fbf, 0xdfff
-
-Continue:
-	tst.w	 0x00C00004
-
-* set stack pointer
-	move.w	 #0,%a7
-
-* user mode
-	move.w	#0x2300,%sr
-
-* clear Genesis RAM
-	lea	0xff0000,%a0
-	moveq	#0,%d0
-clrram:
-        move.w	#0,(%a0)+
-	subq.w	#2,%d0
-	bne	clrram
-        jmp	start_kernel
-
-*------------------------------------------------
-*
-*	interrupt functions
-*
-*------------------------------------------------
+/* Should never return, but just in case... */
+3:
+        bra.b   3b
 
 
-HBL:
-*	movem.l %d0-%d1/%a0-%a1,-(%sp)
-*	jsr hb
-*	movem.l (%sp)+,%d0-%d1/%a0-%a1
-nop
-	rte
+/* Data section - vectors and tick counter */
 
-VBL:
-*	movem.l %d0-%d1/%a0-%a1,-(%sp)
-*        jsr vb
-*	movem.l (%sp)+,%d0-%d1/%a0-%a1
-nop
-	rte
+        .data
 
-INT:
-*	movem.l %d0-%d1/%a0-%a1,-(%sp)
-*	jsr in
-*	movem.l (%sp)+,%d0-%d1/%a0-%a1
-nop
-	rte
+        .global exception_vector
+exception_vector:
+        .long   0
+        .global hblank_vector
+hblank_vector:
+        .long   0
+        .global vblank_vector
+vblank_vector:
+        .long   0
 
 
+/* Exception handlers */
 
-* .global font_base
-* font_base:
-* .incbin "font.bin"
+        .text
 
+exception:
+        move.l  exception_vector,-(sp)
+        beq.b   1f
+        rts
+1:
+        addq.l  #4,sp
+        rte
 
+hblank:
+        move.l  hblank_vector,-(sp)
+        beq.b   1f
+        rts
+1:
+        addq.l  #4,sp
+        rte
 
+vblank:
+        /* Simple vblank handler - just increment tick counter */
+        /* Kernel will install its own handler via vblank_vector if needed */
+        movem.l d0-d1/a0-a1,-(sp)
+        move.l  vblank_vector,d0
+        beq.b   1f
+        movea.l d0,a0
+        jsr     (a0)
+1:
+        addq.l  #1,gTicks
+        movem.l (sp)+,d0-d1/a0-a1
+        rte

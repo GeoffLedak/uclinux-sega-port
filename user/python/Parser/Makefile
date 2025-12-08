@@ -14,7 +14,7 @@ srcdir=		.
 #AR=		ar
 
 DEFS=		-DHAVE_CONFIG_H
-LIBS=		
+LIBS=		-lpthread -ldl  -lutil
 
 
 # === Other things that are customizable but not by configure ===

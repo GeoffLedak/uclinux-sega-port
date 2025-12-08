@@ -3,7 +3,7 @@
 #
 
 ROMFSIMG = $(IMAGEDIR)/romfs.img
-IMAGE    = $(IMAGEDIR)/68Katy.rom
+IMAGE    = $(IMAGEDIR)/68Katy.bin
 
 ROMFS_DIRS = bin dev etc home lib mnt proc usr var
 

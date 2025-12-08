@@ -14,10 +14,10 @@ srcdir=		.
 #AR=		ar
 
 DEFS=		-DHAVE_CONFIG_H
-LIBOBJS=	 dup2.o getopt.o
-LIBS=		
+LIBOBJS=	 thread.o getopt.o
+LIBS=		-lpthread -ldl  -lutil
 DLINCLDIR=	/
-DYNLOADFILE=	dynload_stub.o
+DYNLOADFILE=	dynload_shlib.o
 
 # Machine-dependent subdirectories
 MACHDEP=	linux2
