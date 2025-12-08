@@ -148,9 +148,8 @@ init_hardware:
         move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
         move.l  #0x0000000A,(a3)        /* entry 32 (black) BGR and 33 (red) */
 
-        move.w  #0x8164,(a4)            /* display on, vblank DISABLED */
-        /* Don't enable CPU interrupts yet - linker script needs fixing first */
-        /* move    #0x2000,sr */
+        move.w  #0x8174,(a4)            /* display on, vblank enabled */
+        move    #0x2000,sr              /* enable interrupts */
 
         movem.l (sp)+,d2-d7/a2-a6
         rts
