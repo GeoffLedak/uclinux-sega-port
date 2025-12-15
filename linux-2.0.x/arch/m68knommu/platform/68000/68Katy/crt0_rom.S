@@ -4,13 +4,22 @@
 
         .text
 
-/* Initial exception vectors */
+/* Import exception handlers from kernel entry.S */
+        .extern system_call
+        .extern buserr
+        .extern trap3, trap4, trap5, trap6, trap7
+        .extern trap8, trap9, trap10, trap11
+        .extern inthandler1, inthandler2, inthandler3
+        .extern inthandler5, inthandler7
 
-        .long   0x01000000,initialize,exception,exception,exception,exception,exception,exception
+/* Initial exception vectors */
+/* Vector 32 (TRAP #0) must point to system_call for kernel syscalls */
+
+        .long   0x01000000,initialize,buserr,trap3,trap4,trap5,trap6,trap7
+        .long   trap8,trap9,trap10,trap11,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
-        .long   exception,exception,exception,exception,exception,exception,exception,exception
-        .long   exception,exception,exception,exception,hblank,exception,vblank,exception
-        .long   exception,exception,exception,exception,exception,exception,exception,exception
+        .long   exception,inthandler1,inthandler2,inthandler3,hblank,inthandler5,vblank,inthandler7
+        .long   system_call,exception,exception,exception,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception

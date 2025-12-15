@@ -118,7 +118,8 @@
  * Character devices
  */
 #undef  CONFIG_72001_SERIAL
-#define CONFIG_FT245_SERIAL 1
+/* FT245 is 68Katy-specific USB-serial, not present on Sega Genesis */
+#undef  CONFIG_FT245_SERIAL
 #undef  CONFIG_DS1743
 
 /*

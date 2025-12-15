@@ -1094,16 +1094,21 @@ asmlinkage void start_kernel(void)
 
 
 	printk(linux_banner);
+	printk("[BOOT] banner printed, calling sysctl_init\n");
 #ifdef __SMP__
 	smp_init();
 #endif
 	sysctl_init();
+	printk("[BOOT] sysctl_init done, about to call kernel_thread\n");
 	/* 
 	 *	We count on the initial thread going ok 
 	 *	Like idlers init is an unlocked kernel thread, which will
 	 *	make syscalls (and thus be locked).
 	 */
+	printk("[BOOT] calling kernel_thread(init)...\n");
 	kernel_thread(init, NULL, 0);
+	printk("[BOOT] kernel_thread returned!\n");
+	printk("[BOOT] entering cpu_idle loop\n");
 /*
  * task[0] is meant to be used as an "idle" task: it may not sleep, but
  * it might do some general things like count free pages or it could be
@@ -1180,8 +1185,10 @@ static int init(void * unused)
 #if defined(__H8300H__)
 	extern char console_tty[];
 #endif
+	printk("[INIT] init process starting\n");
 	/* Launch bdflush from here, instead of the old syscall way. */
 	kernel_thread(bdflush, NULL, 0);
+	printk("[INIT] bdflush spawned\n");
 	/* Start the background pageout daemon. */
 #ifndef NO_MM
 	kswapd_setup();
@@ -1194,6 +1201,7 @@ static int init(void * unused)
 	if (initrd_start && mount_initrd) root_mountflags &= ~MS_RDONLY;
 	else mount_initrd =0;
 #endif
+	printk("[INIT] calling setup() - device drivers will init\n");
 	setup();
 #ifdef CONFIG_LCDDMA
 	lcddma_init();
