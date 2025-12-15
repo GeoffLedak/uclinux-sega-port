@@ -10,15 +10,17 @@
 
 #OBJECTS=
 
-all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o $(BOARD)/font_cga.o entry.o platform.o
+all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/genesis_keyboard.o entry.o platform.o
 O_TARGET := platform.o
-O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(OBJECTS)
+O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/genesis_keyboard.o $(OBJECTS)
 
 $(BOARD)/crt0_$(MODEL).o: $(BOARD)/crt0_$(MODEL).S
 
 $(BOARD)/hw_md.o: $(BOARD)/hw_md.S
 
 $(BOARD)/font_cga.o: $(BOARD)/font_cga.c
+
+$(BOARD)/genesis_keyboard.o: $(BOARD)/genesis_keyboard.c
 
 entry.o: entry.S
 

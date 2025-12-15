@@ -40,11 +40,13 @@ extern void console_putchar(char c);
 
 /*
  * Serial driver structures
+ * Note: genesis_serial_driver and genesis_tty_table are non-static
+ * so the keyboard driver can access them
  */
-static struct tty_driver genesis_serial_driver;
+struct tty_driver genesis_serial_driver;
 static struct tty_driver genesis_callout_driver;
 static int genesis_refcount;
-static struct tty_struct *genesis_tty_table[NR_PORTS];
+struct tty_struct *genesis_tty_table[NR_PORTS];
 static struct termios *genesis_termios[NR_PORTS];
 static struct termios *genesis_termios_locked[NR_PORTS];
 

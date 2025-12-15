@@ -524,9 +524,11 @@ console_flush:
 
 /* void genesis_vblank_handler(void); */
 /* Called by crt0_rom.S during vblank interrupt */
-/* Flushes console buffer, draws cursor sprite, AND calls kernel timer routine */
+/* Reads keyboard, flushes console, draws cursor, calls kernel timer */
         .global genesis_vblank_handler
 genesis_vblank_handler:
+        jsr     genesis_read_keyboard   /* read keyboard input from port 2 */
+        jsr     genesis_process_keyboard /* process keyboard and feed to TTY */
         jsr     console_flush           /* flush any pending console output */
         jsr     draw_cursor_sprite      /* draw blinking cursor */
         jsr     genesis_timer_callback  /* call kernel timer (increments jiffies) */
