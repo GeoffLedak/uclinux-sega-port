@@ -55,13 +55,17 @@ void mpsc_console_initialize(void);
 #include "68Katy/68Katy_hw.h"
 void ft245_console_initialize(void);
 
-/* Genesis VDP console output - calls assembly routine in hw_md.S */
-extern void syscall_PRINT_STRING(const char *str, int color);
+/* Genesis VDP console output - uses buffered output via vblank */
+/* console_putchar adds chars to buffer, flushed during vblank interrupt */
+extern void console_putchar(char c);
 
-/* Wrapper for register_console - always uses default color (gray on black) */
+/* Wrapper for register_console - buffers characters for vblank output */
 static void genesis_console_print(const char *str)
 {
-    syscall_PRINT_STRING(str, 0);  /* 0 = palette 0 (gray text) */
+    while (*str) {
+        console_putchar(*str);
+        str++;
+    }
 }
 #endif
 

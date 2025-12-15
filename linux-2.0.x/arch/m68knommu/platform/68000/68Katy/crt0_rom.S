@@ -195,14 +195,18 @@ hblank:
         rte
 
 vblank:
-        /* Simple vblank handler - just increment tick counter */
-        /* Kernel will install its own handler via vblank_vector if needed */
-        movem.l d0-d1/a0-a1,-(sp)
+        /* VBlank handler - flush console buffer and increment tick counter */
+        movem.l d0-d7/a0-a6,-(sp)       /* save all registers (console_flush uses several) */
+        
+        /* Call genesis_vblank_handler to flush console buffer */
+        jsr     genesis_vblank_handler
+        
+        /* Check if kernel installed a custom vblank handler */
         move.l  vblank_vector,d0
         beq.b   1f
         movea.l d0,a0
         jsr     (a0)
 1:
         addq.l  #1,gTicks
-        movem.l (sp)+,d0-d1/a0-a1
+        movem.l (sp)+,d0-d7/a0-a6       /* restore all registers */
         rte

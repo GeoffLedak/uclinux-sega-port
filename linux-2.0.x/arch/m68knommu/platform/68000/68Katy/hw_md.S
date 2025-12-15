@@ -148,8 +148,8 @@ init_hardware:
         move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
         move.l  #0x0000000A,(a3)        /* entry 32 (black) BGR and 33 (red) */
 
-        move.w  #0x8164,(a4)            /* display on, vblank DISABLED */
-        /* move    #0x2000,sr */        /* keep interrupts disabled for now */
+        move.w  #0x8174,(a4)            /* display on, vblank ENABLED */
+        move    #0x2000,sr              /* enable CPU interrupts */
 
         movem.l (sp)+,d2-d7/a2-a6
         rts
@@ -483,6 +483,53 @@ syscall_SCROLL:
 
 
 
+/* ============================================================ */
+/* Console buffer functions for vblank-synchronized output      */
+/* ============================================================ */
+
+/* void console_putchar(char c); */
+/* Add a character to the console buffer (called from kernel) */
+        .global console_putchar
+console_putchar:
+        move.l  4(sp),d0                /* get character */
+        move.l  console_buf_index,d1
+        cmpi.l  #254,d1                 /* buffer full? */
+        bge.s   1f                      /* yes, drop character */
+        lea     console_buffer,a0
+        move.b  d0,0(a0,d1.l)           /* store character */
+        addq.l  #1,d1
+        move.l  d1,console_buf_index
+        clr.b   0(a0,d1.l)              /* null terminate */
+1:
+        rts
+
+/* void console_flush(void); */
+/* Flush the console buffer to screen - call during vblank */
+        .global console_flush
+console_flush:
+        tst.l   console_buf_index       /* anything in buffer? */
+        beq.s   1f                      /* no, return */
+        
+        /* Call syscall_PRINT_STRING(console_buffer, 0) */
+        move.l  #0,-(sp)                /* color = 0 */
+        pea     console_buffer          /* string pointer */
+        jsr     syscall_PRINT_STRING
+        addq.l  #8,sp                   /* clean up stack */
+        
+        /* Clear the buffer */
+        clr.l   console_buf_index
+        clr.b   console_buffer
+1:
+        rts
+
+/* void genesis_vblank_handler(void); */
+/* Called by crt0_rom.S during vblank interrupt */
+        .global genesis_vblank_handler
+genesis_vblank_handler:
+        jsr     console_flush           /* flush any pending console output */
+        rts
+
+
         .data
 
         .global gTicks
@@ -504,3 +551,12 @@ vScrollPos:
         .global scrollFlag
 scrollFlag:
         .long   0
+
+/* Console output buffer */
+        .global console_buf_index
+console_buf_index:
+        .long   0
+
+        .global console_buffer
+console_buffer:
+        .space  256, 0                  /* 256 byte buffer for console output */
