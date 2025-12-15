@@ -1286,13 +1286,17 @@ static int init(void * unused)
 #if defined(__H8300H__)
 	if (open(console_tty,O_RDWR,0) < 0)
 #else
+	printk("[INIT] trying to open /dev/tty1...\n");
 	if ((open("/dev/tty1",O_RDWR,0) < 0) &&
 	    (open("/dev/ttyS0",O_RDWR,0) < 0))
 #endif
 		printk("Unable to open an initial console.\n");
+	else
+		printk("[INIT] console opened successfully\n");
 			
 	(void) dup(0);
 	(void) dup(0);
+	printk("[INIT] about to exec init/shell\n");
 #if defined(CONFIG_M68360)
         quicc_kick_wdt();
 #endif
@@ -1301,29 +1305,38 @@ static int init(void * unused)
 		/* Temporary fix */
 		execve("/bin/sh",argv_init,envp_init);
 #endif
+		printk("[INIT] trying /etc/init...\n");
 		execve("/etc/init",argv_init,envp_init);
+		printk("[INIT] trying /bin/init...\n");
 		execve("/bin/init",argv_init,envp_init);
+		printk("[INIT] trying /sbin/init...\n");
 		execve("/sbin/init",argv_init,envp_init);
 #if defined(CONFIG_SED_SIOS)
         execve("/bin/sh",argv_sh,envp_sh);
         panic("No init found.  Try passing init= option to kernel.");
 #endif
 		/* if this fails, fall through to original stuff */
-
+		printk("[INIT] init programs failed, trying /etc/rc...\n");
 		pid = kernel_thread(do_rc, "/etc/rc", SIGCHLD);
+		printk("[INIT] do_rc kernel_thread returned pid=%d\n", pid);
 		if (pid>0)
 			while (pid != wait(&i))
 				/* nothing */;
+		printk("[INIT] /etc/rc finished\n");
 	}
 
+	printk("[INIT] entering shell loop\n");
 	while (1) {
+		printk("[INIT] spawning shell...\n");
 		pid = kernel_thread(do_shell,
 			execute_command ? execute_command : "/bin/sh",
 			SIGCHLD);
+		printk("[INIT] do_shell returned pid=%d\n", pid);
 		if (pid < 0) {
 			printf("Fork failed in init\n\r");
 			continue;
 		}
+		printk("[INIT] waiting for shell to exit...\n");
 		while (1)
 			if (pid == wait(&i))
 				break;
