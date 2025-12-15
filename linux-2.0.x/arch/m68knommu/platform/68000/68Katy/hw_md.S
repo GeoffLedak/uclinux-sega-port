@@ -524,11 +524,62 @@ console_flush:
 
 /* void genesis_vblank_handler(void); */
 /* Called by crt0_rom.S during vblank interrupt */
-/* Flushes console buffer AND calls kernel timer routine */
+/* Flushes console buffer, draws cursor sprite, AND calls kernel timer routine */
         .global genesis_vblank_handler
 genesis_vblank_handler:
         jsr     console_flush           /* flush any pending console output */
+        jsr     draw_cursor_sprite      /* draw blinking cursor */
         jsr     genesis_timer_callback  /* call kernel timer (increments jiffies) */
+        rts
+
+/* Draw cursor sprite - blinks based on globalCounter */
+draw_cursor_sprite:
+        movem.l d0-d2/a0-a1,-(sp)
+
+        /* Increment globalCounter (wraps at 16 for blink effect) */
+        move.l  globalCounter,d0
+        addq.l  #1,d0
+        andi.l  #0x0F,d0                /* wrap at 16 */
+        move.l  d0,globalCounter
+
+        /* Calculate sprite Y position: (yCursor * 8) + 128 - vScrollPos */
+        move.l  yCursor,d1
+        lsl.l   #3,d1                   /* * 8 */
+        addi.l  #128,d1                 /* + 128 (sprite offset) */
+        sub.l   vScrollPos,d1           /* - vScrollPos */
+
+        /* If Y < 128, cursor would be off screen, put at bottom */
+        cmpi.l  #128,d1
+        bge.s   1f
+        move.l  #328,d1                 /* (25 * 8) + 128 */
+1:
+        /* Calculate sprite X position: (xCursor * 8) + 128 */
+        move.l  xCursor,d2
+        lsl.l   #3,d2                   /* * 8 */
+        addi.l  #128,d2                 /* + 128 (sprite offset) */
+
+        /* Set up VDP for sprite table write at 0xA800 */
+        lea     0xC00004,a0             /* VDP control */
+        lea     0xC00000,a1             /* VDP data */
+        move.l  #0x68000002,(a0)        /* Write to sprite table at 0xA800 */
+
+        /* Write sprite data - first longword: Y pos (10 bits), size, link */
+        move.w  d1,(a1)                 /* Y position */
+        move.w  #0x0000,(a1)            /* size=0 (8x8), link=0 (end of list) */
+
+        /* Write sprite data - second longword: tile index, X pos */
+        /* Blink: if globalCounter < 8, show tile 0xFF, else show tile 0x00 (blank) */
+        move.l  globalCounter,d0
+        cmpi.l  #8,d0
+        blt.s   2f
+        move.w  #0x0000,(a1)            /* tile 0 (blank) */
+        bra.s   3f
+2:
+        move.w  #0x00FF,(a1)            /* tile 0xFF (solid block) */
+3:
+        move.w  d2,(a1)                 /* X position */
+
+        movem.l (sp)+,d0-d2/a0-a1
         rts
 
 
@@ -536,6 +587,10 @@ genesis_vblank_handler:
 
         .global gTicks
 gTicks:
+        .long   0
+
+        .global globalCounter
+globalCounter:
         .long   0
 
         .global xCursor
