@@ -524,9 +524,11 @@ console_flush:
 
 /* void genesis_vblank_handler(void); */
 /* Called by crt0_rom.S during vblank interrupt */
+/* Flushes console buffer AND calls kernel timer routine */
         .global genesis_vblank_handler
 genesis_vblank_handler:
         jsr     console_flush           /* flush any pending console output */
+        jsr     genesis_timer_callback  /* call kernel timer (increments jiffies) */
         rts
 
 

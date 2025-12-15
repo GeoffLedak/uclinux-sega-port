@@ -67,6 +67,17 @@ static void genesis_console_print(const char *str)
         str++;
     }
 }
+
+/* Store kernel's timer routine - called from vblank handler in hw_md.S */
+void (*genesis_timer_routine)(int, void *, struct pt_regs *) = 0;
+
+/* Called from vblank handler (hw_md.S) to invoke kernel timer */
+void genesis_timer_callback(void)
+{
+    if (genesis_timer_routine) {
+        genesis_timer_routine(0, NULL, NULL);
+    }
+}
 #endif
 
 void config_M68000_irq(void);
@@ -114,13 +125,15 @@ BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
                "Guido Classen\n");
 #endif
 #ifdef CONFIG_68KATY
-        request_irq(M68KATY_INT_NUM_TIMER-VEC_SPUR, 
-                    timer_routine, IRQ_FLG_LOCK, "timer", NULL);
-        request_irq(M68KATY_INT_NUM_SERIAL_AND_TIMER-VEC_SPUR, 
-                    timer_routine, IRQ_FLG_LOCK, "timer-and-serial", NULL);
+        /* On Sega Genesis, we use vblank (~60Hz) as our timer source.
+         * Store the timer_routine pointer - it will be called from the
+         * vblank handler in hw_md.S via genesis_timer_callback()
+         */
+        genesis_timer_routine = timer_routine;
 
         printk("MC68000 68 Katy support by Big Mess o' Wires, "
                "Steve Chamberlin\n");
+        printk("[BOOT] Genesis vblank timer installed\n");
 #endif
 }
 
