@@ -1,15 +1,20 @@
 /*
  * Sega Genesis / MegaDrive Memory Map for uClinux
- * Configured for Mega EverDrive X7 with cartridge RAM
+ * Configured for Mega EverDrive X7 with SSF mapper (extended_ssf-v2)
+ *
+ * SSF Mapper Setup:
+ *   - ROM header contains "SEGA SSF" to enable mapper
+ *   - Register 0xA130F0 with P=1, W=1 enables write access
+ *   - Slot 4 (0x200000-0x27FFFF) mapped to bank 4 via 0xA130F8
  *
  * +--------------------+ <- 0x00000000
- * | .text              |   ROM (cartridge)
+ * | .text              |   ROM (cartridge slot 0, bank 0)
  * | (code + rodata)    |
  * |        __text_end  |
  * | __data_rom_start   |   (initialized data stored here in ROM)
- * +--------------------+ <- ~0x00200000 (ROM ends before cartridge RAM)
+ * +--------------------+ <- ~0x00080000 (ROM fits in first 512KB)
  * +--------------------+ <- 0x00200000
- * | .data              |   Cartridge RAM (Mega EverDrive X7 PSRAM)
+ * | .data              |   SSF Bank 4 (writable PSRAM)
  * |      __data_start  |
  * |        __data_end  |
  * +--------------------+
@@ -20,17 +25,16 @@
  * |       (heap)       |
  * |             _end   |
  * .                    .
- * +--------------------+ <- 0x00280000 (end of 512KB cartridge RAM)
+ * +--------------------+ <- 0x00280000 (end of 512KB bank)
  * .                    .
  * +--------------------+ <- 0x00FF0000
  * | Work RAM (64KB)    |   Used for stack (fast on-chip RAM)
  * |           _stack   | <- stack grows down from top
  * +--------------------+ <- 0x01000000
  *
- * The Mega EverDrive X7 provides PSRAM accessible at 0x200000.
- * We use 512KB of this for kernel data/bss/heap.
- * Work RAM (0xFF0000-0xFFFFFF) is used for the stack since it's
- * the fastest RAM in the system.
+ * The SSF mapper provides 512KB banks that can be used as RAM.
+ * Bank 4 at slot 4 (0x200000-0x27FFFF) is used for kernel data/bss/heap.
+ * Work RAM (0xFF0000-0xFFFFFF) is used for the stack.
  */
 
 MEMORY

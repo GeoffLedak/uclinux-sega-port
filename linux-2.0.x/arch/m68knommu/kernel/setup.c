@@ -253,23 +253,10 @@ void setup_arch(char **cmdline_p,
 	flash_probe();
 #endif
 
-#ifdef CONFIG_COLDFIRE
-	memory_start = _ramstart;
-	memory_end = _ramend - 4096; /* <- stack area */
-#else
- #if defined(CONFIG_PILOT) && defined(CONFIG_M68EZ328) && \
- 		!defined(CONFIG_PILOT_INCROMFS)
-	memory_start = _ramstart;
- #else
-	memory_start = &_end;
- #endif
-	memory_end = &_ramend - 4096; /* <- stack area */
-#endif /* CONFIG_COLDFIRE */
-
-#ifdef CONFIG_MWI
-	memory_start = _ramstart;
-	memory_end = _ramend - 0x400;
-#endif
+	/* Genesis/EverDrive memory setup - hardcoded for Sega Genesis */
+	/* End of BSS = start of heap, End of 512KB cartridge RAM = 0x280000 */
+	memory_start = 0x00215058;  /* Hardcode for testing */
+	memory_end = 0x0027F000;    /* 0x280000 - 4096 */
 
 #if defined (CONFIG_M68360)
 	if (quicc_cpm_init())
@@ -280,6 +267,9 @@ void setup_arch(char **cmdline_p,
 
 	setup_console();
 	printk("\x0F\r\n\nuClinux/" CPU "\n");
+	printk("GENESIS BUILD v2 - values should be nonzero:\n");
+	printk("[BOOT] Memory: _end=%lx start=%lx end=%lx\n", 
+		(unsigned long)&_end, memory_start, memory_end);
 
 #if defined( CONFIG_M68360 )
 	printk("uCquicc support by Lineo Inc. <mleslie@lineo.com>\n");

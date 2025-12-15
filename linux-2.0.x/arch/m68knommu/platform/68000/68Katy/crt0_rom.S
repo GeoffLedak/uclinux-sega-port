@@ -17,7 +17,7 @@
 
 /* Standard MegaDrive ROM header at 0x100 */
 
-        .ascii  "SEGA MD uClinux"       /* SEGA must be the first four chars for TMSS */
+        .ascii  "SEGA SSF       "       /* SEGA must be the first four chars for TMSS */
         .ascii  " "
         .ascii  "(C)2024         "
         .ascii  "uClinux for     "      /* export name */
@@ -81,6 +81,22 @@ skip_tmss:
         move.l  d0,(a0)+
         dbra    d1,1b
 
+/* Enable Mega EverDrive X7 SSF mapper with write access */
+/* Register 0xA130F0: [PXWL.... ...RRRRR] (16-bit, active high byte)
+ *   P = Protection bit (must be 1 to write to this register)
+ *   X = 32X mode (0 for normal)
+ *   W = Write enable (1 = cartridge space is writable as RAM)
+ *   L = LED (0 = off)
+ *   R = Bank number for first 512KB slot (0 = bank 0)
+ * 0xA0 = 10100000 binary = P=1, W=1
+ */
+        move.b  #0xA0,0xA130F0          /* Enable cartridge RAM writes: P=1, W=1 */
+
+/* Set up SSF mapper bank for our RAM region */
+/* Slot 4 (0x200000-0x27FFFF) is controlled by register 0xA130F8 */
+/* Map bank 4 to slot 4 (this is the default, but be explicit) */
+        move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 (0x200000-0x27FFFF) */
+
 /* Copy initialized data from ROM to cartridge RAM */
         lea     __data_rom_start,a0     /* source: ROM */
         lea     __data_start,a1         /* dest: cartridge RAM at 0x200000 */
@@ -122,6 +138,16 @@ skip_tmss:
         pea     test_string             /* string pointer */
         jsr     put_str
         lea     16(sp),sp               /* clean up stack (4 args * 4 bytes) */
+
+/* Wait for a few frames so "test" is visible before kernel potentially crashes */
+        move.w  #5,d0                   /* wait for 5 vblanks */
+1:      move.w  0xC00004,d1             /* read VDP status */
+        btst    #3,d1                   /* check vblank flag */
+        beq.b   1b                      /* wait for vblank */
+2:      move.w  0xC00004,d1             /* read VDP status */
+        btst    #3,d1                   /* check vblank flag */
+        bne.b   2b                      /* wait for vblank to end */
+        dbra    d0,1b                   /* repeat for N frames */
 
 /* Jump to Linux kernel */
         jmp     start_kernel

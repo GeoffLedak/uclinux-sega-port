@@ -269,8 +269,9 @@ extern void ipc_init(void);
 
 extern void time_init(void);
 
-static unsigned long memory_start = 0;
-static unsigned long memory_end = 0;
+/* Use the global memory_start/memory_end from arch setup.c */
+extern unsigned long memory_start;
+extern unsigned long memory_end;
 
 int rows, cols;
 

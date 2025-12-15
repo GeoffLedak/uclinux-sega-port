@@ -115,12 +115,11 @@ setup.o: \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/68katy.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/chr/dev/flash.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/blk/dev/flash.h) \
-   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/pilot/incromfs.h) \
-   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/mwi.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/elite.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/m68ez328ads.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/alma/ans.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/cwez328.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/mwi.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/blk/dev/blkmem.h)
 sys_m68k.o: \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
