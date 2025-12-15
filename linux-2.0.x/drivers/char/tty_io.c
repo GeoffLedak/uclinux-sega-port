@@ -2114,6 +2114,9 @@ int tty_init(void)
 #ifdef CONFIG_FT245_SERIAL
 	ft245_init();
 #endif
+#ifdef CONFIG_68KATY
+	genesis_vdp_init();
+#endif
 #ifdef CONFIG_SC28L91
 	rs_sc28l91_init();
 #endif

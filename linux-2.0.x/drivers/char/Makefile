@@ -491,6 +491,10 @@ ifeq ($(CONFIG_FT245_SERIAL),y)
 L_OBJS += ft245.o
 endif
 
+ifeq ($(CONFIG_68KATY),y)
+L_OBJS += genesis_vdp.o
+endif
+
 include $(TOPDIR)/Rules.make
 
 fastdep: uni_hash.tbl
