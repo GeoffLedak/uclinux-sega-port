@@ -68,7 +68,7 @@ int verify_area(int type, const void * addr, unsigned long size)
 #define HIMEM	0x10f00000UL
 #endif
     
-#if defined(CONFIG_COLDFIRE)
+#if defined(CONFIG_COLDFIRE) || defined(CONFIG_68KATY)
 	extern unsigned long _ramend;
 	if ((unsigned long)addr > _ramend) {
 #elif defined(CONFIG_LEON_2)

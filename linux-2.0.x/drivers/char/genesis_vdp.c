@@ -65,6 +65,7 @@ static struct genesis_serial genesis_ports[NR_PORTS];
 
 /*
  * Write characters to VDP console
+ * Handle control characters appropriately
  */
 static int genesis_write(struct tty_struct *tty, int from_user,
                          const unsigned char *buf, int count)
@@ -73,7 +74,21 @@ static int genesis_write(struct tty_struct *tty, int from_user,
 	
 	for (i = 0; i < count; i++) {
 		unsigned char c = from_user ? get_user(buf + i) : buf[i];
-		console_putchar(c);
+		
+		/* Handle control characters */
+		if (c == '\n') {
+			/* Newline: output as newline (syscall_PRINT_STRING handles it) */
+			console_putchar('\n');
+		} else if (c == '\r') {
+			/* Carriage return: ignore (we handle \n) */
+		} else if (c == '\b' || c == 0x7F) {
+			/* Backspace/DEL: TODO - handle cursor movement */
+			console_putchar('\b');
+		} else if (c >= 0x20 && c <= 0x7E) {
+			/* Printable ASCII */
+			console_putchar(c);
+		}
+		/* Ignore other control characters */
 	}
 	
 	return count;
@@ -131,6 +146,11 @@ static int genesis_open(struct tty_struct *tty, struct file *filp)
 	info->count++;
 	info->tty = tty;
 	tty->driver_data = info;
+	
+	/* Store in table for keyboard driver access */
+	genesis_tty_table[line] = tty;
+	
+	printk("[genesis_vdp] ttyS%d opened\n", line);
 	
 	return 0;
 }

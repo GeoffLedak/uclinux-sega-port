@@ -7,6 +7,7 @@
 
 #include <linux/tty.h>
 #include <linux/tty_flip.h>
+#include <linux/sched.h>
 
 /* Hardware registers */
 #define kData2      0xA10005
@@ -750,6 +751,9 @@ void genesis_read_keyboard(void)
     }
 }
 
+/* Debug flag */
+static int tty_debug_printed = 0;
+
 /*
  * Process keyboard input and feed to TTY
  * Called from main loop or timer context
@@ -758,26 +762,43 @@ void genesis_process_keyboard(void)
 {
     unsigned char ch;
     struct tty_struct *tty;
+    unsigned char buf[1];
+    char flag_buf[1];
 
     ch = GetNextHardwareKeyboardChar();
 
     if (ch != kNoKey && ch != 0) {
-        /* Debug: echo the character we got */
-        if (ch >= 0x20 && ch <= 0x7E) {
-            printk("%c", ch);  /* printable char */
-        } else if (ch == '\n' || ch == 0x0A) {
-            printk("\n");
-        } else if (ch == 0x08) {
-            printk("<BS>");
-        }
-
         /* Get the TTY for ttyS0 */
         tty = genesis_tty_table[0];
 
+        /* Debug: print TTY status once */
+        if (!tty_debug_printed) {
+            if (tty) {
+                printk("[TTY open, feeding input]\n");
+            } else {
+                printk("[TTY is NULL - shell may not have opened it]\n");
+            }
+            tty_debug_printed = 1;
+        }
+
         if (tty) {
-            /* Feed character to TTY input buffer */
+            /* Use flip buffer and manually process */
             tty_insert_flip_char(tty, ch, 0);
-            tty_schedule_flip(tty);
+            
+            /* Manually call the flip buffer work function */
+            if (tty->flip.tqueue.routine) {
+                tty->flip.tqueue.routine(tty->flip.tqueue.data);
+            } else {
+                printk("[KB: flip.tqueue.routine is NULL!]\n");
+            }
+            
+            /* After newline, check canon_data and wake */
+            if (ch == '\n' || ch == 0x0A) {
+                printk("[KB: canon_data=%d, read_cnt=%d]\n", 
+                       tty->canon_data, tty->read_cnt);
+                wake_up_interruptible(&tty->read_wait);
+                need_resched = 1;
+            }
         }
     }
 }

@@ -1140,18 +1140,38 @@ static int do_rc(void * rc)
 	return execve("/bin/sh", argv_rc, envp_rc);
 }
 
+/* Static shell path to avoid pointer corruption across fork */
+static char shell_path[] = "/bin/sh";
+
 static int do_shell(void * shell)
 {
+	int fd;
+	int ret;
+	
+	/* Use static shell_path instead of passed pointer */
+	(void)shell;  /* unused - pointer gets corrupted */
+	
+	printk("[SHELL] do_shell starting\n");
 	close(0);close(1);close(2);
 	setsid();
-	if ((open("/dev/tty0",O_RDWR,0) < 0) &&
-	    (open("/dev/ttyS0",O_RDWR,0) < 0)) {
-		printk("Unable to open an initial console for do_shell.\n");
+	
+	fd = open("/dev/ttyS0", O_RDWR, 0);
+	printk("[SHELL] open /dev/ttyS0 returned %d\n", fd);
+	if (fd < 0) {
+		fd = open("/dev/tty0", O_RDWR, 0);
+		printk("[SHELL] open /dev/tty0 returned %d\n", fd);
+	}
+	if (fd < 0) {
+		printk("[SHELL] Unable to open console!\n");
 	}
 
 	(void) dup(0);
 	(void) dup(0);
-	return execve(shell, argv, envp);
+	
+	printk("[SHELL] about to execve %s\n", shell_path);
+	ret = execve(shell_path, argv, envp);
+	printk("[SHELL] execve returned %d (this should NOT print!)\n", ret);
+	return ret;
 }
 
 #ifdef CONFIG_BLK_DEV_INITRD
