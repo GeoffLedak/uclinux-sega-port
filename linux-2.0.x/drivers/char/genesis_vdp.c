@@ -150,7 +150,7 @@ static int genesis_open(struct tty_struct *tty, struct file *filp)
 	/* Store in table for keyboard driver access */
 	genesis_tty_table[line] = tty;
 	
-	printk("[genesis_vdp] ttyS%d opened\n", line);
+	/* Genesis VDP console opened */
 	
 	return 0;
 }

@@ -627,8 +627,7 @@ do_load_flat_binary(struct linux_binprm * bprm, struct pt_regs * regs)
 #endif
 	rev       = ntohl(hdr->rev);
 
-	printk("[BFLT] Loading: text=%lx data=%lx bss=%lx stack=%lx relocs=%d flags=%lx\n",
-		text_len, data_len, bss_len, stack_len, relocs, flags);
+	/* BFLT loader - debug removed */
 
 	if (strncmp(hdr->magic, "bFLT", 4) ||
 			(rev != FLAT_VERSION && rev != OLD_FLAT_VERSION)) {
@@ -725,8 +724,7 @@ do_load_flat_binary(struct linux_binprm * bprm, struct pt_regs * regs)
 		memp = textpos;
 		memkasked = text_len + data_len + extra;
 
-		printk("[BFLT] Allocated: textpos=%lx datapos=%lx reloc=%lx\n",
-			textpos, datapos, (unsigned long)reloc);
+		/* BFLT allocated - debug removed */
 
 #ifdef CONFIG_BINFMT_ZFLAT
 		/*

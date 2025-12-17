@@ -771,13 +771,8 @@ void genesis_process_keyboard(void)
         /* Get the TTY for ttyS0 */
         tty = genesis_tty_table[0];
 
-        /* Debug: print TTY status once */
+        /* TTY status check - debug removed */
         if (!tty_debug_printed) {
-            if (tty) {
-                printk("[TTY open, feeding input]\n");
-            } else {
-                printk("[TTY is NULL - shell may not have opened it]\n");
-            }
             tty_debug_printed = 1;
         }
 
@@ -788,14 +783,10 @@ void genesis_process_keyboard(void)
             /* Manually call the flip buffer work function */
             if (tty->flip.tqueue.routine) {
                 tty->flip.tqueue.routine(tty->flip.tqueue.data);
-            } else {
-                printk("[KB: flip.tqueue.routine is NULL!]\n");
             }
             
-            /* After newline, check canon_data and wake */
+            /* After newline, wake up any waiting readers */
             if (ch == '\n' || ch == 0x0A) {
-                printk("[KB: canon_data=%d, read_cnt=%d]\n", 
-                       tty->canon_data, tty->read_cnt);
                 wake_up_interruptible(&tty->read_wait);
                 need_resched = 1;
             }
