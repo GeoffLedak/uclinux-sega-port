@@ -1003,7 +1003,6 @@ asmlinkage void start_kernel(void)
  * enable them
  */
 	printk("[BOOT] start_kernel entered\n");
-
 	setup_arch(&command_line, &memory_start, &memory_end);
 	printk("[BOOT] setup_arch done\n");
 
@@ -1169,6 +1168,8 @@ static int do_shell(void * shell)
 	(void) dup(0);
 	
 	printk("[SHELL] about to execve %s\n", shell_path);
+	printk("[SHELL] argv=%lx argv[0]=%lx\n", (unsigned long)argv, (unsigned long)(argv ? argv[0] : 0));
+	printk("[SHELL] envp=%lx envp[0]=%lx\n", (unsigned long)envp, (unsigned long)(envp ? envp[0] : 0));
 	ret = execve(shell_path, argv, envp);
 	printk("[SHELL] execve returned %d (this should NOT print!)\n", ret);
 	return ret;

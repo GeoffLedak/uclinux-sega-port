@@ -114,15 +114,23 @@ SECTIONS
     __text_size = __text_end - __text_start;
 
     /*
+     * RAM vector table - 68000 needs 256 vectors * 4 bytes = 0x400 bytes
+     * Reserve this space BEFORE data section to avoid overlapping static data
+     */
+    .ramvec 0x00200000 (NOLOAD) : {
+        __ram_start = .;
+        _ramvec = .;
+        . = . + 0x400;      /* Reserve 1KB for vector table */
+    } > cartram
+
+    /*
      * Initialized data - lives in cartridge RAM at runtime, but initial
      * values are stored in ROM. Startup code must copy from __data_rom_start
      * to __data_start.
      */
-    .data 0x00200000 : AT (__data_rom_start)
+    .data : AT (__data_rom_start)
     {
         __data_start = .;
-        __ram_start = .;
-        _ramvec = .;        /* RAM vector table starts here if needed */
         
         *(.data)
         *(.data.*)

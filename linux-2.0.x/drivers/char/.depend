@@ -471,6 +471,20 @@ gbatxt.o: \
 gbatxt.h: \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/serial.h
 	@touch gbatxt.h
+genesis_vdp.o: \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/errno.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/signal.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/sched.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/timer.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tty.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/tty_flip.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/major.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/string.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/fcntl.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/mm.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/kernel.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
+   /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/segment.h
 h8.o: \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/linux/module.h \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/system.h \
@@ -1541,6 +1555,7 @@ tty_io.o: \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/max311x/serial.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/72001/serial.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/ft245/serial.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/68katy.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/sc28l91.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/serial/atmel.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/serial/atmel/bt.h) \

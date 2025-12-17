@@ -106,6 +106,17 @@ skip_tmss:
 /* Map bank 4 to slot 4 (this is the default, but be explicit) */
         move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 (0x200000-0x27FFFF) */
 
+/* Test: Can we write to cartridge RAM at 0x200000? */
+        move.l  #0xDEADBEEF,0x200000    /* Write test pattern */
+        move.l  0x200000,d0             /* Read it back */
+        cmp.l   #0xDEADBEEF,d0          /* Compare */
+        beq.b   ram_write_ok
+        /* RAM write failed - store marker */
+        move.l  #0xBAD00001,d7          /* Store failure code in d7 */
+        bra.b   skip_data_copy          /* Skip data copy since RAM isn't writable */
+ram_write_ok:
+        move.l  #0x600D0000,d7          /* Store success code in d7 */
+
 /* Copy initialized data from ROM to cartridge RAM */
         lea     __data_rom_start,a0     /* source: ROM */
         lea     __data_start,a1         /* dest: cartridge RAM at 0x200000 */
@@ -118,6 +129,10 @@ skip_tmss:
         subq.l  #1,d0
         bne.b   1b
 2:
+
+/* DEBUG: Save argv[0] value in d6 right after copy */
+        move.l  0x20007c,d6             /* Read argv[0] from RAM */
+skip_data_copy:
 
 /* Clear BSS section in cartridge RAM */
         lea     __bss_start,a0
@@ -140,13 +155,21 @@ skip_tmss:
 /* Initialize the console hardware */
         jsr     init_hardware
 
-/* Sanity check - display "test" on screen */
-        move.l  #2,-(sp)                /* y = 2 */
-        move.l  #2,-(sp)                /* x = 2 */
-        move.l  #0,-(sp)                /* color = 0 (normal) */
-        pea     test_string             /* string pointer */
+/* Brief startup indicator */
+
+/* Check RAM test result - halt if failed */
+        cmp.l   #0x600D0000,d7          /* Check if RAM write succeeded */
+        beq.b   ram_test_done
+        /* RAM failed - show message and halt */
+        move.l  #3,-(sp)
+        move.l  #2,-(sp)
+        move.l  #0,-(sp)
+        pea     ram_fail_string
         jsr     put_str
-        lea     16(sp),sp               /* clean up stack (4 args * 4 bytes) */
+        lea     16(sp),sp
+ram_fail_halt:
+        bra.b   ram_fail_halt
+ram_test_done:
 
 /* Wait for a few frames so "test" is visible before kernel potentially crashes */
         move.w  #5,d0                   /* wait for 5 vblanks */
@@ -161,11 +184,28 @@ skip_tmss:
 /* Jump to Linux kernel */
         jmp     start_kernel
 
-
-/* Test string in ROM */
+/* Test strings in ROM */
         .text
 test_string:
         .asciz  "test"
+        .align  2
+ram_ok_string:
+        .asciz  "RAM OK"
+        .align  2
+ram_fail_string:
+        .asciz  "RAM FAIL!"
+        .align  2
+argv0_label:
+        .asciz  "argv[0] after copy saved in d6"
+        .align  2
+argv0_now:
+        .asciz  "argv[0] after init_hw read again"
+        .align  2
+jumping_string:
+        .asciz  "Jumping to kernel..."
+        .align  2
+returned_string:
+        .asciz  "ERROR: kernel returned!"
         .align  2
 
 /* Data section - vectors and tick counter */

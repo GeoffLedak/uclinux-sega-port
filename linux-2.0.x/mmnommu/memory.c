@@ -70,7 +70,7 @@ int verify_area(int type, const void * addr, unsigned long size)
     
 #if defined(CONFIG_COLDFIRE) || defined(CONFIG_68KATY)
 	extern unsigned long _ramend;
-	if ((unsigned long)addr > _ramend) {
+	if ((unsigned long)addr > (unsigned long)&_ramend) {
 #elif defined(CONFIG_LEON_2)
 	extern int _ramend;
 	if ((unsigned long)addr > &_ramend) {
@@ -87,8 +87,14 @@ int verify_area(int type, const void * addr, unsigned long size)
 			if((unsigned long)addr < 0xf0400000)
 #endif
 			return 0;
-		printk("Bad verify_area in process %d: %lx\n",
-			current->pid, (unsigned long)addr);
+		printk("Bad verify_area in process %d: %lx (ramend=%lx)\n",
+			current->pid, (unsigned long)addr, (unsigned long)&_ramend);
+		/* Print a simple stack trace hint */
+		{
+			unsigned long *sp;
+			asm("move.l %%sp, %0" : "=r" (sp));
+			printk("  caller hints: %lx %lx %lx\n", sp[1], sp[2], sp[3]);
+		}
 		return -EFAULT;
 	}
 	return 0;

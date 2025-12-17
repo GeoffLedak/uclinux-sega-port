@@ -46,6 +46,7 @@ memory.o: \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/pgtable.h \
    /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/asm/string.h \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/coldfire.h) \
+   $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/68katy.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/leon/2.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/flash1mb.h) \
    $(wildcard /home/ubuntu/Documents/projects/uclinux-sega-port/linux-2.0.x/include/config/flash2mb.h) \
