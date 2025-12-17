@@ -79,60 +79,210 @@ initialize:
         move.w  0xC00004,d0             /* read VDP Status reg */
 
 skip_tmss:
+
+/* ===========================================================================
+ * DEBUG STEP 2: Test EverDrive mapper and RAM write
+ * ===========================================================================
+ */
         move.w  #0x8104,0xC00004        /* display off, vblank disabled */
         move.w  0xC00004,d0             /* read VDP Status reg */
 
-/* Clear Work RAM */
-        lea     0xFF0000,a0
-        moveq   #0,d0
-        move.w  #0x3FFF,d1
-1:
-        move.l  d0,(a0)+
+        /* Wait for DMA to complete (in case of reset during DMA) */
+        lea     0xC00004,a4
+0:      move.w  (a4),d0
+        btst    #1,d0                   /* DMA busy? */
+        bne.b   0b
+
+        /* Set VDP registers for minimal display */
+        move.w  #0x8004,(a4)            /* Reg 0: no H-blank int */
+        move.w  #0x8104,(a4)            /* Reg 1: display off, no V-blank int */
+        move.w  #0x8230,(a4)            /* Reg 2: Name Table A at 0xC000 */
+        move.w  #0x832C,(a4)            /* Reg 3: Name Table W at 0xB000 */
+        move.w  #0x8407,(a4)            /* Reg 4: Name Table B at 0xE000 */
+        move.w  #0x8554,(a4)            /* Reg 5: Sprite Table at 0xA800 */
+        move.w  #0x8700,(a4)            /* Reg 7: Background color = 0 */
+        move.w  #0x8C81,(a4)            /* Reg 12: H40 mode */
+        move.w  #0x8F02,(a4)            /* Reg 15: Auto-increment = 2 */
+        move.w  #0x9001,(a4)            /* Reg 16: Scroll size 64x32 */
+
+        /* Clear VRAM */
+        move.l  #0x40000000,(a4)        /* Write to VRAM address 0 */
+        lea     0xC00000,a3             /* VDP data port */
+        move.w  #0x7FFF,d1
+1:      move.w  #0,(a3)
         dbra    d1,1b
 
-/* Enable Mega EverDrive X7 SSF mapper with write access */
-/* Register 0xA130F0: [PXWL.... ...RRRRR] (16-bit, active high byte)
- *   P = Protection bit (must be 1 to write to this register)
- *   X = 32X mode (0 for normal)
- *   W = Write enable (1 = cartridge space is writable as RAM)
- *   L = LED (0 = off)
- *   R = Bank number for first 512KB slot (0 = bank 0)
- * 0xA0 = 10100000 binary = P=1, W=1
- */
-        move.b  #0xA0,0xA130F0          /* Enable cartridge RAM writes: P=1, W=1 */
+        /* Set palette: entry 0 = black, entry 1 = white, entry 2 = green, entry 3 = red */
+        move.l  #0xC0000000,(a4)        /* Write to CRAM address 0 */
+        move.w  #0x0000,(a3)            /* Color 0: black */
+        move.w  #0x0EEE,(a3)            /* Color 1: white */
+        move.w  #0x00E0,(a3)            /* Color 2: green */
+        move.w  #0x000E,(a3)            /* Color 3: red */
 
-/* Set up SSF mapper bank for our RAM region */
-/* Slot 4 (0x200000-0x27FFFF) is controlled by register 0xA130F8 */
-/* Map bank 4 to slot 4 (this is the default, but be explicit) */
-        move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 (0x200000-0x27FFFF) */
+        /* Load font into VRAM (we need letters for RAM OK / RAM FAIL) */
+        /* Copy font_data to VRAM at address 0 */
+        move.l  #0x40000000,(a4)        /* Write to VRAM address 0 */
+        lea     font_data,a0
+        move.w  #256*8-1,d2             /* 256 characters * 8 longwords each */
+font_load_loop:
+        move.l  (a0)+,d0                /* font fg mask */
+        move.l  d0,d1
+        not.l   d1                      /* font bg mask */
+        andi.l  #0x11111111,d0          /* set font fg color (color 1) */
+        andi.l  #0x00000000,d1          /* set font bg color (color 0) */
+        or.l    d1,d0
+        move.l  d0,(a3)                 /* write tile line */
+        dbra    d2,font_load_loop
 
-/* Test: Can we write to cartridge RAM at 0x200000? */
+        /* Turn display ON so we can see what happens */
+        move.w  #0x8144,(a4)            /* Reg 1: display ON, no V-blank int */
+
+        /* ---- Now test EverDrive mapper ---- */
+        
+        /* First, let's test Work RAM (0xFF0000) to make sure basic writes work */
+        move.l  #0x12345678,0xFF0000    /* Write to Work RAM */
+        move.l  0xFF0000,d0             /* Read it back */
+        cmp.l   #0x12345678,d0
+        bne     workram_fail            /* If this fails, something is very wrong */
+
+        /* Work RAM OK - show "W" */
+        move.l  #0x60800003,(a4)        /* Row 2, col 2 */
+        move.w  #'W',(a3)
+        move.w  #'R',(a3)
+        move.w  #'A',(a3)
+        move.w  #'M',(a3)
+        move.w  #':',(a3)
+        move.w  #'O',(a3)
+        move.w  #'K',(a3)
+
+        /* Enable Mega EverDrive X7 SSF mapper with write access */
+        /* Try writing the full word to 0xA130F0 */
+        move.w  #0xA000,0xA130F0        /* Enable cartridge RAM writes: P=1, W=1 (word write) */
+        
+        /* Add delay - real hardware might need time */
+        move.w  #1000,d1
+delay1: dbra    d1,delay1
+        
+        /* Map bank 4 to slot 4 (0x200000-0x27FFFF) */
+        move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 */
+
+        /* Add delay */
+        move.w  #1000,d1
+delay2: dbra    d1,delay2
+
+        /* Test 1: Try writing to slot 4 (0x200000) */
         move.l  #0xDEADBEEF,0x200000    /* Write test pattern */
+        nop
+        nop
         move.l  0x200000,d0             /* Read it back */
         cmp.l   #0xDEADBEEF,d0          /* Compare */
-        beq.b   ram_write_ok
-        /* RAM write failed - store marker */
-        move.l  #0xBAD00001,d7          /* Store failure code in d7 */
-        bra.b   skip_data_copy          /* Skip data copy since RAM isn't writable */
-ram_write_ok:
-        move.l  #0x600D0000,d7          /* Store success code in d7 */
+        beq     ram_test_ok
+
+        /* Test 2: Try slot 2 (0x100000) instead */
+        move.w  #0x0002,0xA130F4        /* Bank 2 -> slot 2 */
+        move.w  #100,d1
+delay3: dbra    d1,delay3
+        move.l  #0xCAFEBABE,0x100000    /* Write test pattern */
+        nop
+        nop
+        move.l  0x100000,d0             /* Read it back */
+        cmp.l   #0xCAFEBABE,d0
+        beq     ram_test_ok_slot2
+
+        /* Test 3: Try slot 1 (0x080000) */
+        move.w  #0x0001,0xA130F2        /* Bank 1 -> slot 1 */
+        move.w  #100,d1
+delay4: dbra    d1,delay4
+        move.l  #0xFEEDFACE,0x080000    /* Write test pattern */
+        nop
+        nop
+        move.l  0x080000,d0             /* Read it back */
+        cmp.l   #0xFEEDFACE,d0
+        beq     ram_test_ok_slot1
+
+        /* All failed - show what we read back from 0x200000 */
+        move.l  0x200000,d7             /* Save what we read */
+        bra     ram_test_fail
+
+ram_test_ok:
+        /* RAM OK at slot 4! Show brief message then continue booting */
+        move.l  #0x61000003,(a4)        /* Row 4, col 2 */
+        move.w  #'R',(a3)
+        move.w  #'A',(a3)
+        move.w  #'M',(a3)
+        move.w  #' ',(a3)
+        move.w  #'O',(a3)
+        move.w  #'K',(a3)
+        move.w  #' ',(a3)
+        move.w  #'-',(a3)
+        move.w  #' ',(a3)
+        move.w  #'B',(a3)
+        move.w  #'O',(a3)
+        move.w  #'O',(a3)
+        move.w  #'T',(a3)
+        move.w  #'I',(a3)
+        move.w  #'N',(a3)
+        move.w  #'G',(a3)
+        bra     continue_boot
+
+ram_test_ok_slot2:
+ram_test_ok_slot1:
+        /* Unexpected - we want slot 4, halt for debug */
+        bra     ram_test_fail
+
+workram_fail:
+        /* Work RAM failed - very bad! */
+        move.l  #0x60800003,(a4)
+        move.w  #'W',(a3)
+        move.w  #'R',(a3)
+        move.w  #'A',(a3)
+        move.w  #'M',(a3)
+        move.w  #' ',(a3)
+        move.w  #'F',(a3)
+        move.w  #'A',(a3)
+        move.w  #'I',(a3)
+        move.w  #'L',(a3)
+        bra     debug_halt
+
+ram_test_fail:
+        /* All cart RAM tests failed - show diagnostic */
+        move.l  #0x61000003,(a4)        /* Row 4, col 2 */
+        move.w  #'C',(a3)
+        move.w  #'A',(a3)
+        move.w  #'R',(a3)
+        move.w  #'T',(a3)
+        move.w  #' ',(a3)
+        move.w  #'R',(a3)
+        move.w  #'A',(a3)
+        move.w  #'M',(a3)
+        move.w  #' ',(a3)
+        move.w  #'F',(a3)
+        move.w  #'A',(a3)
+        move.w  #'I',(a3)
+        move.w  #'L',(a3)
+
+/* DEBUG: Loop forever on failure */
+debug_halt:
+        bra.b   debug_halt
+
+/* ===========================================================================
+ * Continue booting - RAM test passed
+ * ===========================================================================
+ */
+continue_boot:
 
 /* Copy initialized data from ROM to cartridge RAM */
         lea     __data_rom_start,a0     /* source: ROM */
         lea     __data_start,a1         /* dest: cartridge RAM at 0x200000 */
         move.l  #__data_size,d0         /* size in bytes */
-        beq.b   2f                      /* skip if no data */
+        beq.b   data_copy_done          /* skip if no data */
         addq.l  #3,d0                   /* round up to longword */
         lsr.l   #2,d0                   /* convert to longwords */
-1:
+data_copy_loop:
         move.l  (a0)+,(a1)+
         subq.l  #1,d0
-        bne.b   1b
-2:
-
-/* DEBUG: Save argv[0] value in d6 right after copy */
-        move.l  0x20007c,d6             /* Read argv[0] from RAM */
-skip_data_copy:
+        bne.b   data_copy_loop
+data_copy_done:
 
 /* Clear BSS section in cartridge RAM */
         lea     __bss_start,a0
@@ -152,34 +302,20 @@ skip_data_copy:
         movea.l a0,sp
         link.w  a6,#-8                  /* set up initial stack frame */
 
-/* Initialize the console hardware */
+/* Initialize the console hardware (re-init VDP with proper font/colors) */
         jsr     init_hardware
 
-/* Brief startup indicator */
-
-/* Check RAM test result - halt if failed */
-        cmp.l   #0x600D0000,d7          /* Check if RAM write succeeded */
-        beq.b   ram_test_done
-        /* RAM failed - show message and halt */
-        move.l  #3,-(sp)
-        move.l  #2,-(sp)
-        move.l  #0,-(sp)
-        pea     ram_fail_string
-        jsr     put_str
-        lea     16(sp),sp
-ram_fail_halt:
-        bra.b   ram_fail_halt
-ram_test_done:
-
-/* Wait for a few frames so "test" is visible before kernel potentially crashes */
-        move.w  #5,d0                   /* wait for 5 vblanks */
-1:      move.w  0xC00004,d1             /* read VDP status */
+/* Wait for a few frames so "RAM OK - BOOTING" is visible */
+        move.w  #30,d0                  /* wait for 30 vblanks (~0.5 sec) */
+wait_boot_msg:
+        move.w  0xC00004,d1             /* read VDP status */
         btst    #3,d1                   /* check vblank flag */
-        beq.b   1b                      /* wait for vblank */
-2:      move.w  0xC00004,d1             /* read VDP status */
+        beq.b   wait_boot_msg           /* wait for vblank */
+wait_boot_msg2:
+        move.w  0xC00004,d1             /* read VDP status */
         btst    #3,d1                   /* check vblank flag */
-        bne.b   2b                      /* wait for vblank to end */
-        dbra    d0,1b                   /* repeat for N frames */
+        bne.b   wait_boot_msg2          /* wait for vblank to end */
+        dbra    d0,wait_boot_msg        /* repeat for N frames */
 
 /* Jump to Linux kernel */
         jmp     start_kernel
