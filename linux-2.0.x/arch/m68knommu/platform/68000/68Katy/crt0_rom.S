@@ -99,7 +99,7 @@ skip_tmss:
  *   R = Bank number for first 512KB slot (0 = bank 0)
  * 0xA0 = 10100000 binary = P=1, W=1
  */
-        move.b  #0xA0,0xA130F0          /* Enable cartridge RAM writes: P=1, W=1 */
+        move.w  #0xA000,0xA130F0        /* Enable cartridge RAM writes: P=1, W=1 */
 
 /* Set up SSF mapper bank for our RAM region */
 /* Slot 4 (0x200000-0x27FFFF) is controlled by register 0xA130F8 */
