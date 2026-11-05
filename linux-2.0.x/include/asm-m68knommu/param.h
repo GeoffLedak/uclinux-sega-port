@@ -14,6 +14,12 @@
 /* 2002-05-14 gc: */
 #define HZ 500
 #endif
+#ifdef CONFIG_68KATY
+/* Sega Genesis: the system tick is the vblank interrupt, 59.92 times a
+ * second on NTSC consoles (49.70 on PAL).  The exact period is set in
+ * arch/m68knommu/platform/68000/config.c. */
+#define HZ 60
+#endif
 #ifndef HZ
 #define	HZ 100
 #endif

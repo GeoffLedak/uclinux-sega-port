@@ -143,6 +143,7 @@ dir_$(CONFIG_USER_LANG_A60)                 += a60
 dir_$(CONFIG_USER_LCD_LCD)                  += lcd
 dir_$(CONFIG_USER_LEDBLINK) 		    += ledblink
 dir_$(CONFIG_USER_BEEP)                     += beep
+dir_$(CONFIG_USER_VGMPLAY)                  += vgmplay
 dir_$(CONFIG_USER_LEDCON_LEDCON)            += ledcon
 dir_$(CONFIG_USER_LEVEE_VI)                 += levee
 dir_$(CONFIG_USER_LILO_LILO)                += lilo

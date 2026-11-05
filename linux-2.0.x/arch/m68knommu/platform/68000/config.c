@@ -39,6 +39,7 @@
 #include <linux/mm.h>
 #include <linux/tty.h>
 #include <linux/console.h>
+#include <linux/timex.h>
 
 #include <asm/setup.h>
 #include <asm/system.h>
@@ -135,6 +136,12 @@ BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
          * vblank handler in hw_md.S via genesis_timer_callback()
          */
         genesis_timer_routine = timer_routine;
+
+        /* The tick is the vblank: 262 lines x 3420 master clocks at
+         * 53.693175 MHz (59.92 Hz) on NTSC, 313 x 3420 at 53.203424 MHz
+         * (49.70 Hz) on PAL.  HZ is 60, so on PAL the clock is right but
+         * timeouts (sleep etc.) last 20% longer than asked. */
+        tick = (*(volatile unsigned char *)0xA10001 & 0x40) ? 20120 : 16688;
 
         printk("MC68000 68 Katy support by Big Mess o' Wires, "
                "Steve Chamberlin\n");

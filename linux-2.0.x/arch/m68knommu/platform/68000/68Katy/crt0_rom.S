@@ -107,6 +107,13 @@ skip_tmss:
 /* Map bank 4 to slot 4 (this is the default, but be explicit) */
         move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 (0x200000-0x27FFFF) */
 
+/* Map the rest of the ROM image straight through too (slots 1-3 =
+ * 0x080000-0x1FFFFF), so an image over 512KB can be read past its first
+ * bank.  Not all emulators reset these to banks 1-3. */
+        move.w  #0x0001,0xA130F2        /* Bank 1 -> slot 1 (0x080000-0x0FFFFF) */
+        move.w  #0x0002,0xA130F4        /* Bank 2 -> slot 2 (0x100000-0x17FFFF) */
+        move.w  #0x0003,0xA130F6        /* Bank 3 -> slot 3 (0x180000-0x1FFFFF) */
+
 /* Test: Can we write to cartridge RAM at 0x200000? */
         move.l  #0xDEADBEEF,0x200000    /* Write test pattern */
         move.l  0x200000,d0             /* Read it back */
