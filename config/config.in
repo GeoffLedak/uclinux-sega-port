@@ -502,6 +502,7 @@ bool 'chat'			CONFIG_USER_CHAT_CHAT
 if [ "$CONFIG_USER_CHAT_CHAT" = "y" ]; then
 	bool '  chat network/telnet support' CONFIG_USER_CHAT_CHAT_NETWORK
 fi
+bool 'beep'			CONFIG_USER_BEEP
 bool 'cksum'			CONFIG_USER_CKSUM_CKSUM
 bool 'clock'			CONFIG_USER_CLOCK_CLOCK
 bool 'cpu'			CONFIG_USER_CPU_CPU
