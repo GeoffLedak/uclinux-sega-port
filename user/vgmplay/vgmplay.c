@@ -7,7 +7,9 @@
  * .vgz files are gzip-compressed VGM files, about a quarter of the size;
  * zlib unpacks them as they play.  Their title tag is at the end of the
  * file, which can only be reached by unpacking everything (seconds on the
- * 68000), so for them the file name is shown instead.
+ * 68000).  So for them the gzip comment is shown instead: mkvgz.py puts
+ * the title, game and composer there.  Without one, the file name is shown.
+ *
  * VGM files record every write a game made to its sound chips, with waits
  * in 1/44100 s units between them.  This program replays the YM2612 (FM)
  * and SN76489 (PSG) writes on the real chips; writes for other chips and
@@ -206,6 +208,8 @@ static int zin_left;
 static long zstart;		/* file offset of the compressed data */
 static long zpos;		/* unpacked offset of the next byte out */
 
+static char comment[256];	/* gzip comment: title lines from mkvgz.py */
+
 static int raw_byte(void)
 {
 	unsigned char c;
@@ -217,7 +221,7 @@ static int raw_byte(void)
 static int raw_open(const char *name)
 {
 	unsigned char h[10];
-	int flags, n;
+	int flags, n, c;
 
 	if ((fd = open(name, O_RDONLY)) < 0)
 		return -1;
@@ -234,9 +238,13 @@ static int raw_open(const char *name)
 	if (flags & 8)					/* FNAME */
 		while (raw_byte() > 0)
 			;
-	if (flags & 16)					/* FCOMMENT */
-		while (raw_byte() > 0)
-			;
+	if (flags & 16) {				/* FCOMMENT */
+		n = 0;
+		while ((c = raw_byte()) > 0)
+			if (n < (int)sizeof comment - 1)
+				comment[n++] = c;
+		comment[n] = 0;
+	}
 	if (flags & 2)					/* FHCRC */
 		lseek(fd, 2, SEEK_CUR);
 	zstart = lseek(fd, 0, SEEK_CUR);
@@ -528,6 +536,12 @@ int main(int argc, char **argv)
 
 	if (gd3_off && !packed) {
 		show_tag(gd3_off);
+	} else if (comment[0]) {
+		char *p;
+
+		for (p = comment; *p; p++)	/* plain ASCII only */
+			putchar((*p & 0x80) || (*p < ' ' && *p != '\n') ? '?' : *p);
+		putchar('\n');
 	} else {
 		const char *base = strrchr(argv[1], '/');
 		printf("Playing %s\n", base ? base + 1 : argv[1]);
