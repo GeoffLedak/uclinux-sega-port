@@ -17,6 +17,7 @@
 #include <linux/fcntl.h>
 #include <linux/mm.h>
 #include <linux/kernel.h>
+#include <linux/genesis_console.h>
 
 #include <asm/system.h>
 #include <asm/segment.h>
@@ -31,6 +32,17 @@
  * External function from hw_md.S for outputting characters
  */
 extern void console_putchar(char c);
+
+/*
+ * Font / colour change requests, applied by apply_console_settings in hw_md.S
+ * during the next vblank (so the VDP is only accessed from vblank).
+ */
+extern volatile long pendingFont;	/* 0 = none, 6 or 8 */
+extern volatile long pendingColor;	/* 0 = none, else 0x10000 | 0x0BGR */
+
+/* Current settings; must match the boot defaults in hw_md.S */
+static int genesis_font = 8;
+static int genesis_color = 0x0EEE;
 
 /*
  * Driver info
@@ -201,6 +213,27 @@ static void genesis_set_termios(struct tty_struct *tty, struct termios *old)
 static int genesis_ioctl(struct tty_struct *tty, struct file *file,
                          unsigned int cmd, unsigned long arg)
 {
+	switch (cmd) {
+	case GENESIS_SET_FONT:
+		if (arg != 6 && arg != 8)
+			return -EINVAL;
+		genesis_font = arg;
+		pendingFont = arg;
+		return 0;
+
+	case GENESIS_GET_FONT:
+		return genesis_font;
+
+	case GENESIS_SET_COLOR:
+		if (arg > 0xFFF)
+			return -EINVAL;
+		genesis_color = arg & 0x0EEE;	/* the VDP ignores the odd bits */
+		pendingColor = 0x10000 | genesis_color;
+		return 0;
+
+	case GENESIS_GET_COLOR:
+		return genesis_color;
+	}
 	return -ENOIOCTLCMD;
 }
 

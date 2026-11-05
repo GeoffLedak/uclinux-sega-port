@@ -64,6 +64,9 @@ CMDTAB	cmdtab[] = {
 	"cmp",		"filename1 filename2",	do_cmp,
 	3,		3,
 
+	"color",	"[BGR hex, e.g. EEE]",	do_color,
+	1,		2,
+
 	"cp",		"srcname ... destname",	do_cp,
 	3,		MAXARGS,
 
@@ -87,6 +90,9 @@ CMDTAB	cmdtab[] = {
 
 	"exit",		"",			do_exit,
 	1,		1,
+
+	"font",		"[6x8|8x8]",		do_font,
+	1,		2,
 
 	"free",		"",			do_free,
 	1,		1,

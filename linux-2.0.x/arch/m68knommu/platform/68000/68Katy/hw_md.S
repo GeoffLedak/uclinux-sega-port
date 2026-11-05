@@ -11,35 +11,42 @@
         .equ VDP_CONTROL,               0xC00004
         .equ VDP_WRITE_SPRITE_TABLE,    0x60000003
 
-/* Text console layout (6x8 font, software rendered)                       */
+/* Text console layout (software rendered, 8x8 or 6x8 font)                */
 /*                                                                          */
-/* The VDP can only place whole 8x8 tiles, so 6 pixel wide characters are  */
-/* drawn into tiles in software. Each text cell of plane B gets its own    */
-/* tile (the name table is filled once at boot and never changes), a RAM   */
-/* copy of the characters (text_charmap) is kept, and when a character is  */
-/* written the 1 or 2 tiles it overlaps are rebuilt from text_charmap.     */
-/* Four characters fit exactly in three tiles (4 * 6 = 3 * 8 = 24 pixels). */
+/* Each text cell of plane B gets its own tile (the name table is filled    */
+/* once at boot and never changes), a RAM copy of the characters            */
+/* (text_charmap) is kept, and characters are drawn into the tiles in       */
+/* software.                                                                */
+/*   8x8 font (font_cga.c):      36 columns, one character = one tile.      */
+/*   6x8 font (font_cp437_6x8.c): 48 columns. The VDP can only place whole  */
+/*     8x8 tiles, so a character overlaps 1 or 2 tiles, which are rebuilt   */
+/*     from text_charmap. 4 characters fit exactly in 3 tiles (24 pixels). */
+/* Both modes have 16 pixels of padding on the left and right.              */
 /*                                                                          */
-/* xCursor is a character column (0 - 47), yCursor is a plane B row        */
-/* (0 - 31).                                                                */
+/* xCursor is a character column (0 - textCols-1), yCursor is a plane B     */
+/* row (0 - 31). The font is switched at run time through pendingFont and   */
+/* the text colour through pendingColor (see genesis_vdp.c ioctls).         */
         .equ SCREEN_LEFT_PIXEL,         16              /* left/right padding in pixels */
         .equ SCREEN_LEFT_EDGE,          0               /* first text column */
-        .equ SCREEN_RIGHT_EDGE,         48              /* (320 - 2*16) / 6 = 48 columns, 0 - 47 */
         .equ SCREEN_TOP_EDGE,           2
         .equ SCREEN_BOTTOM_EDGE,        25
         .equ PLANE_VERTICAL_EDGE,       31              /* 0 - 31 */
 
-        .equ FONT_WIDTH,                6
-        .equ TEXT_COLS,                 48              /* characters per row */
+        .equ TEXT_COLS_8X8,             36              /* (320 - 2*16) / 8 */
+        .equ TEXT_COLS_6X8,             48              /* (320 - 2*16) / 6 */
+        .equ TEXT_COLS,                 48              /* text_charmap row length (widest mode) */
         .equ TEXT_ROWS,                 32              /* every row of the 64x32 plane (it wraps when scrolling) */
-        .equ TEXT_TILE_COLS,            36              /* 48 * 6 / 8 tiles per row */
+        .equ TEXT_TILE_COLS,            36              /* text tiles per row (288 px) */
         .equ TEXT_FIRST_PLANE_COL,      2               /* plane B column of the first text tile (16 px) */
         .equ TEXT_FIRST_TILE,           1               /* tile 0 stays blank */
-        .equ CURSOR_TILE,               TEXT_FIRST_TILE + TEXT_TILE_COLS * TEXT_ROWS   /* 1153, VRAM 0x9020 */
+        .equ CURSOR_TILE_8X8,           TEXT_FIRST_TILE + TEXT_TILE_COLS * TEXT_ROWS   /* 1153, 8 px wide block */
+        .equ CURSOR_TILE_6X8,           CURSOR_TILE_8X8 + 1                            /* 1154, 6 px wide block */
 
+/* Boot defaults */
+        .equ DEFAULT_FONT_WIDTH,        8               /* 8 = 8x8 font, 6 = 6x8 font */
 /* Text colour, Genesis CRAM format 0000 BBB0 GGG0 RRR0 (each 0x0 - 0xE) */
 /* 0x0AAA = light gray, 0x0EEE = white, 0x00C0 = dim green */
-        .equ TEXT_COLOR,                0x00C0
+        .equ TEXT_COLOR,                0x0EEE
 
 
 
@@ -174,14 +181,18 @@ init_hardware:
         dbra    d3,10b
         dbra    d2,7b
 
-/* cursor tile: a 6 pixel wide solid block */
-        move.l  #CURSOR_TILE*32,d0
+/* cursor tiles: an 8 pixel wide and a 6 pixel wide solid block (consecutive tiles) */
+        move.l  #CURSOR_TILE_8X8*32,d0
         bsr     vram_write_cmd
         move.l  d0,(a4)
         moveq   #7,d2
 11:
-        move.l  #0x11111100,(a3)
+        move.l  #0x11111111,(a3)
         dbra    d2,11b
+        moveq   #7,d2
+12:
+        move.l  #0x11111100,(a3)
+        dbra    d2,12b
 
 /* set the default palette for text */
         move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
@@ -356,7 +367,7 @@ vram_write_cmd:
         rts
 
 /* text_render_tile */
-/* Rebuild one text tile from the two characters that overlap it. */
+/* 6x8 font only: rebuild one text tile from the two characters that overlap it. */
 /* entry: d2.w = row (0 - 31), d3.w = tile column (0 - 35) */
 /* trashes d0-d1, d4-d7, a2-a5 (d2, d3 preserved) */
 /*                                                             */
@@ -424,25 +435,52 @@ text_render_tile:
         rts
 
 /* text_draw_char */
-/* entry: d0.b = character, d2.w = row (0 - 31), d3.w = column (0 - 47) */
+/* entry: d0.b = character, d2.w = row (0 - 31), d3.w = column (0 - textCols-1) */
 /* trashes d0-d1 */
 text_draw_char:
         movem.l d3-d7/a2-a5,-(sp)
+        moveq   #0,d4
+        move.b  d0,d4                   /* d4 = character */
         lea     text_charmap,a2
         move.w  d2,d1
         mulu.w  #TEXT_COLS,d1
         add.w   d3,d1
-        move.b  d0,0(a2,d1.w)           /* text_charmap[row][col] = character */
+        move.b  d4,0(a2,d1.w)           /* text_charmap[row][col] = character */
 
+        cmpi.l  #6,fontWidth
+        beq.s   2f
+
+        /* 8x8 font: the character is exactly one tile (tile column = text column) */
+        move.w  d2,d0
+        mulu.w  #TEXT_TILE_COLS,d0
+        add.w   d3,d0
+        addq.w  #TEXT_FIRST_TILE,d0
+        lsl.l   #5,d0
+        bsr     vram_write_cmd
+        move.l  d0,4(a1)                /* write VRAM at the tile */
+        lea     font_data,a2
+        lsl.w   #5,d4                   /* 8 longs (32 bytes) per glyph */
+        adda.w  d4,a2
+        move.l  #0x11111111,d1          /* glyph rows are 0xF per lit pixel; use colour 1 */
+        moveq   #7,d5
+3:
+        move.l  (a2)+,d0
+        and.l   d1,d0
+        move.l  d0,(a1)                 /* write tile row */
+        dbra    d5,3b
+        bra.s   1f
+
+        /* 6x8 font */
+2:
         move.w  d3,d4
-        mulu.w  #FONT_WIDTH,d4          /* pixel x within the text area */
+        mulu.w  #6,d4                   /* pixel x within the text area */
         move.w  d4,-(sp)
         lsr.w   #3,d4
         move.w  d4,d3                   /* first tile the character touches */
         bsr     text_render_tile
         move.w  (sp)+,d4
         andi.w  #7,d4                   /* pixel offset inside that tile */
-        cmpi.w  #8-FONT_WIDTH,d4
+        cmpi.w  #8-6,d4
         bls.s   1f                      /* character fits inside one tile */
         addq.w  #1,d3
         bsr     text_render_tile        /* it spills into the next tile */
@@ -490,6 +528,53 @@ clear_screen:
         bsr     text_clear_row
         dbra    d2,1b
         move.l  (sp)+,d2
+        rts
+
+/* void apply_console_settings(void); */
+/* Apply a font or colour change requested by the console driver (genesis_vdp.c */
+/* sets pendingFont / pendingColor). Called from the vblank handler before the  */
+/* console buffer is flushed, so the VDP is only touched from vblank.           */
+/* A font change clears the screen and puts the cursor back at the top.         */
+        .global apply_console_settings
+apply_console_settings:
+        lea     0xC00000,a1
+        move.w  #0x8F02,4(a1)           /* set INC to 2 */
+
+        move.l  pendingColor,d0
+        beq.s   1f                      /* 0 = no change */
+        clr.l   pendingColor
+        move.l  #0xC0020000,4(a1)       /* write CRAM address 2 (palette 0, entry 1) */
+        move.w  d0,(a1)                 /* text and cursor colour (low word) */
+1:
+        move.l  pendingFont,d0
+        beq.w   9f                      /* 0 = no change */
+        clr.l   pendingFont
+
+        cmpi.l  #6,d0
+        beq.s   2f
+        move.l  #8,fontWidth            /* 8x8 font */
+        move.l  #TEXT_COLS_8X8,textCols
+        move.l  #CURSOR_TILE_8X8,cursorTile
+        bra.s   3f
+2:
+        move.l  #6,fontWidth            /* 6x8 font */
+        move.l  #TEXT_COLS_6X8,textCols
+        move.l  #CURSOR_TILE_6X8,cursorTile
+3:
+        move.l  d2,-(sp)
+        moveq   #TEXT_ROWS-1,d2
+4:
+        bsr     text_clear_row          /* clear the whole plane */
+        dbra    d2,4b
+        move.l  (sp)+,d2
+
+        move.l  #SCREEN_LEFT_EDGE,xCursor
+        move.l  #SCREEN_TOP_EDGE,yCursor
+        clr.l   scrollFlag
+        clr.l   vScrollPos
+        move.l  #0x40020010,4(a1)       /* write VSRAM address 2 (plane B vertical scroll) */
+        move.w  #0,(a1)
+9:
         rts
 
 /* void put_str(char *str, int color, int x, int y); */
@@ -581,7 +666,8 @@ printLoop:
         bsr     text_draw_char          /* draw character at the cursor */
 
         addq.l  #1, xCursor
-        cmpi.l  #SCREEN_RIGHT_EDGE, xCursor             /* if xCursor is past the last column */
+        move.l  xCursor,d0
+        cmp.l   textCols,d0                             /* if xCursor is past the last column */
         bcc.s   newline                                 /* jump to newline */
         bra.s   printLoop
 
@@ -685,6 +771,7 @@ console_flush:
 genesis_vblank_handler:
         jsr     genesis_read_keyboard   /* read keyboard input from port 2 */
         jsr     genesis_process_keyboard /* process keyboard and feed to TTY */
+        jsr     apply_console_settings  /* font / colour changes requested by the console driver */
         jsr     console_flush           /* flush any pending console output */
         jsr     draw_cursor_sprite      /* draw blinking cursor */
         jsr     genesis_timer_callback  /* call kernel timer (increments jiffies) */
@@ -711,9 +798,9 @@ draw_cursor_sprite:
         bge.s   1f
         move.l  #328,d1                 /* (25 * 8) + 128 */
 1:
-        /* Calculate sprite X position: (xCursor * 6) + left padding + 128 */
+        /* Calculate sprite X position: (xCursor * fontWidth) + left padding + 128 */
         move.l  xCursor,d2
-        mulu.w  #FONT_WIDTH,d2          /* * 6 */
+        mulu.w  fontWidth+2,d2          /* * 8 or 6 */
         addi.l  #SCREEN_LEFT_PIXEL+128,d2 /* + padding + 128 (sprite offset) */
 
         /* Set up VDP for sprite table write at 0xA800 */
@@ -733,7 +820,7 @@ draw_cursor_sprite:
         move.w  #0x0000,(a1)            /* tile 0 (blank) */
         bra.s   3f
 2:
-        move.w  #CURSOR_TILE,(a1)       /* 6 pixel wide solid block */
+        move.w  cursorTile+2,(a1)       /* solid block as wide as the font */
 3:
         move.w  d2,(a1)                 /* X position */
 
@@ -754,6 +841,32 @@ globalCounter:
         .global xCursor
 xCursor:
         .long   SCREEN_LEFT_EDGE
+
+/* Current font: width in pixels (8 or 6), columns per row, cursor tile */
+        .global fontWidth
+fontWidth:
+        .long   DEFAULT_FONT_WIDTH
+
+        .if DEFAULT_FONT_WIDTH - 6
+textCols:
+        .long   TEXT_COLS_8X8
+cursorTile:
+        .long   CURSOR_TILE_8X8
+        .else
+textCols:
+        .long   TEXT_COLS_6X8
+cursorTile:
+        .long   CURSOR_TILE_6X8
+        .endif
+
+/* Requests from the console driver, applied in apply_console_settings */
+        .global pendingFont
+pendingFont:
+        .long   0                       /* 0 = none, 6 or 8 = switch to that font */
+
+        .global pendingColor
+pendingColor:
+        .long   0                       /* 0 = none, else 0x10000 | new CRAM colour 0x0BGR */
 
         .global yCursor
 yCursor:
