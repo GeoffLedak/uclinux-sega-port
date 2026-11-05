@@ -410,6 +410,13 @@ int main(int argc, char *argv[])
 		}
 
 		pid = wait(&vec);
+		if (pid < 0 && errno == ECHILD) {
+			/* No children: a job is being held back for respawning
+			 * too fast.  Sleep rather than spin; the SIGALRM set by
+			 * respawn_children() ends the sleep early if it's due. */
+			sleep(1);
+			continue;
+		}
 		alarm(0);
 
 		/* clear utmp entry, and append to wtmp if possible */
