@@ -19,7 +19,8 @@
  *   s u (save/restore cursor), n (status/cursor position report),
  *   c (device attributes), 4h/4l (insert mode), ?7h/l (autowrap),
  *   ?25h/l (show/hide cursor), Ps SP q (cursor shape),
- *   m (attributes: accepted and ignored - there are no colours yet).
+ *   m (attributes: 7 reverse video, 27 not reversed, 0 normal; others
+ *   such as bold and colours are accepted and ignored).
  * Bytes 0x80-0xFF are drawn as Code Page 437 characters.
  *
  * Note: the kernel is not linked with libgcc, so this file must not use
@@ -43,12 +44,13 @@
 #define ROWS		24			/* TEXT_ROWS */
 #define CURSOR_TILES	865			/* CURSOR_TILES */
 #define CELL(b, x)	text_charmap[((b) << 5) + ((b) << 4) + (x)]	/* TEXT_COLS = 48 */
+#define ATTR(b, x)	text_attrmap[((b) << 5) + ((b) << 4) + (x)]	/* 1 = reverse */
 
 /* hw_md.S */
 extern void text_refresh(int block, int from, int to);
 extern void text_zero_block(int block);
 extern void text_map_row(int row, int block);
-extern unsigned char text_charmap[];
+extern unsigned char text_charmap[], text_attrmap[];
 extern long fontWidth, textCols;
 
 extern struct tty_struct *genesis_tty_table[];
@@ -135,6 +137,8 @@ static char insert_mode;			/* CSI 4h */
 static char cursor_shown = 1;			/* CSI ?25h */
 static char cursor_style;			/* CSI Ps SP q: 0-6 */
 static int saved_x, saved_y;
+static char attr;				/* for new characters: 1 = reverse */
+static char saved_attr;
 
 static unsigned char row_block[ROWS] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
@@ -259,6 +263,7 @@ static void erase(int r, int from, int to)
 		return;
 	}
 	memset(&CELL(b, from), 0, to - from);
+	memset(&ATTR(b, from), 0, to - from);
 	mark(b, from, to);
 }
 
@@ -300,9 +305,11 @@ static void put_glyph(unsigned char c)
 	b = row_block[cy];
 	if (insert_mode && cx < cols - 1) {
 		memmove(&CELL(b, cx + 1), &CELL(b, cx), cols - cx - 1);
+		memmove(&ATTR(b, cx + 1), &ATTR(b, cx), cols - cx - 1);
 		mark(b, cx, cols);
 	}
 	CELL(b, cx) = c;
+	ATTR(b, cx) = attr;
 	mark(b, cx, cx + 1);
 	if (cx < cols - 1)
 		cx++;
@@ -331,6 +338,7 @@ static void reset_terminal(void)
 	cursor_shown = 1;
 	cursor_style = 0;
 	saved_x = saved_y = 0;
+	attr = saved_attr = 0;
 	state = S_NORMAL;
 	clear_screen();
 }
@@ -486,6 +494,8 @@ static void do_csi(unsigned char f)
 		b = row_block[cy];
 		memmove(&CELL(b, cx + n), &CELL(b, cx), cols - cx - n);
 		memset(&CELL(b, cx), 0, n);
+		memmove(&ATTR(b, cx + n), &ATTR(b, cx), cols - cx - n);
+		memset(&ATTR(b, cx), 0, n);
 		mark(b, cx, cols);
 		break;
 	case 'P':				/* delete characters */
@@ -495,6 +505,8 @@ static void do_csi(unsigned char f)
 		b = row_block[cy];
 		memmove(&CELL(b, cx), &CELL(b, cx + n), cols - cx - n);
 		memset(&CELL(b, cols - n), 0, n);
+		memmove(&ATTR(b, cx), &ATTR(b, cx + n), cols - cx - n);
+		memset(&ATTR(b, cols - n), 0, n);
 		mark(b, cx, cols);
 		break;
 	case 'X':				/* erase characters */
@@ -536,12 +548,26 @@ static void do_csi(unsigned char f)
 	case 's':				/* save cursor */
 		saved_x = cx;
 		saved_y = cy;
+		saved_attr = attr;
 		break;
 	case 'u':				/* restore cursor */
 		cx = saved_x;
 		cy = saved_y;
+		attr = saved_attr;
 		break;
-	default:				/* m (attributes), g, ... ignored */
+	case 'm':				/* character attributes */
+		if (npar == 0)
+			attr = 0;
+		for (i = 0; i < npar; i++) {
+			if (par[i] == 0)
+				attr = 0;
+			else if (par[i] == 7)
+				attr = 1;
+			else if (par[i] == 27)
+				attr = 0;
+		}
+		break;
+	default:				/* g, ... ignored */
 		break;
 	}
 	clamp_cursor();
@@ -606,10 +632,12 @@ static void term_byte(unsigned char c)
 		case '7':			/* save cursor */
 			saved_x = cx;
 			saved_y = cy;
+			saved_attr = attr;
 			break;
 		case '8':			/* restore cursor */
 			cx = saved_x;
 			cy = saved_y;
+			attr = saved_attr;
 			wrapnext = 0;
 			clamp_cursor();
 			break;
@@ -686,6 +714,8 @@ static void draw_cursor(void)
 
 	if (!cursor_shown || (!steady && blink >= 16))
 		tile = 0;			/* blank */
+	else if (ATTR(row_block[cy], cx))
+		tile |= 0x2000;			/* palette 1, colour 1 = black: shows on reverse video */
 
 	x = 128 + 16 + ((cols == 48) ? (cx << 2) + (cx << 1) : (cx << 3));
 	y = 128 + 16 + (cy << 3);
@@ -707,7 +737,15 @@ void genesis_term_vblank(void)
 	struct tty_struct *tty;
 	int did_output = 0;
 	unsigned char c;
+	static char palette1_set;
 
+	if (!palette1_set) {
+		/* palette 1 colour 1 = black: the cursor over reverse video */
+		VDP_CTRL16 = 0x8F02;
+		VDP_CTRL32 = 0xC0220000;	/* write CRAM entry 17 */
+		VDP_DATA16 = 0x0000;
+		palette1_set = 1;
+	}
 	if (pending_color) {
 		VDP_CTRL16 = 0x8F02;
 		VDP_CTRL32 = 0xC0020000;	/* write CRAM entry 1 (text colour) */

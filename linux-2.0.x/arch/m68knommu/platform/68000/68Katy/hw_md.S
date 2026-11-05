@@ -24,6 +24,8 @@
 /*   6x8 font (font_cp437_6x8.c): 48 columns. The VDP can only place whole  */
 /*     8x8 tiles, so a character overlaps 1 or 2 tiles, which are rebuilt   */
 /*     from text_charmap. 4 characters fit exactly in 3 tiles (24 pixels).  */
+/* text_attrmap has one byte per character too: nonzero = reverse video,   */
+/* drawn by swapping the text colour (1) and the background (0).            */
 /* The terminal logic (cursor, escape sequences, scrolling) is in           */
 /* genesis_term.c; the constants marked (*) must match it.                  */
         .equ TEXT_COLS_8X8,             36              /* (320 - 2*16) / 8 */
@@ -402,13 +404,19 @@ tile_write_cmd:
 
 /* text_render_tile8 */
 /* 8x8 font: draw the character in column d3 of block d2 (one tile). */
-/* trashes d0-d1, d4-d5, a2 */
+/* trashes d0-d1, d4-d6, a2 */
 text_render_tile8:
         bsr     tile_write_cmd
-        lea     text_charmap,a2
         move.w  d2,d0
         mulu.w  #TEXT_COLS,d0
         add.w   d3,d0
+        moveq   #0,d6                   /* d6 = pixels to flip: none, */
+        lea     text_attrmap,a2
+        tst.b   0(a2,d0.w)
+        beq.s   0f
+        move.l  #0x11111111,d6          /* or all of them (reverse video) */
+0:
+        lea     text_charmap,a2
         moveq   #0,d4
         move.b  0(a2,d0.w),d4           /* character */
         moveq   #7,d5
@@ -423,11 +431,12 @@ text_render_tile8:
 1:
         move.l  (a2)+,d0
         and.l   d1,d0
+        eor.l   d6,d0
         move.l  d0,(a1)                 /* write tile row */
         dbra    d5,1b
         rts
 2:
-        moveq   #0,d0                   /* blank character: clear the tile */
+        move.l  d6,d0                   /* blank character: clear (or fill) the tile */
 3:
         move.l  d0,(a1)
         dbra    d5,3b
@@ -436,7 +445,7 @@ text_render_tile8:
 /* text_render_tile6 */
 /* 6x8 font: rebuild one tile from the two characters that overlap it. */
 /* entry: d2.w = block, d3.w = tile column (0 - 35) */
-/* trashes d0-d1, d4-d7, a2-a5 (d2, d3 preserved) */
+/* trashes d0-d1, d4-d7, a0, a2-a5 (d2, d3 preserved) */
 /*                                                             */
 /* The first character in tile t is k = 4t/3 and it starts      */
 /* s = -2 * (4t mod 3) pixels from the tile's left edge         */
@@ -463,6 +472,8 @@ text_render_tile6:
         mulu.w  #TEXT_COLS,d0
         add.w   d4,d0
         adda.w  d0,a2                   /* a2 = &text_charmap[block][k] */
+        lea     text_attrmap,a0
+        adda.w  d0,a0                   /* a0 = &text_attrmap[block][k] */
 
         moveq   #0,d0
         move.b  (a2)+,d0                /* character k */
@@ -470,7 +481,10 @@ text_render_tile6:
         move.b  (a2),d1                 /* character k+1 */
         moveq   #7,d5                   /* 8 pixel rows */
 
-        /* both characters blank (0 or space): clear the tile */
+        /* both characters blank (0 or space) and not reversed: clear the tile */
+        move.b  (a0),d4
+        or.b    1(a0),d4
+        bne.s   2f
         move.b  d0,d4
         andi.b  #0xDF,d4                /* 0x20 -> 0x00 */
         bne.s   2f
@@ -490,6 +504,19 @@ text_render_tile6:
         lsl.w   #3,d1
         adda.w  d1,a4                   /* a4 = glyph of character k+1 */
 
+        /* d4 = pixels to flip for reverse video, shifted like the glyphs */
+        moveq   #0,d4
+        tst.b   (a0)+
+        beq.s   4f
+        move.l  #0x00111111,d4          /* character k */
+        lsl.l   d6,d4
+4:
+        tst.b   (a0)
+        beq.s   5f
+        move.l  #0x00111111,d0          /* character k+1 */
+        lsr.l   d7,d0
+        or.l    d0,d4
+5:
         lea     font_6x8_expand,a5
 1:
         moveq   #0,d0
@@ -505,13 +532,14 @@ text_render_tile6:
         move.l  0(a5,d1.w),d1           /* character k+1 row as 4bpp pixels */
         lsr.l   d7,d1
         or.l    d1,d0
+        eor.l   d4,d0
         move.l  d0,(a1)                 /* write tile row */
         dbra    d5,1b
         rts
 
 /* text_refresh_internal */
 /* Redraw columns [d3, d4) of block d2 from text_charmap in the current font. */
-/* trashes d0-d1, d3-d7, a2-a5 */
+/* trashes d0-d1, d3-d7, a0, a2-a5 */
 text_refresh_internal:
         cmp.w   d3,d4
         bls.s   9f                      /* empty range */
@@ -566,17 +594,20 @@ text_refresh:
         rts
 
 /* void text_zero_block(int block); */
-/* Blank a block: clear its text_charmap row and all of its tiles. */
+/* Blank a block: clear its text_charmap and text_attrmap rows and all of its tiles. */
         .global text_zero_block
 text_zero_block:
         move.l  4(sp),d0                /* block */
-        lea     text_charmap,a0
         mulu.w  #TEXT_COLS,d0
+        lea     text_charmap,a0
         adda.w  d0,a0
+        lea     text_attrmap,a1
+        adda.w  d0,a1
         moveq   #TEXT_COLS/4-1,d1
         moveq   #0,d0
 1:
         move.l  d0,(a0)+                /* TEXT_COLS is a multiple of 4 and rows are long aligned */
+        move.l  d0,(a1)+
         dbra    d1,1b
 
         lea     0xC00000,a1
@@ -723,4 +754,9 @@ textCols:
 /* Characters of each block, [TEXT_ROWS][TEXT_COLS] (zeroed at boot = blank) */
         .global text_charmap
 text_charmap:
+        .space  TEXT_COLS*TEXT_ROWS
+
+/* Attributes of each character, same layout: nonzero = reverse video */
+        .global text_attrmap
+text_attrmap:
         .space  TEXT_COLS*TEXT_ROWS
