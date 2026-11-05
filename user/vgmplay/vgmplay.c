@@ -2,7 +2,12 @@
  * vgmplay -- play a VGM music log on the Sega Genesis sound chips.
  *
  *	vgmplay file.vgm
+ *	vgmplay file.vgz
  *
+ * .vgz files are gzip-compressed VGM files, about a quarter of the size;
+ * zlib unpacks them as they play.  Their title tag is at the end of the
+ * file, which can only be reached by unpacking everything (seconds on the
+ * 68000), so for them the file name is shown instead.
  * VGM files record every write a game made to its sound chips, with waits
  * in 1/44100 s units between them.  This program replays the YM2612 (FM)
  * and SN76489 (PSG) writes on the real chips; writes for other chips and
@@ -30,6 +35,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <sys/times.h>
+#include "zlib.h"
 
 #define YM_ADDR0	(*(volatile unsigned char *)0xA04000)	/* also status */
 #define YM_DATA0	(*(volatile unsigned char *)0xA04001)
@@ -64,6 +70,8 @@ static clock_t last_tick;
 static struct tms tms;
 static unsigned char reg27;	/* channel 3 mode bits the song set in reg 0x27 */
 static unsigned long overflows;
+
+static void prefetch(void);
 
 static struct termios saved_tty;
 static int have_tty;
@@ -143,8 +151,8 @@ static void sync_clock(void)
 	if (ticks == 0)
 		return;
 	last_tick = now;
-	if (ticks > 4)		/* we didn't run for a while: pause, don't rush */
-		ticks = 4;
+	if (ticks > 30)		/* we didn't run for 1/2 s: pause, don't rush */
+		ticks = 30;
 	behind += ticks * tick_units - granted;
 	granted = 0;
 	if (behind > TIMER_UNITS) {
@@ -171,6 +179,8 @@ static void wait_samples(unsigned long n)
 				sync_clock();
 				if ((++overflows & 15) == 0)	/* every ~32 ms */
 					check_key();
+			} else if (credit < -2 * TIMER_UNITS) {
+				prefetch();		/* over 4 ms to spare */
 			}
 		}
 	}
@@ -179,35 +189,233 @@ static void wait_samples(unsigned long n)
 /* ---------------------------------------------------------------- */
 /* File                                                             */
 
+/*
+ * Raw file access, unpacking .vgz files on the way.  Everything is done in
+ * small pieces because the music can't play while we read; zlib's own
+ * gzread() reads 16KB at a time.  zlib unpacks all the input it is given
+ * before it returns, whatever the room for output, so it is handed ZSTEP
+ * bytes at a time: about 128 bytes out, under 1/100 s of work.
+ */
+#define ZSTEP	32
 static int fd;
-static unsigned char buf[4096];
-static int bpos, blen;
-static long bstart;		/* file offset of buf[0] */
+static int packed;		/* gzip file */
+static z_stream z;
+static unsigned char zin[512];
+static unsigned char *zin_next;	/* not yet handed to zlib */
+static int zin_left;
+static long zstart;		/* file offset of the compressed data */
+static long zpos;		/* unpacked offset of the next byte out */
+
+static int raw_byte(void)
+{
+	unsigned char c;
+
+	return read(fd, &c, 1) == 1 ? c : -1;
+}
+
+/* Open a .vgm or .vgz file; returns 0 or -1 */
+static int raw_open(const char *name)
+{
+	unsigned char h[10];
+	int flags, n;
+
+	if ((fd = open(name, O_RDONLY)) < 0)
+		return -1;
+	if (read(fd, h, 10) != 10 || h[0] != 0x1F || h[1] != 0x8B || h[2] != 8) {
+		lseek(fd, 0, SEEK_SET);		/* not gzip: plain file */
+		return 0;
+	}
+	flags = h[3];			/* skip the rest of the gzip header */
+	if (flags & 4) {				/* FEXTRA */
+		n = raw_byte();
+		n |= raw_byte() << 8;
+		lseek(fd, n, SEEK_CUR);
+	}
+	if (flags & 8)					/* FNAME */
+		while (raw_byte() > 0)
+			;
+	if (flags & 16)					/* FCOMMENT */
+		while (raw_byte() > 0)
+			;
+	if (flags & 2)					/* FHCRC */
+		lseek(fd, 2, SEEK_CUR);
+	zstart = lseek(fd, 0, SEEK_CUR);
+	if (inflateInit2(&z, -MAX_WBITS) != Z_OK)	/* raw deflate data */
+		return -1;
+	packed = 1;
+	return 0;
+}
+
+static int raw_read(unsigned char *dst, int n)
+{
+	int e;
+
+	if (!packed)
+		return read(fd, dst, n);
+	z.next_out = dst;
+	z.avail_out = n;
+	while (z.avail_out) {
+		if (z.avail_in == 0) {
+			if (zin_left == 0) {
+				zin_left = read(fd, zin, sizeof zin);
+				if (zin_left <= 0) {
+					zin_left = 0;
+					break;
+				}
+				zin_next = zin;
+			}
+			z.next_in = zin_next;
+			z.avail_in = zin_left > ZSTEP ? ZSTEP : zin_left;
+			zin_next += z.avail_in;
+			zin_left -= z.avail_in;
+		}
+		e = inflate(&z, Z_NO_FLUSH);
+		if (e != Z_OK)		/* end of data, or damaged */
+			break;
+	}
+	n -= z.avail_out;
+	zpos += n;
+	return n;
+}
+
+static void raw_seek(long off)
+{
+	unsigned char tmp[256];
+
+	if (!packed) {
+		lseek(fd, off, SEEK_SET);
+		return;
+	}
+	if (off < zpos) {		/* backwards: start again from the top */
+		inflateReset(&z);
+		lseek(fd, zstart, SEEK_SET);
+		z.avail_in = 0;
+		zin_left = 0;
+		zpos = 0;
+	}
+	while (zpos < off)
+		if (raw_read(tmp, off - zpos > 256 ? 256 : off - zpos) <= 0)
+			break;
+}
+
+/*
+ * Read-ahead: unpacked song data waits in a ring buffer.  While the player
+ * waits for the next note it unpacks a little more (prefetch()), so the
+ * music rarely has to stop for get() to unpack data itself.
+ */
+#define RING	4096		/* power of 2 */
+static unsigned char ring[RING];
+static int rtail, rcount;	/* next byte out, bytes waiting */
+static long rstart;		/* file offset of the next byte out */
+static int at_eof;
+static unsigned long read_ticks, read_max;	/* -v: time music waited */
+
+/*
+ * A .vgz file can only be unpacked from the start, so jumping back to the
+ * loop point would mean unpacking everything before it again, all at once.
+ * Instead the first LOOP_KEEP bytes after the loop point are kept the first
+ * time through.  At the loop they go back into the ring, and the unpacking
+ * is redone in the background (fill() throws away what it has already got).
+ */
+#define LOOP_KEEP	RING
+static unsigned char loop_keep[LOOP_KEEP];
+static long loop_at;		/* loop point, 0 if none */
+static int loop_len;		/* bytes kept */
+
+/* Add up to max bytes to the ring; returns how many */
+static int fill(int max)
+{
+	int head = (rtail + rcount) & (RING - 1);
+	int n = RING - rcount;
+	long at = rstart + rcount;	/* file offset of ring[head] */
+
+	if (packed && zpos < at) {	/* catching up after a loop */
+		unsigned char tmp[256];
+
+		n = at - zpos > max ? max : at - zpos;
+		if (raw_read(tmp, n > 256 ? 256 : n) <= 0)
+			at_eof = 1;
+		return 0;
+	}
+	if (n > RING - head)
+		n = RING - head;
+	if (n > max)
+		n = max;
+	if (n <= 0 || at_eof)
+		return 0;
+	n = raw_read(ring + head, n);
+	if (n <= 0) {
+		at_eof = 1;
+		return 0;
+	}
+	rcount += n;
+	if (packed && loop_at && at + n > loop_at + loop_len && loop_len < LOOP_KEEP &&
+	    at <= loop_at + loop_len) {		/* keep the loop's start */
+		int from = loop_at + loop_len - at;
+		int k = n - from;
+
+		if (k > LOOP_KEEP - loop_len)
+			k = LOOP_KEEP - loop_len;
+		memcpy(loop_keep + loop_len, ring + head + from, k);
+		loop_len += k;
+	}
+	return n;
+}
+
+static void prefetch(void)
+{
+	fill(64);		/* about 3 ms of unpacking on the 68000 */
+}
 
 static int get(void)
 {
-	if (bpos >= blen) {
-		bstart += blen;
-		blen = read(fd, buf, sizeof buf);
-		bpos = 0;
-		if (blen <= 0) {
-			blen = 0;
+	int c;
+
+	if (rcount == 0) {
+		clock_t t0 = times(&tms), t;
+
+		while (rcount == 0 && !at_eof)
+			fill(256);
+		t = times(&tms) - t0;
+		read_ticks += t;
+		if (t > read_max)
+			read_max = t;
+		if (rcount == 0)
 			return -1;
-		}
 	}
-	return buf[bpos++];
+	c = ring[rtail];
+	rtail = (rtail + 1) & (RING - 1);
+	rcount--;
+	rstart++;
+	return c;
 }
 
 static void seek_to(long off)
 {
-	lseek(fd, off, SEEK_SET);
-	bstart = off;
-	bpos = blen = 0;
+	if (off >= rstart && off <= rstart + rcount) {	/* already read */
+		rtail = (rtail + (off - rstart)) & (RING - 1);
+		rcount -= off - rstart;
+	} else if (packed && off == loop_at && loop_len) {
+		memcpy(ring, loop_keep, loop_len);	/* see loop_keep */
+		rtail = 0;
+		rcount = loop_len;
+		at_eof = 0;
+		inflateReset(&z);
+		lseek(fd, zstart, SEEK_SET);
+		z.avail_in = 0;
+		zin_left = 0;
+		zpos = 0;
+	} else {
+		raw_seek(off);
+		rcount = 0;
+		at_eof = 0;
+	}
+	rstart = off;
 }
 
 static void skip(long n)
 {
-	seek_to(bstart + bpos + n);
+	seek_to(rstart + n);
 }
 
 static unsigned long le32(unsigned char *p)
@@ -239,12 +447,12 @@ static void show_tag(long off)
 	int i, n;
 
 	seek_to(off);
-	if (read(fd, hdr, 12) != 12 || memcmp(hdr, "Gd3 ", 4))
+	if (raw_read(hdr, 12) != 12 || memcmp(hdr, "Gd3 ", 4))
 		return;
 	len = le32(hdr + 8);
 	if (len > 4096 || !(tag = malloc(len)))
 		return;
-	if (read(fd, tag, len) == (int)len) {
+	if (raw_read(tag, len) == (int)len) {
 		/* strings: title, title (jp), game, game (jp), system,
 		 * system (jp), author, author (jp), date, ripper, notes */
 		p = tag;
@@ -269,7 +477,7 @@ int main(int argc, char **argv)
 	unsigned long version, data_off, loop_off, gd3_off;
 	struct termios raw;
 	struct tms tm;
-	unsigned long played = 0, start;
+	unsigned long played = 0, start, opened;
 	int verbose = 0, c, a, b;
 
 	if (argc > 1 && !strcmp(argv[1], "-v")) {
@@ -277,17 +485,17 @@ int main(int argc, char **argv)
 		argc--, argv++;
 	}
 	if (argc != 2) {
-		fprintf(stderr, "usage: vgmplay file.vgm\n"
-				"try:   vgmplay /usr/music/spacewalk.vgm\n");
+		fprintf(stderr, "usage: vgmplay file.vgm|file.vgz\n"
+				"try:   vgmplay /usr/music/spacewalk.vgz\n");
 		return 1;
 	}
-	if ((fd = open(argv[1], O_RDONLY)) < 0) {
+	opened = times(&tm);
+	if (raw_open(argv[1]) < 0) {
 		perror(argv[1]);
 		return 1;
 	}
-	if (read(fd, h, sizeof h) != sizeof h || memcmp(h, "Vgm ", 4)) {
-		fprintf(stderr, "%s: not a VGM file (compressed .vgz files "
-				"must be gunzipped first)\n", argv[1]);
+	if (raw_read(h, sizeof h) != sizeof h || memcmp(h, "Vgm ", 4)) {
+		fprintf(stderr, "%s: not a VGM file\n", argv[1]);
 		return 1;
 	}
 	version = le32(h + 0x08);
@@ -318,10 +526,19 @@ int main(int argc, char **argv)
 		tcsetattr(0, TCSANOW, &raw);
 	}
 
-	if (gd3_off)
+	if (gd3_off && !packed) {
 		show_tag(gd3_off);
+	} else {
+		const char *base = strrchr(argv[1], '/');
+		printf("Playing %s\n", base ? base + 1 : argv[1]);
+	}
 	printf("\nPress q to quit.\n");
 	fflush(stdout);
+
+	seek_to(data_off);
+	loop_at = loop_off;
+	while (fill(256))		/* read ahead before the music starts */
+		;
 
 	/* Get the Z80 off the bus so the 68000 can reach the YM2612 */
 	Z80_BUSREQ = 0x100;
@@ -335,7 +552,6 @@ int main(int argc, char **argv)
 	timer_restart();
 	start = last_tick = times(&tm);
 
-	seek_to(data_off);
 	while (!quit) {
 		c = get();
 		switch (c) {
@@ -420,9 +636,13 @@ int main(int argc, char **argv)
 done:
 	restore();
 	if (verbose)
-		printf("%lu samples (%lu.%02lu s) in %lu ticks of 1/60 s\n",
+		printf("%lu samples (%lu.%02lu s) in %lu ticks of 1/60 s, "
+		       "%lu ticks to start\n",
 		       played, played / VGM_RATE,
 		       played % VGM_RATE * 100 / VGM_RATE,
-		       (unsigned long)times(&tm) - start);
+		       (unsigned long)times(&tm) - start, start - opened);
+	if (verbose)
+		printf("waited for data: %lu ticks in all, longest %lu\n",
+		       read_ticks, read_max);
 	return 0;
 }

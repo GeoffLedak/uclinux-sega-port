@@ -2,12 +2,12 @@
 EXEC = vgmplay
 OBJS = vgmplay.o
 
-CFLAGS += -I.
+CFLAGS += -I. -I$(ROOTDIR)/lib/zlib
 
 all: $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) -lz $(LDLIBS)
 
 romfs:
 	$(ROMFSINST) /bin/$(EXEC)

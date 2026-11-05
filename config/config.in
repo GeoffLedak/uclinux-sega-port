@@ -504,6 +504,9 @@ if [ "$CONFIG_USER_CHAT_CHAT" = "y" ]; then
 fi
 bool 'beep'			CONFIG_USER_BEEP
 bool 'vgmplay'			CONFIG_USER_VGMPLAY
+if [ "$CONFIG_USER_VGMPLAY" = "y" ]; then
+	define_bool CONFIG_LIB_ZLIB y
+fi
 bool 'cksum'			CONFIG_USER_CKSUM_CKSUM
 bool 'clock'			CONFIG_USER_CLOCK_CLOCK
 bool 'cpu'			CONFIG_USER_CPU_CPU
