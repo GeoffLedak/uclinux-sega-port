@@ -10,11 +10,32 @@
         .equ VDP_DATA,                  0xC00000
         .equ VDP_CONTROL,               0xC00004
         .equ VDP_WRITE_SPRITE_TABLE,    0x60000003
-        .equ SCREEN_LEFT_EDGE,          2
-        .equ SCREEN_RIGHT_EDGE,         38
+
+/* Text console layout (6x8 font, software rendered)                       */
+/*                                                                          */
+/* The VDP can only place whole 8x8 tiles, so 6 pixel wide characters are  */
+/* drawn into tiles in software. Each text cell of plane B gets its own    */
+/* tile (the name table is filled once at boot and never changes), a RAM   */
+/* copy of the characters (text_charmap) is kept, and when a character is  */
+/* written the 1 or 2 tiles it overlaps are rebuilt from text_charmap.     */
+/* Four characters fit exactly in three tiles (4 * 6 = 3 * 8 = 24 pixels). */
+/*                                                                          */
+/* xCursor is a character column (0 - 47), yCursor is a plane B row        */
+/* (0 - 31).                                                                */
+        .equ SCREEN_LEFT_PIXEL,         16              /* left/right padding in pixels */
+        .equ SCREEN_LEFT_EDGE,          0               /* first text column */
+        .equ SCREEN_RIGHT_EDGE,         48              /* (320 - 2*16) / 6 = 48 columns, 0 - 47 */
         .equ SCREEN_TOP_EDGE,           2
         .equ SCREEN_BOTTOM_EDGE,        25
         .equ PLANE_VERTICAL_EDGE,       31              /* 0 - 31 */
+
+        .equ FONT_WIDTH,                6
+        .equ TEXT_COLS,                 48              /* characters per row */
+        .equ TEXT_ROWS,                 32              /* every row of the 64x32 plane (it wraps when scrolling) */
+        .equ TEXT_TILE_COLS,            36              /* 48 * 6 / 8 tiles per row */
+        .equ TEXT_FIRST_PLANE_COL,      2               /* plane B column of the first text tile (16 px) */
+        .equ TEXT_FIRST_TILE,           1               /* tile 0 stays blank */
+        .equ CURSOR_TILE,               TEXT_FIRST_TILE + TEXT_TILE_COLS * TEXT_ROWS   /* 1153, VRAM 0x9020 */
 
 
 
@@ -125,20 +146,38 @@ init_hardware:
         move.b  (a5)+,0x0011(a0)
         move.b  (a5),0x0011(a0)
 
-/* load font tile data */
+/* set up plane B as a text bitmap: every text cell gets its own tile */
+/* row r, tile column t uses tile TEXT_FIRST_TILE + r*TEXT_TILE_COLS + t */
+/* (the tiles themselves are already blank because VRAM was cleared)     */
         move.w  #0x8F02,(a4)            /* INC = 2 */
-        move.l  #0x40000000,(a4)        /* write VRAM address 0 */
-        lea     font_data,a0
-        move.w  #0x100*8-1,d2           /* 0x100 = 256, 256 = number of characters in the CGA font */
+        move.l  #0x60000003,(a4)        /* write VRAM 0xE000 (plane B name table) */
+        moveq   #0,d0                   /* blank name table entry */
+        moveq   #TEXT_FIRST_TILE,d1     /* next text tile number */
+        moveq   #TEXT_ROWS-1,d2
 7:
-        move.l  (a0)+,d0                /* font fg mask */
-        move.l  d0,d1
-        not.l   d1                      /* font bg mask */
-        andi.l  #0x11111111,d0          /* set font fg color */
-        andi.l  #0x00000000,d1          /* set font bg color */
-        or.l    d1,d0
-        move.l  d0,(a3)                 /* set tile line */
+        moveq   #TEXT_FIRST_PLANE_COL-1,d3
+8:
+        move.w  d0,(a3)                 /* left padding: blank */
+        dbra    d3,8b
+        moveq   #TEXT_TILE_COLS-1,d3
+9:
+        move.w  d1,(a3)                 /* text tile, palette 0 */
+        addq.w  #1,d1
+        dbra    d3,9b
+        moveq   #64-TEXT_FIRST_PLANE_COL-TEXT_TILE_COLS-1,d3
+10:
+        move.w  d0,(a3)                 /* right padding and off-screen columns: blank */
+        dbra    d3,10b
         dbra    d2,7b
+
+/* cursor tile: a 6 pixel wide solid block */
+        move.l  #CURSOR_TILE*32,d0
+        bsr     vram_write_cmd
+        move.l  d0,(a4)
+        moveq   #7,d2
+11:
+        move.l  #0x11111100,(a3)
+        dbra    d2,11b
 
 /* set the default palette for text */
         move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
@@ -293,70 +332,210 @@ get_input:
         move.b  (a0),d0
         rts
 
+/* ============================================================ */
+/* 6x8 software text renderer (internal routines)               */
+/* All of these expect a1 = 0xC00000 (VDP data) and VDP INC = 2 */
+/* ============================================================ */
+
+/* vram_write_cmd */
+/* entry: d0.l = VRAM byte address (0 - 0xFFFF) */
+/* exit:  d0.l = VDP "write VRAM" command for that address */
+/* trashes d1 */
+vram_write_cmd:
+        move.l  d0,d1
+        andi.l  #0x3FFF,d0
+        swap    d0                      /* (addr & 0x3FFF) << 16 */
+        ori.l   #0x40000000,d0          /* VRAM write */
+        rol.w   #2,d1                   /* addr bits 15-14 -> bits 1-0 */
+        andi.w  #3,d1
+        or.w    d1,d0
+        rts
+
+/* text_render_tile */
+/* Rebuild one text tile from the two characters that overlap it. */
+/* entry: d2.w = row (0 - 31), d3.w = tile column (0 - 35) */
+/* trashes d0-d1, d4-d7, a2-a5 (d2, d3 preserved) */
+/*                                                             */
+/* The first character in tile t is k = 4t/3 and it starts      */
+/* s = -2 * (4t mod 3) pixels from the tile's left edge         */
+/* (0, -2 or -4); character k+1 starts at s+6. A glyph row      */
+/* expanded by font_6x8_expand has its leftmost pixel in bits   */
+/* 23-20, so it is shifted left by 8 - 4s for character k and   */
+/* right by 16 + 4s for character k+1.                          */
+text_render_tile:
+        move.w  d2,d0
+        mulu.w  #TEXT_TILE_COLS,d0
+        add.w   d3,d0
+        addq.w  #TEXT_FIRST_TILE,d0     /* tile number */
+        lsl.l   #5,d0                   /* * 32 bytes per tile */
+        bsr     vram_write_cmd
+        move.l  d0,4(a1)                /* write VRAM at the tile */
+
+        moveq   #0,d4
+        move.w  d3,d4
+        lsl.w   #2,d4                   /* 4t */
+        divu.w  #3,d4                   /* low word = k, high word = 4t mod 3 */
+        move.l  d4,d6
+        swap    d6
+        lsl.w   #3,d6                   /* 8 * (4t mod 3) */
+        moveq   #16,d7
+        sub.w   d6,d7                   /* d7 = right shift for character k+1 */
+        addq.w  #8,d6                   /* d6 = left shift for character k */
+
+        lea     text_charmap,a2
+        move.w  d2,d0
+        mulu.w  #TEXT_COLS,d0
+        add.w   d4,d0
+        adda.w  d0,a2                   /* a2 = &text_charmap[row][k] */
+
+        lea     font_6x8,a3
+        moveq   #0,d0
+        move.b  (a2)+,d0
+        lsl.w   #3,d0
+        adda.w  d0,a3                   /* a3 = glyph of character k */
+        lea     font_6x8,a4
+        moveq   #0,d0
+        move.b  (a2),d0
+        lsl.w   #3,d0
+        adda.w  d0,a4                   /* a4 = glyph of character k+1 */
+
+        lea     font_6x8_expand,a5
+        moveq   #7,d5                   /* 8 pixel rows */
+1:
+        moveq   #0,d0
+        move.b  (a3)+,d0
+        add.w   d0,d0
+        add.w   d0,d0
+        move.l  0(a5,d0.w),d0           /* character k row as 4bpp pixels */
+        lsl.l   d6,d0
+        moveq   #0,d1
+        move.b  (a4)+,d1
+        add.w   d1,d1
+        add.w   d1,d1
+        move.l  0(a5,d1.w),d1           /* character k+1 row as 4bpp pixels */
+        lsr.l   d7,d1
+        or.l    d1,d0
+        move.l  d0,(a1)                 /* write tile row */
+        dbra    d5,1b
+        rts
+
+/* text_draw_char */
+/* entry: d0.b = character, d2.w = row (0 - 31), d3.w = column (0 - 47) */
+/* trashes d0-d1 */
+text_draw_char:
+        movem.l d3-d7/a2-a5,-(sp)
+        lea     text_charmap,a2
+        move.w  d2,d1
+        mulu.w  #TEXT_COLS,d1
+        add.w   d3,d1
+        move.b  d0,0(a2,d1.w)           /* text_charmap[row][col] = character */
+
+        move.w  d3,d4
+        mulu.w  #FONT_WIDTH,d4          /* pixel x within the text area */
+        move.w  d4,-(sp)
+        lsr.w   #3,d4
+        move.w  d4,d3                   /* first tile the character touches */
+        bsr     text_render_tile
+        move.w  (sp)+,d4
+        andi.w  #7,d4                   /* pixel offset inside that tile */
+        cmpi.w  #8-FONT_WIDTH,d4
+        bls.s   1f                      /* character fits inside one tile */
+        addq.w  #1,d3
+        bsr     text_render_tile        /* it spills into the next tile */
+1:
+        movem.l (sp)+,d3-d7/a2-a5
+        rts
+
+/* text_clear_row */
+/* entry: d2.w = row (0 - 31) */
+/* trashes d0-d1 */
+text_clear_row:
+        move.l  a2,-(sp)
+        lea     text_charmap,a2
+        move.w  d2,d0
+        mulu.w  #TEXT_COLS,d0
+        adda.w  d0,a2
+        moveq   #TEXT_COLS-1,d1
+1:
+        clr.b   (a2)+
+        dbra    d1,1b
+        move.l  (sp)+,a2
+
+        move.w  d2,d0
+        mulu.w  #TEXT_TILE_COLS,d0
+        addq.w  #TEXT_FIRST_TILE,d0
+        lsl.l   #5,d0
+        bsr     vram_write_cmd
+        move.l  d0,4(a1)                /* write VRAM at the row's first tile */
+        moveq   #0,d0
+        move.w  #TEXT_TILE_COLS*8-1,d1  /* the row's tiles are contiguous */
+2:
+        move.l  d0,(a1)
+        dbra    d1,2b
+        rts
+
 /* void clear_screen(void); */
-/* clear the name table for plane B */
+/* clear every text row of plane B */
         .global clear_screen
 clear_screen:
-        moveq   #0,d0
-        lea     0xC00000,a0
-        move.w  #0x8F02,4(a0)           /* set INC to 2 */
-        move.l  #0x60000003,d1          /* VDP write VRAM at 0xE000 (scroll plane B) */
-        move.l  d1,4(a0)                /* write VRAM at plane B start */
-        move.w  #64*32-1,d1
+        move.l  d2,-(sp)
+        lea     0xC00000,a1
+        move.w  #0x8F02,4(a1)           /* set INC to 2 */
+        moveq   #TEXT_ROWS-1,d2
 1:
-        move.w  d0,(a0)                 /* clear name pattern */
-        dbra    d1,1b
+        bsr     text_clear_row
+        dbra    d2,1b
+        move.l  (sp)+,d2
         rts
 
 /* void put_str(char *str, int color, int x, int y); */
-/* put string characters to the screen */
+/* put string characters to the screen (no wrapping, stops at the right edge) */
 /* entry: first arg = string address */
-/*        second arg = 0 for normal color font, N * 0x0200 for alternate color font (use CP bits for different colors) */
-/*        third arg = column at which to start printing */
-/*        fourth arg = row at which to start printing */
+/*        second arg = color (currently ignored) */
+/*        third arg = text column at which to start printing (0 - 47) */
+/*        fourth arg = row at which to start printing (0 - 31) */
         .global put_str
 put_str:
-        movea.l 4(sp),a0                /* string pointer */
-        move.l  8(sp),d0                /* color palette */
+        movem.l d2-d3,-(sp)
+        movea.l 12(sp),a0               /* string pointer */
+        move.l  20(sp),d3               /* x (column) */
+        move.l  24(sp),d2               /* y (row) */
+        andi.w  #TEXT_ROWS-1,d2
         lea     0xC00000,a1
         move.w  #0x8F02,4(a1)           /* set INC to 2 */
-        move.l  16(sp),d1               /* y coord */
-        lsl.l   #6,d1
-        or.l    12(sp),d1               /* cursor y<<6 | x */
-        add.w   d1,d1                   /* pattern names are words */
-        swap    d1
-        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
-        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
 1:
+        moveq   #0,d0
         move.b  (a0)+,d0
-        move.w  d0,(a1)                 /* set pattern name for character */
-        tst.b   (a0)
-        bne.b   1b
+        beq.s   2f
+        cmpi.w  #TEXT_COLS,d3
+        bcc.s   2f
+        bsr     text_draw_char
+        addq.w  #1,d3
+        bra.s   1b
+2:
+        movem.l (sp)+,d2-d3
         rts
 
 /* void put_chr(char chr, int color, int x, int y); */
 /* put a character to the screen */
 /* entry: first arg = character */
-/*        second arg = 0 for normal color font, N * 0x0200 for alternate color font (use CP bits for different colors) */
-/*        third arg = column at which to start printing */
-/*        fourth arg = row at which to start printing */
+/*        second arg = color (currently ignored) */
+/*        third arg = text column (0 - 47) */
+/*        fourth arg = row (0 - 31) */
         .global put_chr
 put_chr:
-        movea.l 4(sp),a0                /* character */
-        move.l  8(sp),d0                /* color palette */
+        movem.l d2-d3,-(sp)
+        move.l  12(sp),d0               /* character */
+        move.l  20(sp),d3               /* x (column) */
+        move.l  24(sp),d2               /* y (row) */
+        andi.w  #TEXT_ROWS-1,d2
+        cmpi.w  #TEXT_COLS,d3
+        bcc.s   1f
         lea     0xC00000,a1
         move.w  #0x8F02,4(a1)           /* set INC to 2 */
-        move.l  16(sp),d1               /* y coord */
-        lsl.l   #6,d1
-        or.l    12(sp),d1               /* cursor y<<6 | x */
-        add.w   d1,d1                   /* pattern names are words */
-        swap    d1
-        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
-        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
-
-        move.l  a0,d1
-        move.b  d1,d0
-        move.w  d0,(a1)                 /* set pattern name for character */
+        bsr     text_draw_char
+1:
+        movem.l (sp)+,d2-d3
         rts
 
 /* void delay(int count); */
@@ -380,93 +559,66 @@ delay:
 
         .global syscall_PRINT_STRING
 syscall_PRINT_STRING:
-
-
-        movea.l 4(sp),a0                /* string pointer */
-        move.l  8(sp),d0                /* color palette */
+        movem.l d2-d3,-(sp)
+        movea.l 12(sp),a0               /* string pointer (color arg at 16(sp) is currently ignored) */
         lea     0xC00000,a1
         move.w  #0x8F02,4(a1)           /* set INC to 2 */
-        move.l  yCursor,d1              /* y coord */
-        lsl.l   #6,d1
-        or.l    xCursor,d1              /* cursor y<<6 | x */
-        add.w   d1,d1                   /* pattern names are words */
-        swap    d1
-        ori.l   #0x60000003,d1          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
-        move.l  d1,4(a1)                /* write VRAM at location of cursor in plane B */
-1:
+
+printLoop:
+        moveq   #0,d0
         move.b  (a0)+,d0
-        
-        cmpi.b #0x0A, d0                /* check if it is the enter key (0xA) */
-        beq.s newline                   /* if it is, then jump to newline subroutine */
-        
-        move.w  d0,(a1)                 /* set pattern name for character */
+        beq.s   printDone               /* end of string */
 
-        addi.l #1, xCursor
-        cmpi.l #SCREEN_RIGHT_EDGE, xCursor              /* if xCursor is greater than SCREEN_RIGHT_EDGE */
-        bcc.s  newline                                  /* jump to newline */
+        cmpi.b  #0x0A, d0               /* check if it is the enter key (0xA) */
+        beq.s   newline                 /* if it is, then jump to newline subroutine */
 
-testend:
-        tst.b   (a0)
-        bne.b   1b
+        move.l  yCursor,d2
+        move.l  xCursor,d3
+        bsr     text_draw_char          /* draw character at the cursor */
+
+        addq.l  #1, xCursor
+        cmpi.l  #SCREEN_RIGHT_EDGE, xCursor             /* if xCursor is past the last column */
+        bcc.s   newline                                 /* jump to newline */
+        bra.s   printLoop
+
+printDone:
+        movem.l (sp)+,d2-d3
         rts
 
 newline:
-        move.l  #SCREEN_LEFT_EDGE, xCursor              /*  set X cursor to zero     */
-        addi.l  #1, yCursor                             /*  advance Y cursor         */
-                
-        cmpi.l  #0, scrollFlag                          /* if scrollFlag is greater than zero */
-        bhi.s   scrollPlaneB                            /* jump to scrollPlaneB */
+        move.l  #SCREEN_LEFT_EDGE, xCursor              /*  set X cursor to the first column */
+        addq.l  #1, yCursor                             /*  advance Y cursor         */
 
-        cmpi.l #SCREEN_BOTTOM_EDGE, yCursor             /* if yCursor is less than or equal to SCREEN_BOTTOM_EDGE */
-        bls     shouldResetYcursor                      /* jump to shouldResetYcursor */
+        tst.l   scrollFlag                              /* if scrollFlag is set */
+        bne.s   scrollPlaneB                            /* jump to scrollPlaneB */
+
+        cmpi.l  #SCREEN_BOTTOM_EDGE, yCursor            /* if yCursor is less than or equal to SCREEN_BOTTOM_EDGE */
+        bls.s   shouldResetYcursor                      /* jump to shouldResetYcursor */
                                                         /* ..otherwise scroll the screen down */
 scrollPlaneB:
-
-        /* clear top line */
-        moveq   #0,d0
-        move.l  yCursor,d1
-
-        cmpi.l  #24,yCursor             /* if yCursor is greater than or equal to 24 */
+        /* clear the row that is about to scroll into view: (yCursor + 8) mod 32 */
+        move.l  yCursor,d2
+        cmpi.l  #24,d2                  /* if yCursor is greater than or equal to 24 */
         bcc.s   sub24                   /* jump to sub24 */
-        addi.l  #8,d1                   /* otherwise add 8... */
-        jmp    continueLineClear        /* and jump to continueLineClear */
+        addq.l  #8,d2                   /* otherwise add 8... */
+        bra.s   continueLineClear       /* and jump to continueLineClear */
 
 sub24:
-        subi.l  #24,d1
-        
-continueLineClear:
-        lsl.l   #6,d1
-        or.l    #0,d1
-        add.w   d1,d1
-        swap    d1
-        ori.l   #0x60000003,d1
-        move.l  d1,4(a1)                /* write VRAM at plane B start */
-        move.w  #64,d1                  /* 64 equals one row */
-1:
-        move.w  d0,(a1)                 /* clear name pattern */
-        dbra    d1,1b
+        subi.l  #24,d2
 
-        addi.l  #8, vScrollPos                          /* Increment vertical scroll position */
-        move.l  vScrollPos, d6
-        move.l  #0x40020010, (VDP_CONTROL)              /* put Scroll Plane B into VDP control */
-        move.w  d6, (VDP_DATA)                          /* put incremented scroll location into VDP data */
-        move.b  #1, scrollFlag                          /* set scrollFlag to true */
+continueLineClear:
+        bsr     text_clear_row
+
+        addq.l  #8, vScrollPos                          /* Increment vertical scroll position */
+        move.l  #0x40020010, 4(a1)                      /* put Scroll Plane B into VDP control */
+        move.w  vScrollPos+2, (a1)                      /* put incremented scroll location into VDP data */
+        move.l  #1, scrollFlag                          /* set scrollFlag to true */
 
 shouldResetYcursor:
         cmpi.l  #PLANE_VERTICAL_EDGE, yCursor           /* if yCursor is less than or equal to PLANE_VERTICAL_EDGE */
-        bls.s   set_cursor                              /* jump to set_cursor */
-        move.l  #0, yCursor                             /* otherwise reset yCursor to zero */
-
-set_cursor:
-        move.l  yCursor,d1                              /* y coord */
-        lsl.l   #6,d1
-        or.l    xCursor,d1                              /* cursor y<<6 | x */
-        add.w   d1,d1                                   /* pattern names are words */
-        swap    d1
-        ori.l   #0x60000003,d1                          /* OR cursor with VDP write VRAM at 0xE000 (scroll plane B) */
-        move.l  d1,4(a1)                                /* write VRAM at location of cursor in plane B */
-
-        jmp     testend
+        bls.w   printLoop                               /* keep printing */
+        clr.l   yCursor                                 /* otherwise reset yCursor to zero */
+        bra.w   printLoop
 
 
 
@@ -555,10 +707,10 @@ draw_cursor_sprite:
         bge.s   1f
         move.l  #328,d1                 /* (25 * 8) + 128 */
 1:
-        /* Calculate sprite X position: (xCursor * 8) + 128 */
+        /* Calculate sprite X position: (xCursor * 6) + left padding + 128 */
         move.l  xCursor,d2
-        lsl.l   #3,d2                   /* * 8 */
-        addi.l  #128,d2                 /* + 128 (sprite offset) */
+        mulu.w  #FONT_WIDTH,d2          /* * 6 */
+        addi.l  #SCREEN_LEFT_PIXEL+128,d2 /* + padding + 128 (sprite offset) */
 
         /* Set up VDP for sprite table write at 0xA800 */
         lea     0xC00004,a0             /* VDP control */
@@ -570,14 +722,14 @@ draw_cursor_sprite:
         move.w  #0x0000,(a1)            /* size=0 (8x8), link=0 (end of list) */
 
         /* Write sprite data - second longword: tile index, X pos */
-        /* Blink: if globalCounter < 8, show tile 0xFF, else show tile 0x00 (blank) */
+        /* Blink: if globalCounter < 8, show the cursor tile, else show tile 0x00 (blank) */
         move.l  globalCounter,d0
         cmpi.l  #8,d0
         blt.s   2f
         move.w  #0x0000,(a1)            /* tile 0 (blank) */
         bra.s   3f
 2:
-        move.w  #0x00FF,(a1)            /* tile 0xFF (solid block) */
+        move.w  #CURSOR_TILE,(a1)       /* 6 pixel wide solid block */
 3:
         move.w  d2,(a1)                 /* X position */
 
@@ -597,7 +749,7 @@ globalCounter:
 
         .global xCursor
 xCursor:
-        .long   2
+        .long   SCREEN_LEFT_EDGE
 
         .global yCursor
 yCursor:
@@ -619,3 +771,11 @@ console_buf_index:
         .global console_buffer
 console_buffer:
         .space  256, 0                  /* 256 byte buffer for console output */
+
+        .section .bss
+        .align  2
+
+/* Characters currently on screen, [TEXT_ROWS][TEXT_COLS] (zeroed at boot = blank) */
+        .global text_charmap
+text_charmap:
+        .space  TEXT_COLS*TEXT_ROWS
