@@ -102,10 +102,13 @@ skip_tmss:
  */
         move.w  #0xA000,0xA130F0        /* Enable cartridge RAM writes: P=1, W=1 */
 
-/* Set up SSF mapper bank for our RAM region */
-/* Slot 4 (0x200000-0x27FFFF) is controlled by register 0xA130F8 */
-/* Map bank 4 to slot 4 (this is the default, but be explicit) */
+/* Set up SSF mapper banks for our RAM region: slots 4-7 (0x200000-0x3FFFFF)
+ * show PSRAM banks 4-7, 2MB in all, writable because of W above.  Slot n
+ * is controlled by register 0xA130F0 + 2n. */
         move.w  #0x0004,0xA130F8        /* Bank 4 -> slot 4 (0x200000-0x27FFFF) */
+        move.w  #0x0005,0xA130FA        /* Bank 5 -> slot 5 (0x280000-0x2FFFFF) */
+        move.w  #0x0006,0xA130FC        /* Bank 6 -> slot 6 (0x300000-0x37FFFF) */
+        move.w  #0x0007,0xA130FE        /* Bank 7 -> slot 7 (0x380000-0x3FFFFF) */
 
 /* Map the rest of the ROM image straight through too (slots 1-3 =
  * 0x080000-0x1FFFFF), so an image over 512KB can be read past its first

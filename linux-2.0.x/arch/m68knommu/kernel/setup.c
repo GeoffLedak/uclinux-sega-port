@@ -253,10 +253,11 @@ void setup_arch(char **cmdline_p,
 	flash_probe();
 #endif
 
-	/* Genesis/EverDrive memory setup - hardcoded for Sega Genesis */
-	/* End of BSS = start of heap, End of 512KB cartridge RAM = 0x280000 */
-	memory_start = 0x00215058;  /* Hardcode for testing */
-	memory_end = 0x0027F000;    /* 0x280000 - 4096 */
+	/* Genesis/EverDrive memory setup: free memory runs from the end of
+	 * the kernel's BSS to the end of the 2MB of cartridge RAM (slots 4-7,
+	 * 0x200000-0x3FFFFF), less the last page as before. */
+	memory_start = ((unsigned long)&_end + 15) & ~15;
+	memory_end = 0x003FF000;    /* 0x400000 - 4096 */
 
 #if defined (CONFIG_M68360)
 	if (quicc_cpm_init())

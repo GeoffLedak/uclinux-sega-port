@@ -5,7 +5,8 @@
  * SSF Mapper Setup:
  *   - ROM header contains "SEGA SSF" to enable mapper
  *   - Register 0xA130F0 with P=1, W=1 enables write access
- *   - Slot 4 (0x200000-0x27FFFF) mapped to bank 4 via 0xA130F8
+ *   - Slots 4-7 (0x200000-0x3FFFFF) mapped to banks 4-7 via 0xA130F8-FE:
+ *     2MB of writable PSRAM used as RAM
  *
  * +--------------------+ <- 0x00000000
  * | .text              |   ROM (cartridge slot 0, bank 0)
@@ -22,10 +23,11 @@
  * |       __bss_start  |
  * |         __bss_end  |
  * +--------------------+
- * |       (heap)       |
  * |             _end   |
+ * |  (free memory:     |
+ * |   page allocator)  |
  * .                    .
- * +--------------------+ <- 0x00280000 (end of 512KB bank)
+ * +--------------------+ <- 0x00400000 (end of slot 7)
  * .                    .
  * +--------------------+ <- 0x00FF0000
  * | Work RAM (64KB)    |   Used for stack (fast on-chip RAM)
@@ -33,14 +35,15 @@
  * +--------------------+ <- 0x01000000
  *
  * The SSF mapper provides 512KB banks that can be used as RAM.
- * Bank 4 at slot 4 (0x200000-0x27FFFF) is used for kernel data/bss/heap.
+ * Banks 4-7 at slots 4-7 (0x200000-0x3FFFFF) are used for kernel
+ * data/bss and all free memory.
  * Work RAM (0xFF0000-0xFFFFFF) is used for the stack.
  */
 
 MEMORY
 {
     rom (rx)   : ORIGIN = 0x00000000, LENGTH = 0x00200000  /* 2MB ROM max */
-    cartram (rwx) : ORIGIN = 0x00200000, LENGTH = 0x00080000  /* 512KB cartridge RAM */
+    cartram (rwx) : ORIGIN = 0x00200000, LENGTH = 0x00200000  /* 2MB cartridge RAM */
     workram (rwx) : ORIGIN = 0x00FF0000, LENGTH = 0x00010000  /* 64KB Work RAM */
 }
 
@@ -176,6 +179,6 @@ SECTIONS
     __bss_size = __bss_end - __bss_start;
 
     /* End of cartridge RAM */
-    _ramend = 0x00280000;       /* End of 512KB cartridge RAM */
+    _ramend = 0x00400000;       /* End of 2MB cartridge RAM */
     _boot_stack = 0x00FFFFFC;   /* Stack in Work RAM */
 }
