@@ -37,6 +37,10 @@
         .equ TEXT_FIRST_TILE,           1               /* tile 0 stays blank */
         .equ CURSOR_TILE,               TEXT_FIRST_TILE + TEXT_TILE_COLS * TEXT_ROWS   /* 1153, VRAM 0x9020 */
 
+/* Text colour, Genesis CRAM format 0000 BBB0 GGG0 RRR0 (each 0x0 - 0xE) */
+/* 0x0AAA = light gray, 0x0EEE = white, 0x00C0 = dim green */
+        .equ TEXT_COLOR,                0x00C0
+
 
 
 
@@ -181,7 +185,7 @@ init_hardware:
 
 /* set the default palette for text */
         move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
-        move.l  #0x00000AAA,(a3)        /* entry 0 (black) and 1 (lt gray) BGR */
+        move.l  #TEXT_COLOR,(a3)        /* entry 0 (black) and 1 (text and cursor colour) */
         move.l  #0xC0200000,(a4)        /* write CRAM address 32 */
         move.l  #0x000000A0,(a3)        /* entry 16 (black) BGR and 17 (green) */
         move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
