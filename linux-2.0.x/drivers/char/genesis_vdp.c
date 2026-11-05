@@ -29,20 +29,10 @@
 #define SERIAL_TYPE_CALLOUT	2
 
 /*
- * External function from hw_md.S for outputting characters
+ * Output goes to the terminal emulator in
+ * arch/m68knommu/platform/68000/68Katy/genesis_term.c (see
+ * <linux/genesis_console.h>), which buffers it and draws it during vblank.
  */
-extern void console_putchar(char c);
-
-/*
- * Font / colour change requests, applied by apply_console_settings in hw_md.S
- * during the next vblank (so the VDP is only accessed from vblank).
- */
-extern volatile long pendingFont;	/* 0 = none, 6 or 8 */
-extern volatile long pendingColor;	/* 0 = none, else 0x10000 | 0x0BGR */
-
-/* Current settings; must match the boot defaults in hw_md.S */
-static int genesis_font = 8;
-static int genesis_color = 0x0EEE;
 
 /*
  * Driver info
@@ -76,34 +66,15 @@ struct genesis_serial {
 static struct genesis_serial genesis_ports[NR_PORTS];
 
 /*
- * Write characters to VDP console
- * Handle control characters appropriately
+ * Write characters to the console. All bytes, including control characters
+ * and escape sequences, go to the terminal emulator. Returns how many bytes
+ * fit in its buffer; the tty layer waits (on write_wait, woken from vblank)
+ * and retries with the rest.
  */
 static int genesis_write(struct tty_struct *tty, int from_user,
                          const unsigned char *buf, int count)
 {
-	int i;
-	
-	for (i = 0; i < count; i++) {
-		unsigned char c = from_user ? get_user(buf + i) : buf[i];
-		
-		/* Handle control characters */
-		if (c == '\n') {
-			/* Newline: output as newline (syscall_PRINT_STRING handles it) */
-			console_putchar('\n');
-		} else if (c == '\r') {
-			/* Carriage return: ignore (we handle \n) */
-		} else if (c == '\b' || c == 0x7F) {
-			/* Backspace/DEL: TODO - handle cursor movement */
-			console_putchar('\b');
-		} else if (c >= 0x20 && c <= 0x7E) {
-			/* Printable ASCII */
-			console_putchar(c);
-		}
-		/* Ignore other control characters */
-	}
-	
-	return count;
+	return genesis_term_write(buf, count, from_user);
 }
 
 /*
@@ -111,15 +82,24 @@ static int genesis_write(struct tty_struct *tty, int from_user,
  */
 static int genesis_write_room(struct tty_struct *tty)
 {
-	return 256; /* We can always accept characters */
+	return genesis_term_write_room();
 }
 
 /*
- * Return number of characters in buffer (always 0 since we write immediately)
+ * Return number of characters waiting to be drawn
  */
 static int genesis_chars_in_buffer(struct tty_struct *tty)
 {
-	return 0;
+	return genesis_term_chars_in_buffer();
+}
+
+/* Report the screen size (TIOCGWINSZ) */
+static void genesis_set_winsize(struct tty_struct *tty)
+{
+	tty->winsize.ws_row = genesis_term_rows();
+	tty->winsize.ws_col = genesis_term_cols();
+	tty->winsize.ws_xpixel = 0;
+	tty->winsize.ws_ypixel = 0;
 }
 
 /*
@@ -161,6 +141,8 @@ static int genesis_open(struct tty_struct *tty, struct file *filp)
 	
 	/* Store in table for keyboard driver access */
 	genesis_tty_table[line] = tty;
+
+	genesis_set_winsize(tty);
 	
 	/* Genesis VDP console opened */
 	
@@ -217,22 +199,24 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 	case GENESIS_SET_FONT:
 		if (arg != 6 && arg != 8)
 			return -EINVAL;
-		genesis_font = arg;
-		pendingFont = arg;
+		genesis_term_set_font(arg);
+		/* new screen size: tell programs (SIGWINCH) like TIOCSWINSZ does */
+		genesis_set_winsize(tty);
+		if (tty->pgrp > 0)
+			kill_pg(tty->pgrp, SIGWINCH, 1);
 		return 0;
 
 	case GENESIS_GET_FONT:
-		return genesis_font;
+		return genesis_term_get_font();
 
 	case GENESIS_SET_COLOR:
 		if (arg > 0xFFF)
 			return -EINVAL;
-		genesis_color = arg & 0x0EEE;	/* the VDP ignores the odd bits */
-		pendingColor = 0x10000 | genesis_color;
+		genesis_term_set_color(arg);	/* the VDP ignores the odd bits */
 		return 0;
 
 	case GENESIS_GET_COLOR:
-		return genesis_color;
+		return genesis_term_get_color();
 	}
 	return -ENOIOCTLCMD;
 }

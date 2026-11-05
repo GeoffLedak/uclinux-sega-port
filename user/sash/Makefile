@@ -1,7 +1,7 @@
 
 SH = sh
 SHOBJS = sash.o cmds.o cmd_uclinux.o ls.o ps.o hexdump.o df.o free.o \
-	hostname.o date.o genesis.o
+	hostname.o date.o genesis.o lineedit.o
 
 SHUTDOWN = shutdown
 SHUTDOWNOBJS = shutdown.o

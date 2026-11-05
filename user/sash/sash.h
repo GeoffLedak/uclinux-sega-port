@@ -50,6 +50,12 @@ extern	void	do_df(), do_ps(), do_reboot(), do_cat(), do_time(), do_free();
 extern	void	do_hostname(), do_sleep();
 extern	void	do_date();
 extern	void	do_font(), do_color();
+extern	void	do_history(), do_clear();
+
+/* lineedit.c */
+extern	char	*lineedit();
+extern	void	makeprompt();
+extern	const char *sash_command_name();
 
 
 extern	char	*buildname();

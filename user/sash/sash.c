@@ -61,6 +61,9 @@ CMDTAB	cmdtab[] = {
 	"chown",	"uid filename ...",	do_chown,
 	3,		MAXARGS,
 
+	"clear",	"",			do_clear,
+	1,		1,
+
 	"cmp",		"filename1 filename2",	do_cmp,
 	3,		3,
 
@@ -106,6 +109,9 @@ CMDTAB	cmdtab[] = {
 	"help",		"",			do_help,
 	1,		MAXARGS,
 #endif
+
+	"history",	"",			do_history,
+	1,		1,
 
 	"hexdump",	"[-s pos] filename",	do_hexdump,
 	1,		4,
@@ -344,6 +350,15 @@ readfile(name)
 		fflush(stdout);
 		//;'pa990523 -1/+1
 		//if (1)
+		if (fp == stdin && ttyflag) {
+			/* interactive: read with line editing */
+			char	prompt[PATHLEN + 4];
+
+			intflag = FALSE;
+			makeprompt(prompt, sizeof(prompt));
+			if (lineedit(prompt, buf, CMDLEN - 1) == NULL)
+				break;
+		} else {
 		if (fp == stdin) //using terminal, so show prompt
 			showprompt();
 
@@ -359,6 +374,7 @@ readfile(name)
 				continue;
 			}
 			break;
+		}
 		}
 
 		cc = strlen(buf);
@@ -1062,20 +1078,48 @@ do_unalias(argc, argv)
 static void
 showprompt()
 {
-	char	*cp;
-	//;'pa990523 changed from 6...
-	char buf[60];
-	
-	if ((cp = getenv("PS1")) != NULL) {
-		printf("%s", cp);
-	}
-	else {
-		*buf = '\0';
-		getcwd(buf, sizeof(buf) - 1);
-		printf("%s> ", buf);
-	}
+	char	prompt[PATHLEN + 4];
+
+	makeprompt(prompt, sizeof(prompt));
+	fputs(prompt, stdout);
 	fflush(stdout);
-}	
+}
+
+/*
+ * Build the prompt string: $PS1 if set, otherwise the current directory
+ * followed by "> ".
+ */
+void
+makeprompt(prompt, size)
+	char	*prompt;
+	int	size;
+{
+	char	*cp;
+
+	if ((cp = getenv("PS1")) != NULL) {
+		strncpy(prompt, cp, size - 1);
+		prompt[size - 1] = '\0';
+		return;
+	}
+	*prompt = '\0';
+	getcwd(prompt, size - 3);
+	strcat(prompt, "> ");
+}
+
+/*
+ * Name of built-in command number i, or NULL past the end.  Used for
+ * tab completion.
+ */
+const char *
+sash_command_name(i)
+	int	i;
+{
+	if (i < 0 || i >= (int) (sizeof(cmdtab) / sizeof(cmdtab[0])))
+		return NULL;
+	if (cmdtab[i].name[0] == '\0')
+		return NULL;
+	return cmdtab[i].name;
+}
 
 
 static void

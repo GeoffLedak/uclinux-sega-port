@@ -56,13 +56,17 @@ void mpsc_console_initialize(void);
 void ft245_console_initialize(void);
 
 /* Genesis VDP console output - uses buffered output via vblank */
-/* console_putchar adds chars to buffer, flushed during vblank interrupt */
-extern void console_putchar(char c);
+/* console_putchar adds chars to the terminal's buffer (genesis_term.c), */
+/* which is drawn during the vblank interrupt */
+#include <linux/genesis_console.h>
 
-/* Wrapper for register_console - buffers characters for vblank output */
+/* Wrapper for register_console - buffers characters for vblank output. */
+/* printk uses bare \n, so add the carriage return a terminal needs. */
 static void genesis_console_print(const char *str)
 {
     while (*str) {
+        if (*str == '\n')
+            console_putchar('\r');
         console_putchar(*str);
         str++;
     }
