@@ -688,14 +688,17 @@ delay:
         bgt.b   0b
         rts
 
-/* void genesis_vblank_handler(void); */
-/* Called by crt0_rom.S during the vblank interrupt (all registers saved there). */
+/* void genesis_vblank_handler(struct pt_regs *regs); */
+/* Called by genesis_vblank_interrupt (entry.S) during the vblank interrupt,
+ * with all registers saved there; regs is the interrupted context. */
         .global genesis_vblank_handler
 genesis_vblank_handler:
         jsr     genesis_read_keyboard   /* read keyboard input from port 2 */
         jsr     genesis_process_keyboard /* process keyboard and feed to TTY */
         jsr     genesis_term_vblank     /* console: settings, output, cursor, bell */
+        move.l  4(sp),-(sp)             /* regs */
         jsr     genesis_timer_callback  /* call kernel timer (increments jiffies) */
+        addq.l  #4,sp
         rts
 
 

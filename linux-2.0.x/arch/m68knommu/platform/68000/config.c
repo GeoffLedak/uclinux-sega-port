@@ -75,11 +75,12 @@ static void genesis_console_print(const char *str)
 /* Store kernel's timer routine - called from vblank handler in hw_md.S */
 void (*genesis_timer_routine)(int, void *, struct pt_regs *) = 0;
 
-/* Called from vblank handler (hw_md.S) to invoke kernel timer */
-void genesis_timer_callback(void)
+/* Called from vblank handler (hw_md.S) to invoke kernel timer; regs is the
+ * interrupted context */
+void genesis_timer_callback(struct pt_regs *regs)
 {
     if (genesis_timer_routine) {
-        genesis_timer_routine(0, NULL, NULL);
+        genesis_timer_routine(0, NULL, regs);
     }
 }
 #endif

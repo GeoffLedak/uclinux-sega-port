@@ -11,6 +11,7 @@
         .extern trap8, trap9, trap10, trap11
         .extern inthandler1, inthandler2, inthandler3
         .extern inthandler5, inthandler7
+        .extern genesis_vblank_interrupt
 
 /* Initial exception vectors */
 /* Vector 32 (TRAP #0) must point to system_call for kernel syscalls */
@@ -18,7 +19,7 @@
         .long   0x01000000,initialize,buserr,trap3,trap4,trap5,trap6,trap7
         .long   trap8,trap9,trap10,trap11,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
-        .long   exception,inthandler1,inthandler2,inthandler3,hblank,inthandler5,vblank,inthandler7
+        .long   exception,inthandler1,inthandler2,inthandler3,hblank,inthandler5,genesis_vblank_interrupt,inthandler7
         .long   system_call,exception,exception,exception,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
         .long   exception,exception,exception,exception,exception,exception,exception,exception
@@ -243,19 +244,5 @@ hblank:
         addq.l  #4,sp
         rte
 
-vblank:
-        /* VBlank handler - flush console buffer and increment tick counter */
-        movem.l d0-d7/a0-a6,-(sp)       /* save all registers (console_flush uses several) */
-        
-        /* Call genesis_vblank_handler to flush console buffer */
-        jsr     genesis_vblank_handler
-        
-        /* Check if kernel installed a custom vblank handler */
-        move.l  vblank_vector,d0
-        beq.b   1f
-        movea.l d0,a0
-        jsr     (a0)
-1:
-        addq.l  #1,gTicks
-        movem.l (sp)+,d0-d7/a0-a6       /* restore all registers */
-        rte
+/* The vblank interrupt (the system tick) is genesis_vblank_interrupt in
+ * entry.S, so that it leaves through the kernel's interrupt exit. */

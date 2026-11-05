@@ -897,6 +897,43 @@ SYMBOL_NAME_LABEL(inthandler7)
 	bra	ret_from_interrupt	/* this was fallthrough */
 
 /*
+ * Sega Genesis vblank interrupt (level 6, once per frame): the system tick.
+ * Built like the handlers above so that it leaves through ret_from_interrupt,
+ * which runs the bottom halves (clock, timers, time slices) and, when it
+ * interrupted a user program, reschedules and delivers signals.  Without
+ * that, a program that never makes a system call stops the clock, can't be
+ * preempted and can't be stopped with Ctrl-C.
+ *
+ * The vblank code in hw_md.S is assembly that may use any register, so the
+ * registers SAVE_ALL leaves to C's callee-saved convention are saved too.
+ */
+.globl SYMBOL_NAME(genesis_vblank_interrupt)
+SYMBOL_NAME_LABEL(genesis_vblank_interrupt)
+	SAVE_ALL
+	oriw	#0x700,%sr
+
+	moveq	#-1,%d0
+	movel	%d0,%sp@(LORIG_D0)	/* a -1 in the ORIG_D0 field */
+					/* signifies that the stack frame */
+					/* is NOT for syscall */
+	addql	#1,SYMBOL_NAME(intr_count)
+
+	movel	%sp,%a0			/* struct pt_regs * */
+	SAVE_SWITCH_STACK		/* a2-a6/d6-d7 */
+	movel	%a0,%sp@-
+	jbsr	SYMBOL_NAME(genesis_vblank_handler)
+	addql	#4,%sp
+
+	movel	SYMBOL_NAME(vblank_vector),%d0	/* optional extra handler */
+	jeq	1f
+	movel	%d0,%a0
+	jbsr	%a0@
+1:
+	addql	#1,SYMBOL_NAME(gTicks)
+	RESTORE_SWITCH_STACK
+	bra	ret_from_interrupt
+
+/*
 ** This is the main interrupt handler, responsible for calling process_int()
 */
 ; SYMBOL_NAME_LABEL(inthandler8)
