@@ -63,6 +63,9 @@
 #define ZTERM	0
 #define ANSI	1
 
+/* screen size from the terminal (TIOCGWINSZ) instead of fixed LINES/COLS */
+#define WINSIZE	UNIX
+
 #if ST
 
 #include <stdio.h>
@@ -162,7 +165,7 @@ extern long gemdos();
 #define bool int
 
 /* ttydef stuff */
-#if !(ST | TERMCAP)
+#if !(ST | TERMCAP | WINSIZE)
 
 #ifndef LINES
 #define LINES	24

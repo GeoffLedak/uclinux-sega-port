@@ -80,7 +80,7 @@ extern
 struct ybuf yank;		/* last deleted/yanked text */
 /* STATIC INITIALIZATIONS: */
 /* ttydef stuff */
-#if ST | TERMCAP
+#if ST | TERMCAP | WINSIZE
 extern int LINES, COLS;
 #endif
 #if TERMCAP

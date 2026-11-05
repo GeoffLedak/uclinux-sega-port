@@ -21,7 +21,7 @@
 
 /* do a gotoXY -- allowing -1 for same row/column */
 
-#if TERMCAP | ST
+#if TERMCAP | ST | WINSIZE
 
 #define MAXCOLS 160
 
@@ -29,7 +29,7 @@
 #include "termcap.i"
 #endif
 
-#else /*!(TERMCAP | ST)*/
+#else /*!(TERMCAP | ST | WINSIZE)*/
 
 #define MAXCOLS COLS
 

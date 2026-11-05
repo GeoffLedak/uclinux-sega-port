@@ -26,6 +26,8 @@
 #include <ioctls.h>
 #endif
 #include <string.h>
+#include <sys/ioctl.h>
+#include <errno.h>
 
 int
 min(a,b)
@@ -103,10 +105,77 @@ fixcon()
     }
 }
 
-getKey()
+/*
+ * Screen size from the terminal; 24x79 if it can't tell us.
+ */
+screensz(lines, cols)
+int *lines, *cols;
+{
+    struct winsize ws;
+
+    *lines = 24;
+    *cols = 79;
+    if (ioctl(1, TIOCGWINSZ, &ws) == 0 && ws.ws_row > 1 && ws.ws_col > 1) {
+	*lines = ws.ws_row;
+	*cols = ws.ws_col;
+    }
+}
+
+/*
+ * Read a key.  The arrow keys' escape sequences (ESC [ A etc.) become
+ * ^K ^J ^L ^H, which move up, down, right and left in command mode.
+ * Other escape sequences (Home, Delete, function keys...) are swallowed,
+ * so they can't be taken as commands.  An ESC with nothing straight after
+ * it is the Escape key.
+ */
+static int pushback = -1;
+
+static int
+rawkey()
 {
     unsigned char c;
+    int n;
 
-    read(0,&c,1);
-    return c;
+    if (pushback >= 0) {
+	c = pushback;
+	pushback = -1;
+	return c;
+    }
+    for (;;) {
+	n = read(0, &c, 1);
+	if (n == 1)
+	    return c;
+	if (n < 0 && errno == EINTR)
+	    continue;
+	return ESC;			/* end of input: act like Escape */
+    }
+}
+
+getKey()
+{
+    int c, n;
+
+    for (;;) {
+	c = rawkey();
+	if (c != ESC)
+	    return c;
+	n = 0;
+	if (ioctl(0, FIONREAD, &n) < 0 || n <= 0)
+	    return ESC;			/* the Escape key */
+	c = rawkey();
+	if (c != '[' && c != 'O') {	/* not a sequence: ESC, then c */
+	    pushback = c;
+	    return ESC;
+	}
+	do				/* parameters, up to the final byte */
+	    c = rawkey();
+	while (c < 0x40 || c > 0x7E);
+	switch (c) {
+	case 'A': return 'K' & 0x1F;	/* up */
+	case 'B': return 'J' & 0x1F;	/* down */
+	case 'C': return 'L' & 0x1F;	/* right */
+	case 'D': return 'H' & 0x1F;	/* left */
+	}
+	/* anything else: ignore it and read another key */
+    }
 }

@@ -130,7 +130,7 @@ int count;
     zconfig();
 #endif /*ZTERM*/
 
-#if ST
+#if ST | WINSIZE
     screensz(&LINES, &COLS);
     dofscroll = LINES/2;
 #endif

@@ -85,7 +85,7 @@ struct ybuf yank;	/* last deleted/yanked text */
 
 /* ttydef stuff */
 
-#if ST | TERMCAP
+#if ST | TERMCAP | WINSIZE
 int LINES, COLS;
 #endif
 
@@ -215,7 +215,7 @@ char wordset[] = "0123456789$_#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
 char spaces[] = { TAB,EOL,' ',0 };
 
 int shiftwidth = 4,
-#if TERMCAP | ST
+#if TERMCAP | ST | WINSIZE
     dofscroll,
 #else
     dofscroll  = LINES/2,
