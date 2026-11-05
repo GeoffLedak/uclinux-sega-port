@@ -76,12 +76,21 @@ static void genesis_console_print(const char *str)
 /* Store kernel's timer routine - called from vblank handler in hw_md.S */
 void (*genesis_timer_routine)(int, void *, struct pt_regs *) = 0;
 
+/* Set at boot on a PAL (50 Hz) console */
+static int genesis_pal;
+static int genesis_pal_frame;
+
 /* Called from vblank handler (hw_md.S) to invoke kernel timer; regs is the
- * interrupted context */
+ * interrupted context.  HZ is 60: one tick per frame on NTSC, and on PAL
+ * (50 frames a second) an extra tick every fifth frame. */
 void genesis_timer_callback(struct pt_regs *regs)
 {
     if (genesis_timer_routine) {
         genesis_timer_routine(0, NULL, regs);
+        if (genesis_pal && ++genesis_pal_frame == 5) {
+            genesis_pal_frame = 0;
+            genesis_timer_routine(0, NULL, regs);
+        }
     }
 }
 #endif
@@ -137,11 +146,16 @@ BSP_sched_init(void (*timer_routine)(int, void *, struct pt_regs *))
          */
         genesis_timer_routine = timer_routine;
 
-        /* The tick is the vblank: 262 lines x 3420 master clocks at
-         * 53.693175 MHz (59.92 Hz) on NTSC, 313 x 3420 at 53.203424 MHz
-         * (49.70 Hz) on PAL.  HZ is 60, so on PAL the clock is right but
-         * timeouts (sleep etc.) last 20% longer than asked. */
-        tick = (*(volatile unsigned char *)0xA10001 & 0x40) ? 20120 : 16688;
+        /* The tick comes from the vblank: 262 lines x 3420 master clocks
+         * at 53.693175 MHz (59.92 Hz, 16688 us) on NTSC.  On PAL a frame
+         * is 313 x 3420 clocks at 53.203424 MHz (49.70 Hz, 20120 us) and
+         * genesis_timer_callback() makes 6 ticks of 16767 us out of every
+         * 5 frames, so HZ = 60 holds for both.  tick is the exact length
+         * the clock advances by. */
+        genesis_pal = (*(volatile unsigned char *)0xA10001 & 0x40) != 0;
+        tick = genesis_pal ? 16767 : 16688;
+        printk("Genesis: %s console, %s Hz vblank\n",
+               genesis_pal ? "PAL" : "NTSC", genesis_pal ? "50" : "60");
 
         printk("MC68000 68 Katy support by Big Mess o' Wires, "
                "Steve Chamberlin\n");

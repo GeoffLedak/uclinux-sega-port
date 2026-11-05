@@ -17,7 +17,7 @@
  * ticks of the chip's sample clock (about 2 ms), and each overflow lets
  * that much music play.  The timer has only an "overflowed" flag, so
  * overflows are lost while the kernel's vblank interrupt keeps us away for
- * longer than one period.  The system tick (one per vblank, from times())
+ * longer than one period.  The system tick (60 a second, from times())
  * never loses time but is far too coarse on its own, so it is used to
  * catch the music up whenever the timer falls more than a period behind.
  */
@@ -49,13 +49,14 @@
  * is fm_rate units and a Timer A period is TIMER_UNITS.  A vblank lasts
  * VGM_RATE * fm_rate / vblank rate units, which works out to
  * VGM_RATE * master clocks per frame / (7 * 144), and 44100 / 1008 is
- * exactly 175 / 4.
+ * exactly 175 / 4.  The kernel ticks once per vblank on NTSC; on PAL it
+ * ticks 6 times every 5 vblanks, so a tick is 5/6 of a frame.
  */
-#define FRAME_UNITS_NTSC (896040L * 175 / 4)	/* 262 lines x 3420 clocks */
-#define FRAME_UNITS_PAL	(1070460L * 175 / 4)	/* 313 lines x 3420 clocks */
+#define TICK_UNITS_NTSC	(896040L * 175 / 4)	/* 262 lines x 3420 clocks */
+#define TICK_UNITS_PAL	(1070460L * 175 * 5 / 24) /* 313 x 3420, x 5/6 */
 
 static long fm_rate;		/* YM2612 sample clock: master clock / 144 */
-static long frame_units;	/* one vblank */
+static long tick_units;		/* one system tick */
 static long credit;		/* time owed to the song */
 static long behind;		/* system-tick time minus Timer A time */
 static long granted;		/* Timer A time since the last system tick */
@@ -144,7 +145,7 @@ static void sync_clock(void)
 	last_tick = now;
 	if (ticks > 4)		/* we didn't run for a while: pause, don't rush */
 		ticks = 4;
-	behind += ticks * frame_units - granted;
+	behind += ticks * tick_units - granted;
 	granted = 0;
 	if (behind > TIMER_UNITS) {
 		credit += behind - TIMER_UNITS;
@@ -298,10 +299,10 @@ int main(int argc, char **argv)
 	/* YM2612 sample clock: 7670453 Hz / 144 on NTSC, 7600489 / 144 on PAL */
 	if (VERSION_REG & 0x40) {
 		fm_rate = 52781;
-		frame_units = FRAME_UNITS_PAL;
+		tick_units = TICK_UNITS_PAL;
 	} else {
 		fm_rate = 53267;
-		frame_units = FRAME_UNITS_NTSC;
+		tick_units = TICK_UNITS_NTSC;
 	}
 
 	signal(SIGINT, on_signal);
