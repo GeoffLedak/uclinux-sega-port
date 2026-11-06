@@ -23,6 +23,24 @@
 /* returns the current text colour */
 #define GENESIS_GET_COLOR	0x4704
 
+/* Test one 256-byte block of the cartridge RAM in place (see memtest in
+ * user/memtest): arg = pointer to struct genesis_memtest, addr filled in.
+ * The block's contents are kept, so any block can be tested, even one
+ * the kernel or a program is using. */
+#define GENESIS_MEMTEST		0x4705
+
+struct genesis_memtest {
+	unsigned long addr;	/* in: 256-byte aligned, 0x200000 - 0x3FFF00 */
+	unsigned long result;	/* out: 0 ok, 1 data error, 2 address line
+				 * error, 3 byte write error */
+	unsigned long bad_addr;	/* out, on an error: where, */
+	unsigned long wrote;	/* what should have been read */
+	unsigned long read;	/* and what was */
+};
+
+#define GENESIS_RAM_START	0x200000	/* mapper slots 4-7 */
+#define GENESIS_RAM_END		0x400000
+
 #ifdef __KERNEL__
 /* arch/m68knommu/platform/68000/68Katy/genesis_term.c */
 void console_putchar(char c);			/* printk path, drops if full */

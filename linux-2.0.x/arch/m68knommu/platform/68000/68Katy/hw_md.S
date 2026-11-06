@@ -707,6 +707,167 @@ put_chr:
         movem.l (sp)+,d2-d7/a2-a5
         rts
 
+/* ============================================================ */
+/* Memory test (GENESIS_MEMTEST, called from genesis_vdp.c)      */
+/* ============================================================ */
+
+/* int genesis_memtest_chunk(unsigned long *chunk, unsigned long *save,
+ *                           unsigned long *fail);
+ *
+ * Tests the 256 bytes at chunk (256-byte aligned, in cartridge RAM) in
+ * place and puts them back.  The caller has interrupts disabled.  The
+ * chunk may hold anything, even the stack this was called with, so while
+ * it is being tested only registers are used: no bsr, no stack.
+ *
+ * save: 312 bytes, not overlapping the chunk.  save[0..63] keeps the
+ *   chunk; from byte 260 it notes what the 13 addresses chunk ^ (1 << n),
+ *   n = 8..20, hold.  Those are the addresses that differ from the chunk
+ *   in one address line, A8 - A20 (A19 and A20 pick the mapper slot).
+ *
+ * Tests: every long 0x55555555 then 0xAAAAAAAA (every bit 0 and 1);
+ * every long its own address, then the inverse (address lines A1 - A7
+ * within the chunk; after each, the 13 other addresses must still hold
+ * what they did, or an address line is faulty or a slot is mirrored);
+ * 16 single byte writes (the upper and lower byte write strobes).
+ *
+ * Returns 0 if all is well, else 1 (data), 2 (address line), 3 (byte
+ * write), and fail[0..2] = the address, the value expected, the value read.
+ */
+        .global genesis_memtest_chunk
+genesis_memtest_chunk:
+        movem.l d2-d7/a2-a4,-(sp)       /* 36 bytes */
+        movea.l 40(sp),a0               /* chunk */
+        movea.l 44(sp),a1               /* save area */
+        moveq   #0,d4
+        moveq   #0,d5
+        moveq   #0,d6
+        moveq   #0,d7
+
+        movea.l a0,a2                   /* keep the chunk */
+        movea.l a1,a3
+        moveq   #63,d0
+1:      move.l  (a2)+,(a3)+
+        dbra    d0,1b
+
+        lea     260(a1),a3              /* note the one-line-away addresses */
+        moveq   #8,d1
+2:      move.l  a0,d0
+        bchg    d1,d0
+        movea.l d0,a2
+        move.l  (a2),(a3)+
+        addq.w  #1,d1
+        cmpi.w  #21,d1
+        bne     2b
+
+        move.l  #0x55555555,d2
+        lea     3f,a4
+        bra     mt_pattern
+3:      move.l  #0xAAAAAAAA,d2
+        lea     4f,a4
+        bra     mt_pattern
+4:      moveq   #0,d2                   /* own address */
+        lea     5f,a4
+        bra     mt_address
+5:      moveq   #-1,d2                  /* inverse of the address */
+        lea     6f,a4
+        bra     mt_address
+
+6:      movea.l a0,a2                   /* single bytes */
+        moveq   #15,d0
+7:      move.w  a2,d2
+        eori.b  #0xA5,d2
+        move.b  d2,(a2)+
+        dbra    d0,7b
+        movea.l a0,a2
+        moveq   #15,d0
+8:      move.w  a2,d2
+        eori.b  #0xA5,d2
+        move.b  (a2)+,d3
+        cmp.b   d2,d3
+        dbne    d0,8b
+        bne     mt_bad_byte
+        bra     mt_restore
+
+/* fill the chunk with d2 and check it; returns to a4 */
+mt_pattern:
+        movea.l a0,a2
+        moveq   #63,d0
+1:      move.l  d2,(a2)+
+        dbra    d0,1b
+        movea.l a0,a2
+        moveq   #63,d0
+2:      move.l  (a2)+,d3
+        cmp.l   d2,d3
+        dbne    d0,2b
+        bne     mt_bad_long
+        jmp     (a4)
+
+/* fill each long with its address ^ d2 and check; then check that the
+ * one-line-away addresses are unchanged; returns to a4 */
+mt_address:
+        movea.l a0,a2
+        moveq   #63,d0
+1:      move.l  a2,d3
+        eor.l   d2,d3
+        move.l  d3,(a2)+
+        dbra    d0,1b
+        movea.l a0,a2
+        moveq   #63,d0
+2:      move.l  a2,d5
+        eor.l   d2,d5
+        move.l  (a2)+,d3
+        cmp.l   d5,d3
+        dbne    d0,2b
+        bne     mt_bad_data
+        moveq   #0,d5
+        lea     260(a1),a3
+        moveq   #8,d1
+3:      move.l  a0,d0
+        bchg    d1,d0
+        movea.l d0,a2
+        move.l  (a2),d3
+        cmp.l   (a3)+,d3
+        bne     mt_bad_alias
+        addq.w  #1,d1
+        cmpi.w  #21,d1
+        bne     3b
+        jmp     (a4)
+
+mt_bad_long:
+        move.l  d2,d5
+mt_bad_data:                            /* d5 = expected, d3 = read */
+        move.l  a2,d4
+        subq.l  #4,d4
+        move.l  d3,d6
+        moveq   #1,d7
+        bra     mt_restore
+mt_bad_alias:
+        move.l  a2,d4
+        move.l  -4(a3),d5
+        move.l  d3,d6
+        moveq   #2,d7
+        bra     mt_restore
+mt_bad_byte:
+        move.l  a2,d4
+        subq.l  #1,d4
+        moveq   #0,d5
+        move.b  d2,d5
+        moveq   #0,d6
+        move.b  d3,d6
+        moveq   #3,d7
+
+mt_restore:                             /* put the chunk back */
+        movea.l a0,a2
+        movea.l a1,a3
+        moveq   #63,d0
+1:      move.l  (a3)+,(a2)+
+        dbra    d0,1b
+        movea.l 48(sp),a2               /* the stack is usable again */
+        movem.l d4-d6,(a2)
+        move.l  d7,d0
+        movem.l (sp)+,d2-d7/a2-a4
+        rts
+
 /* void delay(int count); */
 /* wait count number of vertical blank periods - relies on vblank running */
 /* entry: arg = count */

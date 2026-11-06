@@ -192,6 +192,49 @@ static void genesis_set_termios(struct tty_struct *tty, struct termios *old)
 {
 }
 
+/* arch/m68knommu/platform/68000/68Katy/hw_md.S */
+extern int genesis_memtest_chunk(unsigned long *chunk, unsigned long *save,
+				 unsigned long *fail);
+
+/*
+ * GENESIS_MEMTEST: test one 256-byte block of cartridge RAM in place.
+ * The block is saved in a buffer that it doesn't overlap: two candidate
+ * areas 512 bytes apart in memtest_buf, each 256-byte aligned so that
+ * genesis_memtest_chunk's notes (from byte 260) hold no address it reads.
+ */
+static unsigned long memtest_buf[(1024 + 256) / 4];
+static unsigned long memtest_fail[3];
+
+static int genesis_memtest(unsigned long arg)
+{
+	struct genesis_memtest m;
+	unsigned long flags, a, block;
+	int err;
+
+	err = verify_area(VERIFY_WRITE, (void *)arg, sizeof m);
+	if (err)
+		return err;
+	memcpy_fromfs(&m, (void *)arg, sizeof m);
+	block = m.addr;
+	if ((block & 255) || block < GENESIS_RAM_START || block >= GENESIS_RAM_END)
+		return -EINVAL;
+	a = ((unsigned long)memtest_buf + 255) & ~255;
+	if (block == a || block == a + 256)
+		a += 512;
+
+	save_flags(flags);
+	cli();
+	m.result = genesis_memtest_chunk((unsigned long *)block,
+					 (unsigned long *)a, memtest_fail);
+	restore_flags(flags);
+
+	m.bad_addr = memtest_fail[0];
+	m.wrote = memtest_fail[1];
+	m.read = memtest_fail[2];
+	memcpy_tofs((void *)arg, &m, sizeof m);
+	return 0;
+}
+
 static int genesis_ioctl(struct tty_struct *tty, struct file *file,
                          unsigned int cmd, unsigned long arg)
 {
@@ -217,6 +260,9 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 
 	case GENESIS_GET_COLOR:
 		return genesis_term_get_color();
+
+	case GENESIS_MEMTEST:
+		return genesis_memtest(arg);
 	}
 	return -ENOIOCTLCMD;
 }
