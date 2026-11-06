@@ -187,7 +187,32 @@ init_hardware:
         move.w  d0,(a3)                 /* blank rows below the text */
         dbra    d3,12b
 
-/* cursor tiles (consecutive): block 8px, block 6px, underline 8px, underline 6px, bar */
+        bsr     genesis_load_cursor_tiles
+
+/* set the default palette for text */
+        move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
+        move.l  #TEXT_COLOR,(a3)        /* entry 0 (black) and 1 (text and cursor colour) */
+        move.l  #0xC0200000,(a4)        /* write CRAM address 32 */
+        move.l  #0x000000A0,(a3)        /* entry 16 (black) BGR and 17 (green) */
+        move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
+        move.l  #0x0000000A,(a3)        /* entry 32 (black) BGR and 33 (red) */
+
+        move.w  #0x8174,(a4)            /* display on, vblank ENABLED */
+        move    #0x2000,sr              /* enable CPU interrupts */
+
+        movem.l (sp)+,d2-d7/a2-a6
+        rts
+
+/* void genesis_load_cursor_tiles(void); */
+/* Load the text cursor's tiles (consecutive from CURSOR_TILES): block 8px,  */
+/* block 6px, underline 8px, underline 6px, bar. Also used after graphics    */
+/* mode (genesis_term.c), which overwrites them.                            */
+        .global genesis_load_cursor_tiles
+genesis_load_cursor_tiles:
+        movem.l d2-d3/a3-a5,-(sp)
+        lea     0xC00000,a3             /* VDP data reg */
+        lea     0xC00004,a4             /* VDP cmd/sts reg */
+        move.w  #0x8F02,(a4)            /* INC = 2 */
         move.l  #CURSOR_TILES*32,d0
         bsr     vram_write_cmd
         move.l  d0,(a4)
@@ -208,18 +233,7 @@ init_hardware:
         dbra    d3,14b
         dbra    d2,13b
 
-/* set the default palette for text */
-        move.l  #0xC0000000,(a4)        /* write CRAM address 0 */
-        move.l  #TEXT_COLOR,(a3)        /* entry 0 (black) and 1 (text and cursor colour) */
-        move.l  #0xC0200000,(a4)        /* write CRAM address 32 */
-        move.l  #0x000000A0,(a3)        /* entry 16 (black) BGR and 17 (green) */
-        move.l  #0xC0400000,(a4)        /* write CRAM address 64 */
-        move.l  #0x0000000A,(a3)        /* entry 32 (black) BGR and 33 (red) */
-
-        move.w  #0x8174,(a4)            /* display on, vblank ENABLED */
-        move    #0x2000,sr              /* enable CPU interrupts */
-
-        movem.l (sp)+,d2-d7/a2-a6
+        movem.l (sp)+,d2-d3/a3-a5
         rts
 
 /* cursor tile pixel rows: (rows 0-5, rows 6-7) for each cursor tile */

@@ -965,8 +965,13 @@ void genesis_process_keyboard(void)
 
     if (ch >= kFirstSpecialKey) {
         seq = special_key_sequence(ch, ControlGlobalz.keyboardFlags & kControlDown);
-        if (seq)
+        if (seq) {
+            if (ControlGlobalz.keyboardFlags & kAltDown) {
+                buf[0] = 0x1B;          /* Alt+F4 etc.: ESC, then the key's sequence */
+                genesis_tty_input(buf, 1);
+            }
             genesis_tty_input(seq, strlen(seq));
+        }
         return;
     }
 

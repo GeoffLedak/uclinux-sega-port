@@ -20,6 +20,9 @@
 #include <linux/mm.h>
 #include <linux/tty.h>
 #include <linux/malloc.h>
+#ifdef CONFIG_68KATY
+#include <linux/genesis_console.h>
+#endif
 #include <linux/interrupt.h>
 
 #include <asm/segment.h>
@@ -626,6 +629,9 @@ NORET_TYPE void do_exit(long code)
 fake_volatile:
 	acct_process(code);
 	current->flags |= PF_EXITING;
+#ifdef CONFIG_68KATY
+	genesis_gfx_exit(current);	/* give the screen back to the console */
+#endif
 	del_timer(&current->real_timer);
 	sem_exit();
 	kerneld_exit();

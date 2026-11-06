@@ -505,6 +505,7 @@ fi
 bool 'beep'			CONFIG_USER_BEEP
 bool 'nano (editor)'		CONFIG_USER_NANO
 bool 'memtest'			CONFIG_USER_MEMTEST
+bool 'win (graphical shell)'	CONFIG_USER_WIN
 bool 'vgmplay'			CONFIG_USER_VGMPLAY
 if [ "$CONFIG_USER_VGMPLAY" = "y" ]; then
 	define_bool CONFIG_LIB_ZLIB y

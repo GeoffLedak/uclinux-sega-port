@@ -52,10 +52,12 @@ extern void text_zero_block(int block);
 extern void text_map_row(int row, int block);
 extern unsigned char text_charmap[], text_attrmap[];
 extern long fontWidth, textCols;
+extern void genesis_load_cursor_tiles(void);
 
 extern struct tty_struct *genesis_tty_table[];
 
 #define VDP_DATA16	(*(volatile unsigned short *)0xC00000)
+#define VDP_DATA32	(*(volatile unsigned long *)0xC00000)
 #define VDP_CTRL16	(*(volatile unsigned short *)0xC00004)
 #define VDP_CTRL32	(*(volatile unsigned long *)0xC00004)
 #define PSG_PORT	(*(volatile unsigned char *)0xC00011)
@@ -164,6 +166,7 @@ static volatile int pending_color;
 static int cur_font = TERM_DEFAULT_FONT;
 static int cur_color = TERM_DEFAULT_COLOR;
 
+static volatile char restore_pending;		/* graphics mode has ended */
 static int budget;				/* work allowed this frame */
 static int blink;
 static int bell_timer;
@@ -732,12 +735,56 @@ static void draw_cursor(void)
 /* Called every frame from the vblank interrupt (hw_md.S)            */
 /* ---------------------------------------------------------------- */
 
+/* Put back everything graphics mode (genesis_gfx.c) changed */
+static void restore_screen(void)
+{
+	int i, b;
+
+	VDP_CTRL16 = 0x8F02;			/* INC = 2 */
+	VDP_CTRL16 = 0x8407;			/* plane B name table back at 0xE000 */
+	VDP_CTRL32 = 0x40000003;		/* VRAM 0xC000: plane A blank again */
+	for (i = 0; i < 1024; i++)
+		VDP_DATA32 = 0;
+	VDP_CTRL32 = 0x40000000;		/* VRAM 0: tile 0 blank again */
+	for (i = 0; i < 8; i++)
+		VDP_DATA32 = 0;
+	VDP_CTRL32 = 0xC0000000;		/* the palettes as at boot */
+	for (i = 0; i < 64; i++)
+		VDP_DATA16 = 0;
+	VDP_CTRL32 = 0xC0020000;		/* entry 1: text colour */
+	VDP_DATA16 = cur_color;
+	VDP_CTRL32 = 0xC0420000;		/* entry 33: red */
+	VDP_DATA16 = 0x000A;
+	genesis_load_cursor_tiles();
+	for (b = 0; b < ROWS; b++)		/* and all the text */
+		mark(b, 0, cols);
+}
+
+/* called by genesis_gfx.c when graphics mode ends */
+void genesis_term_restore(void)
+{
+	restore_pending = 1;
+}
+
 void genesis_term_vblank(void)
 {
 	struct tty_struct *tty;
 	int did_output = 0;
 	unsigned char c;
 	static char palette1_set;
+
+	if (genesis_gfx_active) {
+		/* the screen belongs to a graphics program: just move the
+		 * pointer, and keep the output until the program is done */
+		genesis_gfx_vblank();
+		if (bell_timer && --bell_timer == 0)
+			PSG_PORT = 0x9F;
+		return;
+	}
+	if (restore_pending) {
+		restore_pending = 0;
+		restore_screen();
+	}
 
 	if (!palette1_set) {
 		/* palette 1 colour 1 = black: the cursor over reverse video */

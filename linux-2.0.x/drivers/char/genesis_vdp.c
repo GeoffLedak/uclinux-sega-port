@@ -263,6 +263,16 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 
 	case GENESIS_MEMTEST:
 		return genesis_memtest(arg);
+
+	case GENESIS_GFX_ENTER:
+	case GENESIS_GFX_LEAVE:
+	case GENESIS_GFX_FLUSH:
+	case GENESIS_GFX_PALETTE:
+	case GENESIS_GFX_POINTER:
+	case GENESIS_GFX_INPUT:
+	case GENESIS_GFX_WAIT:
+	case GENESIS_GFX_WARP:
+		return genesis_gfx_ioctl(tty, cmd, arg);
 	}
 	return -ENOIOCTLCMD;
 }
