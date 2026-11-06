@@ -15,9 +15,11 @@
  * overwritten or left alone; genesis_term_restore() redraws them when
  * graphics mode ends.
  *
- * The program's frame buffer is copied to video memory a few tiles at a
- * time with interrupts off, so that the vblank interrupt (which moves
- * the pointer sprite) can't change the VDP's address in the middle.
+ * The program's frame buffer is copied to video memory by DMA, a piece
+ * at a time with interrupts off, so that the vblank interrupt (which
+ * moves the pointer sprite) can't change the VDP's address in the middle;
+ * the vblank interrupt itself sends queued pieces first thing, while the
+ * VDP is fastest.
  *
  * Note: no 32-bit multiply or divide here (the kernel has no libgcc).
  */
@@ -39,7 +41,6 @@
 
 #define PTR_TILE	GENESIS_GFX_TILES	/* first pointer tile (1120) */
 #define DIRTY_LONGS	((GENESIS_GFX_TILES + 31) / 32)
-#define CHUNK		8			/* tiles copied per cli() */
 #define QSIZE		16			/* button events (power of 2) */
 
 extern short get_pad(short pad);		/* hw_md.S */
@@ -57,6 +58,13 @@ static unsigned char hot_y[GENESIS_GFX_POINTER_SHAPES];
 static int hold, frac;				/* d-pad acceleration */
 static unsigned short buttons, lastpad;
 static volatile char moved;
+
+/* the upload queue (see "Drawing") */
+static unsigned long qdirty[DIRTY_LONGS];	/* the tiles still to send */
+static const unsigned long *qfb;		/* from this frame buffer */
+static int qpos;				/* tiles before qpos are sent */
+static volatile char qbusy;
+static struct wait_queue *dma_wait;		/* the flush, waiting for it */
 
 /* button events */
 static struct genesis_gfx_input queue[QSIZE];
@@ -234,6 +242,9 @@ static void gfx_leave(void)
 	if (genesis_gfx_active) {
 		genesis_gfx_active = 0;
 		owner = 0;
+		qbusy = 0;
+		memset(qdirty, 0, sizeof qdirty);
+		wake_up_interruptible(&dma_wait);
 		genesis_term_restore();		/* redrawn at the next vblank */
 	}
 	restore_flags(flags);
@@ -250,40 +261,102 @@ void genesis_gfx_exit(struct task_struct *p)
 /* Drawing                                                           */
 /* ---------------------------------------------------------------- */
 
-/* copy n tiles from src to tile t onwards */
-static void upload(int t, int n, const unsigned long *src)
-{
-	unsigned long flags;
-	int k, i;
+/*
+ * Uploading by DMA: the VDP reads the program's frame buffer itself.
+ * While the picture is being drawn the VDP has little time for that
+ * (18 bytes a line, with the CPU stopped meanwhile), but in the vertical
+ * blank it takes about 8 KB. So the tiles to send are queued, and the
+ * vblank interrupt sends what it can first thing (before reading the
+ * keyboard); the flush ioctl sleeps until the queue is empty, leaving
+ * the CPU to other programs (music). A small upload is sent at once.
+ */
+#define DMA_WORDS	512		/* a piece: 32 tiles */
+#define VBLANK_WORDS	8192		/* per vblank (it may run on past it) */
+#define NOW_WORDS	1024		/* this much is sent at once */
 
-	while (n > 0) {
-		k = (n > CHUNK) ? CHUNK : n;
-		save_flags(flags);
-		cli();
+
+static volatile unsigned short dma_cmd;	/* see below */
+static const unsigned char nbits[16] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
+
+/* send n tiles from src to tile t onwards, interrupts off */
+static void dma(int t, int n, const unsigned long *src)
+{
+	unsigned long addr = (unsigned long)src, vaddr = (unsigned long)t << 5;
+	unsigned long words = (unsigned long)n << 4, k, room, cmd;
+
+	while (words > 0) {
+		/* a piece can't cross a 128 KB boundary of the source:
+		 * the VDP's source counter wraps there */
+		k = words;
+		room = (0x20000 - (addr & 0x1FFFF)) >> 1;
+		if (k > room)
+			k = room;
+		cmd = vram_write(vaddr) | 0x80;		/* CD5: DMA */
 		VDP_CTRL16 = 0x8F02;
-		VDP_CTRL32 = vram_write((unsigned long)t << 5);
-		for (i = k; i > 0; i--) {
-			VDP_DATA32 = src[0];
-			VDP_DATA32 = src[1];
-			VDP_DATA32 = src[2];
-			VDP_DATA32 = src[3];
-			VDP_DATA32 = src[4];
-			VDP_DATA32 = src[5];
-			VDP_DATA32 = src[6];
-			VDP_DATA32 = src[7];
-			src += 8;
-		}
-		restore_flags(flags);
-		t += k;
-		n -= k;
+		VDP_CTRL16 = 0x9300 | (k & 0xFF);
+		VDP_CTRL16 = 0x9400 | ((k >> 8) & 0xFF);
+		VDP_CTRL16 = 0x9500 | ((addr >> 1) & 0xFF);
+		VDP_CTRL16 = 0x9600 | ((addr >> 9) & 0xFF);
+		VDP_CTRL16 = 0x9700 | ((addr >> 17) & 0x7F);
+		VDP_CTRL16 = cmd >> 16;
+		/* the word that starts the DMA is written from RAM: some
+		 * consoles go wrong if the CPU fetches it from ROM */
+		dma_cmd = cmd;
+		VDP_CTRL16 = dma_cmd;
+		addr += k << 1;
+		vaddr += k << 1;
+		words -= k;
 	}
+}
+
+/* send the next run of queued tiles, at most max words; interrupts off.
+ * Returns the words sent, 0 when the queue is empty. */
+static int dma_next(int max)
+{
+	int t = qpos, n = 0, limit = max >> 4;
+
+	while (t < GENESIS_GFX_TILES) {
+		if (!(t & 31) && !qdirty[t >> 5]) {
+			t += 32;
+			continue;
+		}
+		if (qdirty[t >> 5] & (1UL << (t & 31)))
+			break;
+		t++;
+	}
+	if (t >= GENESIS_GFX_TILES) {
+		qpos = GENESIS_GFX_TILES;
+		qbusy = 0;
+		return 0;
+	}
+	while (t + n < GENESIS_GFX_TILES && n < limit &&
+	       (qdirty[(t + n) >> 5] & (1UL << ((t + n) & 31)))) {
+		qdirty[(t + n) >> 5] &= ~(1UL << ((t + n) & 31));
+		n++;
+	}
+	qpos = t + n;
+	dma(t, n, qfb + (t << 3));
+	return n << 4;
+}
+
+/* from the vblank interrupt, before anything else */
+void genesis_gfx_vblank_dma(void)
+{
+	int budget = VBLANK_WORDS, w;
+
+	if (!genesis_gfx_active || !qbusy)
+		return;
+	while (budget > 0 && (w = dma_next(budget < DMA_WORDS ? budget : DMA_WORDS)) > 0)
+		budget -= w;
+	if (!qbusy)
+		wake_up_interruptible(&dma_wait);
 }
 
 static int gfx_flush(unsigned long arg)
 {
 	struct genesis_gfx_flush f;
-	unsigned long bits;
-	int err, w, t, n;
+	unsigned long flags, bits;
+	int err, w, n = 0;
 
 	err = verify_area(VERIFY_READ, (void *)arg, sizeof f);
 	if (err)
@@ -296,29 +369,34 @@ static int gfx_flush(unsigned long arg)
 		return err;
 
 	/* no MMU: the program's memory can be read directly */
+	save_flags(flags);
+	cli();
 	for (w = 0; w < DIRTY_LONGS; w++) {
-		bits = f.dirty[w];
-		if (!bits)
-			continue;
+		qdirty[w] |= f.dirty[w];
 		f.dirty[w] = 0;
-		t = w << 5;
-		while (bits) {
-			while (!(bits & 1)) {
-				bits >>= 1;
-				t++;
-			}
-			n = 0;
-			while (bits & 1) {
-				bits >>= 1;
-				n++;
-			}
-			if (t + n > GENESIS_GFX_TILES)
-				n = GENESIS_GFX_TILES - t;
-			if (n > 0)
-				upload(t, n, f.fb + (t << 3));
-			t += n;
-		}
 	}
+	qdirty[DIRTY_LONGS - 1] &= (1UL << (GENESIS_GFX_TILES & 31)) - 1;
+	for (w = 0; w < DIRTY_LONGS; w++) {
+		bits = qdirty[w];
+		for (; bits; bits >>= 4)
+			n += nbits[bits & 15];
+	}
+	qfb = f.fb;
+	qpos = 0;
+	qbusy = n > 0;
+	/* it must all be sent before returning: the program draws on
+	 * afterwards. A big upload waits for the vertical blanks, unless
+	 * a signal comes: then the rest is sent straight away */
+	if (n > NOW_WORDS / 16)
+		while (qbusy && !(current->signal & ~current->blocked))
+			interruptible_sleep_on(&dma_wait);
+	restore_flags(flags);
+	do {
+		save_flags(flags);
+		cli();
+		w = dma_next(DMA_WORDS);
+		restore_flags(flags);
+	} while (w);
 	return 0;
 }
 
@@ -350,6 +428,7 @@ static int gfx_palette(unsigned long arg)
 static int gfx_pointer(unsigned long arg)
 {
 	struct genesis_gfx_pointer p;
+	unsigned long flags;
 	int err;
 
 	err = verify_area(VERIFY_READ, (void *)arg, sizeof p);
@@ -367,7 +446,10 @@ static int gfx_pointer(unsigned long arg)
 			return err;
 		hot_x[p.shape] = p.hot_x;
 		hot_y[p.shape] = p.hot_y;
-		upload(PTR_TILE + (p.shape << 2), 4, p.tiles);
+		save_flags(flags);
+		cli();
+		dma(PTR_TILE + (p.shape << 2), 4, p.tiles);
+		restore_flags(flags);
 	} else
 		shape = p.shape;		/* drawn at the next frame */
 	return 0;

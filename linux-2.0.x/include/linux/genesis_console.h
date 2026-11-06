@@ -138,6 +138,7 @@ void genesis_term_restore(void);		/* redraw everything after graphics mode */
 extern int genesis_gfx_active;
 int  genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg);
 void genesis_gfx_vblank(void);
+void genesis_gfx_vblank_dma(void);
 void genesis_gfx_exit(struct task_struct *p);	/* from do_exit */
 
 /* arch/m68knommu/platform/68000/68Katy/genesis_keyboard.c */

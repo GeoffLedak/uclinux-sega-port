@@ -305,10 +305,137 @@ void draw_icon_label(int x, int y, int w, const unsigned char *icon,
 	}
 }
 
+/*
+ * Painting without overdraw. A window with a background colour (and not
+ * minimized) covers its whole rectangle: its frame and background are
+ * drawn edge to edge. So going through a window's children from the top
+ * down, each such child takes its part of the area away from the
+ * windows below it, and what is left at the end is all the parent itself
+ * has to paint. Children without a background (controls, minimized
+ * icons) are see-through: they get the area left when it's their turn,
+ * and are painted after what is under them.
+ *
+ * The pieces are rectangles; if there are too many, the window falls
+ * back to plain painting from the bottom up.
+ */
+#define MAXKIDS		48
+#define MAXPIECES	160
+#define MAXREGION	32
+
+static Rect pieces[MAXPIECES];		/* shared by all the levels */
+static int npieces;
+
+typedef struct {
+	Rect r[MAXREGION];
+	int n;
+} Region;
+
+static int opaque(Win *w)
+{
+	return w->bg >= 0 && w->state != W_MIN;
+}
+
+/* take s away from g; 0 if g gets too big */
+static int region_sub(Region *g, const Rect *s)
+{
+	Rect out[MAXREGION], *r;
+	int i, n = 0;
+
+	for (i = 0; i < g->n; i++) {
+		r = &g->r[i];
+		if (r->l >= s->r || r->r <= s->l || r->t >= s->b || r->b <= s->t) {
+			if (n == MAXREGION)
+				return 0;
+			out[n++] = *r;
+			continue;
+		}
+		if (n + 4 > MAXREGION)
+			return 0;
+		if (r->t < s->t)		/* above */
+			set_rect(&out[n++], r->l, r->t, r->r, s->t);
+		if (r->b > s->b)		/* below */
+			set_rect(&out[n++], r->l, s->b, r->r, r->b);
+		if (r->l < s->l)		/* left */
+			set_rect(&out[n++], r->l, r->t > s->t ? r->t : s->t,
+				 s->l, r->b < s->b ? r->b : s->b);
+		if (r->r > s->r)		/* right */
+			set_rect(&out[n++], s->r, r->t > s->t ? r->t : s->t,
+				 r->r, r->b < s->b ? r->b : s->b);
+	}
+	memcpy(g->r, out, n * sizeof(Rect));
+	g->n = n;
+	return 1;
+}
+
+static void paint_win(Win *w, const Rect *area);
+
+/* the window's own background and drawing, in screen area c */
+static void paint_self(Win *w, const Rect *c, int ox, int oy)
+{
+	gfx_set(ox, oy, c);
+	if (w->bg >= 0)
+		fill(0, 0, SCR_W, SCR_H, w->bg);
+	w->proc(w, M_PAINT, 0, 0);
+}
+
+/* the client area of w (c: in screen coordinates, already clipped) */
+static void paint_client(Win *w, const Rect *c, int ox, int oy)
+{
+	Win *kids[MAXKIDS], *ch;
+	short first[MAXKIDS];
+	Region left;
+	Rect kr, piece;
+	int n = 0, i, j, base = npieces;
+
+	for (ch = w->child; ch; ch = ch->next)
+		if (!(ch->style & S_HIDDEN)) {
+			if (n == MAXKIDS)
+				goto fallback;
+			kids[n++] = ch;
+		}
+	/* from the top down: each child's visible pieces */
+	left.r[0] = *c;
+	left.n = 1;
+	for (i = n - 1; i >= 0; i--) {
+		first[i] = npieces;
+		win_screen(kids[i], &kr);
+		if (!rect_and(&kr, c))
+			continue;
+		for (j = 0; j < left.n; j++) {
+			piece = left.r[j];
+			if (!rect_and(&piece, &kr))
+				continue;
+			if (npieces == MAXPIECES)
+				goto fallback;
+			pieces[npieces++] = piece;
+		}
+		if (opaque(kids[i]) && !region_sub(&left, &kr))
+			goto fallback;
+	}
+	/* then paint from the bottom up: the window, then its children */
+	for (j = 0; j < left.n; j++)
+		paint_self(w, &left.r[j], ox, oy);
+	for (i = 0; i < n; i++) {
+		/* (the pieces were listed from the top down) */
+		int end = (i == 0) ? npieces : first[i - 1];
+		for (j = first[i]; j < end; j++) {
+			piece = pieces[j];
+			paint_win(kids[i], &piece);
+		}
+	}
+	npieces = base;
+	return;
+
+fallback:
+	npieces = base;
+	paint_self(w, c, ox, oy);
+	for (ch = w->child; ch; ch = ch->next)
+		paint_win(ch, c);
+}
+
 static void paint_win(Win *w, const Rect *area)
 {
 	Rect a, c;
-	Win *ch;
 	int ox, oy;
 
 	if (w->style & S_HIDDEN)
@@ -321,26 +448,21 @@ static void paint_win(Win *w, const Rect *area)
 		win_screen(w, &r);
 		gfx_set(r.l, r.t, &a);
 		draw_icon_label(0, 0, ICON_W, w->icon ? w->icon : icon_progman,
-				w->text, is_active(w),
-				w->parent == root ? C_BLACK : C_BLACK);
+				w->text, is_active(w), C_BLACK);
 		return;
 	}
-	if (w->parent) {
+	win_client_screen(w, &c);
+	if (w->parent && (a.l < c.l || a.t < c.t || a.r > c.r || a.b > c.b)) {
+		/* the frame (unless it's all inside the client area) */
 		Rect r;
 		win_screen(w, &r);
 		gfx_set(r.l, r.t, &a);
 		draw_nc(w);
 	}
-	win_client_screen(w, &c);
 	client_origin(w, &ox, &oy);
 	if (!rect_and(&c, &a))
 		return;
-	gfx_set(ox, oy, &c);
-	if (w->bg >= 0)
-		fill(0, 0, SCR_W, SCR_H, w->bg);
-	w->proc(w, M_PAINT, 0, 0);
-	for (ch = w->child; ch; ch = ch->next)
-		paint_win(ch, &c);
+	paint_client(w, &c, ox, oy);
 }
 
 void repaint_now(void)
@@ -463,6 +585,13 @@ static void menu_item_rect(Win *w, int i, Rect *r)	/* window coordinates */
 static int caption_pressed = HT_NONE;	/* button held down */
 static Win *caption_pressed_win;
 
+/* does r (in drawing coordinates) touch what is being drawn? */
+static int in_clip(const Rect *r)
+{
+	return org_x + r->l < clip.r && org_x + r->r > clip.l &&
+	       org_y + r->t < clip.b && org_y + r->b + 1 > clip.t;
+}
+
 static void draw_nc(Win *w)
 {
 	int W = w->r.r - w->r.l, H = w->r.b - w->r.t, b = bsize(w);
@@ -492,7 +621,7 @@ static void draw_nc(Win *w)
 			hline(W - b, W, H - 1 - c, C_BLACK);
 		}
 	}
-	if (w->style & S_CAPTION) {
+	if ((w->style & S_CAPTION) && in_clip(&l.cap)) {
 		x0 = l.cap.l;
 		x1 = l.cap.r;
 		if (w->style & S_SYSMENU) {
@@ -526,7 +655,7 @@ static void draw_nc(Win *w)
 		}
 		hline(l.cap.l, l.cap.r, l.cap.b, C_BLACK);
 	}
-	if (w->menu) {
+	if (w->menu && in_clip(&l.menu)) {
 		fill(l.menu.l, l.menu.t, l.menu.r, l.menu.b, col_menu);
 		for (i = 0; i < w->menu->n; i++) {
 			Rect r;
@@ -539,9 +668,9 @@ static void draw_nc(Win *w)
 		}
 		hline(l.menu.l, l.menu.r, l.menu.b, C_BLACK);
 	}
-	if (w->style & S_VSCROLL)
+	if ((w->style & S_VSCROLL) && in_clip(&l.vsb))
 		draw_scrollbar(w, &l.vsb, 1);
-	if (w->style & S_HSCROLL)
+	if ((w->style & S_HSCROLL) && in_clip(&l.hsb))
 		draw_scrollbar(w, &l.hsb, 0);
 	if ((w->style & S_VSCROLL) && (w->style & S_HSCROLL))
 		fill(l.vsb.l, l.vsb.b, l.vsb.r, l.hsb.b, C_SILVER);
@@ -765,7 +894,16 @@ void win_set_text(Win *w, const char *s)
 {
 	strncpy(w->text, s, sizeof w->text - 1);
 	w->text[sizeof w->text - 1] = 0;
-	invalidate(w);
+	if ((w->style & S_CAPTION) && w->state != W_MIN) {
+		/* just the caption */
+		Layout l;
+		Rect r, cap;
+		layout(w, &l);
+		win_screen(w, &r);
+		set_rect(&cap, r.l + l.cap.l, r.t + l.cap.t, r.l + l.cap.r, r.t + l.cap.b);
+		invalidate_screen(&cap);
+	} else
+		invalidate(w);
 }
 
 static void fit_max(Win *w)
@@ -777,12 +915,129 @@ static void fit_max(Win *w)
 	set_rect(&w->r, -b, -b, c.r + b, c.b + b);
 }
 
+/*
+ * Moving and scrolling by copying pixels: what is already on the screen
+ * is copied to its new place, and only what comes into view is drawn.
+ * That needs the pixels to be really there: nothing in front of the
+ * window, and nothing waiting to be redrawn.
+ */
+
+int wm_copy = 1;		/* 0: always redraw (to time the difference) */
+
+/* the part of w that can be on the screen: inside its parents' client areas */
+static int visible_part(Win *w, Rect *r)
+{
+	Rect c;
+	Win *p;
+
+	win_screen(w, r);
+	for (p = w->parent; p; p = p->parent) {
+		win_client_screen(p, &c);
+		if (!rect_and(r, &c))
+			return 0;
+	}
+	set_rect(&c, 0, 0, SCR_W, SCR_H);
+	return rect_and(r, &c);
+}
+
+/* nothing drawn in front of w overlaps r */
+static int uncovered(Win *w, const Rect *r)
+{
+	Win *x, *s;
+	Rect sr;
+
+	for (x = w; x->parent; x = x->parent)
+		for (s = x->next; s; s = s->next) {
+			if (s->style & S_HIDDEN)
+				continue;
+			win_screen(s, &sr);
+			if (rect_and(&sr, r))
+				return 0;
+		}
+	return 1;
+}
+
+static int damage_overlaps(const Rect *r)
+{
+	int i;
+	Rect d;
+
+	for (i = 0; i < ndamage; i++) {
+		d = damage[i];
+		if (rect_and(&d, r))
+			return 1;
+	}
+	return 0;
+}
+
+/* invalidate a minus b */
+static void invalidate_minus(const Rect *a, const Rect *b)
+{
+	Region g;
+	int i;
+
+	g.r[0] = *a;
+	g.n = 1;
+	if (!region_sub(&g, b)) {
+		invalidate_screen(a);
+		return;
+	}
+	for (i = 0; i < g.n; i++)
+		invalidate_screen(&g.r[i]);
+}
+
+/* copy what is in src (screen) by dx, dy, inside limit; invalidate the
+ * rest of limit */
+static void copy_within(const Rect *src0, const Rect *limit, int dx, int dy)
+{
+	Rect dst = *src0;
+
+	dst.l += dx; dst.r += dx; dst.t += dy; dst.b += dy;
+	if (rect_and(&dst, limit))
+		copy_rect(dst.l - dx, dst.t - dy, dst.r - dx, dst.b - dy, dx, dy);
+	else
+		set_rect(&dst, 0, 0, 0, 0);
+	invalidate_minus(limit, &dst);
+}
+
+void scroll_client(Win *w, int dx, int dy)
+{
+	Rect c, s;
+	Win *ch;
+
+	win_client_screen(w, &c);
+	for (ch = w->child; ch; ch = ch->next)
+		if (!(ch->style & S_HIDDEN))
+			break;
+	if (!wm_copy || ch || w->state == W_MIN || !visible(w) || !visible_part(w, &s) ||
+	    !rect_and(&c, &s) || !uncovered(w, &c) || damage_overlaps(&c)) {
+		win_client_screen(w, &c);
+		invalidate_screen(&c);
+		return;
+	}
+	copy_within(&c, &c, dx, dy);
+}
+
 void win_move(Win *w, int x, int y, int wd, int ht)
 {
 	int resized = (w->r.r - w->r.l != wd) || (w->r.b - w->r.t != ht);
-	Rect c;
+	int dx = x - w->r.l, dy = y - w->r.t;
+	Rect c, old, oldvis, newr, newvis;
 	Win *ch;
 
+	win_screen(w, &old);
+	if (wm_copy && !resized && (dx || dy) && w->state != W_MIN && visible(w) &&
+	    visible_part(w, &oldvis) && uncovered(w, &old) && !damage_overlaps(&old)) {
+		/* copy the window to its new place */
+		set_rect(&w->r, x, y, x + wd, y + ht);
+		win_screen(w, &newr);
+		if (uncovered(w, &newr) && visible_part(w, &newvis) && !damage_overlaps(&newr)) {
+			copy_within(&oldvis, &newvis, dx, dy);
+			invalidate_minus(&old, &newr);	/* what it uncovers */
+			return;
+		}
+		set_rect(&w->r, x - dx, y - dy, x - dx + wd, y - dy + ht);
+	}
 	invalidate(w);
 	set_rect(&w->r, x, y, x + wd, y + ht);
 	invalidate(w);
@@ -2391,10 +2646,13 @@ void wm_init(void)
 #define TL_TILE		104
 #define TL_ARRANGE	105
 
+static int tl_sel;			/* the list's choice, kept when it closes */
+
 static int tasklist_proc(Win *w, int msg, int a, int b)
 {
 	if (msg == M_COMMAND) {
 		Win *list = ctl_find(w, TL_LIST);
+		tl_sel = list_sel(list);
 		switch (a) {
 		case TL_LIST:
 			if (b == N_DBLCLK)
@@ -2437,8 +2695,9 @@ void task_list(void)
 	ctl_button(d, 94, 84, 84, 14, "&Tile", TL_TILE, 0);
 	ctl_button(d, 182, 84, 84, 14, "Arrange &Icons", TL_ARRANGE, 0);
 	win_set_focus(list);
+	tl_sel = -1;
 	r = dialog_run(d);
-	sel = n - 1 - list_sel(list);	/* (the list is freed later) */
+	sel = n - 1 - tl_sel;		/* (the list itself is gone by now) */
 	t = (sel >= 0 && sel < n) ? tasks[sel] : 0;
 	switch (r) {
 	case TL_SWITCH:

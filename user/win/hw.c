@@ -63,11 +63,17 @@ void hw_exit(void)
 	con = -1;
 }
 
+/* what the video memory holds (graphics mode starts with it all 0) */
+static u32 shadow[SCR_TILES * 8];
+void fb_sync(const u32 *fb, u32 *shadow, u32 *dirty, int nwords);	/* gfx68k.S */
+
 void hw_flush(void)
 {
 	struct genesis_gfx_flush f;
 	int i;
 
+	/* drop the tiles that were redrawn the same as before */
+	fb_sync(fb, shadow, dirty, DIRTY_WORDS);
 	for (i = 0; i < DIRTY_WORDS; i++)
 		if (dirty[i])
 			break;

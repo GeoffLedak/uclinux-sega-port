@@ -389,11 +389,44 @@ static void list_show_sel(Win *w)
 	list_update_scroll(w);
 }
 
+/* redraw item i */
+static void list_inval_item(Win *w, int i)
+{
+	List *l = w->data;
+	Rect c, r;
+
+	if (i < l->top)
+		return;
+	win_client_screen(w, &c);
+	set_rect(&r, c.l, c.t + (i - l->top) * ITEM_H, c.r, c.t + (i - l->top + 1) * ITEM_H);
+	if (rect_and(&r, &c))
+		invalidate_screen(&r);
+}
+
+/* after top and sel changed from otop and osel: move what is still in
+ * view, redraw what's new and the selection */
+static void list_changed(Win *w, int otop, int osel)
+{
+	List *l = w->data;
+	int d = l->top - otop, rows = list_rows(w) + 1;
+
+	if (d >= rows || d <= -rows) {
+		invalidate(w);
+		return;
+	}
+	if (d)
+		scroll_client(w, 0, -d * ITEM_H);
+	if (osel != l->sel) {
+		list_inval_item(w, osel);
+		list_inval_item(w, l->sel);
+	}
+}
+
 static int list_proc(Win *w, int msg, int a, int b)
 {
 	List *l = w->data;
 	Rect c;
-	int i, y, rows, old;
+	int i, y, rows, old, otop;
 
 	switch (msg) {
 	case M_CREATE:
@@ -437,7 +470,7 @@ static int list_proc(Win *w, int msg, int a, int b)
 		old = l->sel;
 		l->sel = i;
 		if (old != i) {
-			invalidate(w);
+			list_changed(w, l->top, old);
 			notify(w, N_SELCHANGE);
 		}
 		if (msg == M_LDBL)
@@ -446,6 +479,7 @@ static int list_proc(Win *w, int msg, int a, int b)
 	case M_KEY:
 		rows = list_rows(w);
 		old = l->sel;
+		otop = l->top;
 		switch (a) {
 		case K_UP: l->sel--; break;
 		case K_DOWN: l->sel++; break;
@@ -473,12 +507,13 @@ static int list_proc(Win *w, int msg, int a, int b)
 		if (l->sel >= l->n) l->sel = l->n - 1;
 		if (l->sel < 0) l->sel = l->n ? 0 : -1;
 		list_show_sel(w);
-		invalidate(w);
+		list_changed(w, otop, old);
 		if (l->sel != old)
 			notify(w, N_SELCHANGE);
 		return 1;
 	case M_VSCROLL:
 		rows = list_rows(w);
+		otop = l->top;
 		switch (a) {
 		case SB_LINEUP: l->top--; break;
 		case SB_LINEDOWN: l->top++; break;
@@ -487,13 +522,13 @@ static int list_proc(Win *w, int msg, int a, int b)
 		case SB_THUMB: l->top = b; break;
 		}
 		list_update_scroll(w);
-		invalidate(w);
+		list_changed(w, otop, l->sel);
 		return 1;
 	case M_SIZE:
 		list_update_scroll(w);
 		return 1;
 	case M_FOCUS:
-		invalidate(w);
+		list_inval_item(w, l->sel);	/* the dotted frame */
 		return 1;
 	}
 	return def_proc(w, msg, a, b);
@@ -558,10 +593,11 @@ const char *list_item(Win *w, int i)
 void list_set_sel(Win *w, int i)
 {
 	List *l = w->data;
+	int otop = l->top, osel = l->sel;
 
 	l->sel = i;
 	list_show_sel(w);
-	invalidate(w);
+	list_changed(w, otop, osel);
 }
 
 /* ---------------------------------------------------------------- */

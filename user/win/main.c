@@ -8,6 +8,7 @@
  * The keyboard in port 2 works as usual (Alt+F4, Alt+Tab, F10 ...).
  */
 #include <stdio.h>
+#include <string.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -16,6 +17,9 @@
 #ifdef HOST
 void host_open_script(const char *name);
 #endif
+void bench(void);
+void check(void);
+void bench_report(void);
 
 static void reap(int sig)
 {
@@ -26,8 +30,11 @@ static void reap(int sig)
 
 int main(int argc, char **argv)
 {
+	int do_bench = argc > 1 && !strcmp(argv[1], "-b");
+	int do_check = argc > 1 && !strcmp(argv[1], "-c");
+
 #ifdef HOST
-	if (argc > 1)
+	if (argc > 1 && !do_bench && !do_check)
 		host_open_script(argv[1]);
 #endif
 	if (hw_init()) {
@@ -38,10 +45,17 @@ int main(int argc, char **argv)
 	signal(SIGPIPE, SIG_IGN);
 	wm_init();
 	progman_start();
-	run();
+	if (do_bench)
+		bench();
+	else if (do_check)
+		check();
+	else
+		run();
 	/* close the windows, so music players and the like are stopped */
 	while (root->child)
 		win_destroy(root->child);
 	hw_exit();
+	if (do_bench || do_check)
+		bench_report();
 	return 0;
 }

@@ -11,6 +11,7 @@
 
 #define MAX_TEXT	32000
 #define NP_LINE_H	9
+#define NSIG		(SCR_H / NP_LINE_H + 2)
 #define TABW		8
 
 typedef struct {
@@ -23,6 +24,14 @@ typedef struct {
 	char path[256];
 	char modified, caret, dragging, readonly;
 	char find[64];
+	int ver;			/* counts changes to the text */
+	int maxw, maxw_ver;		/* the longest line, at text version maxw_ver */
+	/* what each row of the window shows (the caret aside), as a
+	 * checksum, so a change redraws only the rows that look different;
+	 * and what they were worked out from */
+	u32 sig[NSIG];
+	int sig_ok, sig_top, sig_left, sig_ver, sig_cur, sig_anchor;
+	int sig_cl, sig_cc;		/* the caret: line, column (-1: none) */
 } Note;
 
 static char *clipboard;
@@ -178,6 +187,7 @@ static void replace(Note *n, int a, int b, const char *s, int len)
 	n->len += len - (b - a);
 	n->cur = n->anchor = a + len;
 	n->modified = 1;
+	n->ver++;
 	relines(n);
 }
 
@@ -197,24 +207,217 @@ static void view_size(Win *w, int *rows, int *cols)
 	Rect c;
 
 	win_client(w, &c);
-	*rows = c.b / NP_LINE_H;
-	*cols = (c.r - 2) / FIXED_W;
+	*rows = c.b > 0 ? UDIV16(c.b, NP_LINE_H) : 0;
+	*cols = c.r > 2 ? UDIV16(c.r - 2, FIXED_W) : 0;
 	if (*rows < 1) *rows = 1;
 	if (*cols < 1) *cols = 1;
 }
 
 static void update_scroll(Win *w, Note *n)
 {
-	int rows, cols, i, maxw = 0;
+	int rows, cols, i;
 
 	view_size(w, &rows, &cols);
-	for (i = 0; i < n->nls; i++) {
-		int l = line_end(n, i) - n->ls[i];
-		if (l > maxw)
-			maxw = l;
+	if (n->maxw_ver != n->ver || !n->maxw) {
+		n->maxw = 0;
+		for (i = 0; i < n->nls; i++) {
+			int l = line_end(n, i) - n->ls[i];
+			if (l > n->maxw)
+				n->maxw = l;
+		}
+		n->maxw_ver = n->ver;
 	}
 	set_scroll(w, 1, n->top, n->nls - rows, rows);
-	set_scroll(w, 0, n->left, maxw + 1 - cols, cols);
+	set_scroll(w, 0, n->left, n->maxw + 1 - cols, cols);
+}
+
+#define VIS_COLS	(SCR_W / FIXED_W + 2)
+
+/* columns that can be seen */
+static int vis_cols(Win *w)
+{
+	Rect c;
+	int vis;
+
+	win_client(w, &c);
+	vis = (c.r > 1 ? UDIV16(c.r - 1, FIXED_W) : 0) + 2;
+	return vis > VIS_COLS ? VIS_COLS : vis;
+}
+
+/* line l as shown: vis characters (tabs as spaces) in buf, and in fl
+ * 0 past the end, 1 text, 2 selected */
+static void line_cells(Note *n, int l, int vis, char *buf, char *fl)
+{
+	int a, b, sel = sel_range(n, &a, &b), e = line_end(n, l), col = 0, i, k;
+
+	memset(buf, ' ', vis);
+	memset(fl, 0, vis);
+	for (i = n->ls[l]; i <= e && i <= n->len && col < n->left + vis; i++) {
+		int ch = (i < e) ? (unsigned char)n->t[i] : ' ';
+		int nc = (ch == '\t') ? (col / TABW + 1) * TABW : col + 1;
+		int insel = sel && i >= a && i < b && i < e + (e < n->len);
+		for (k = col; k < nc; k++)
+			if (k >= n->left && k < n->left + vis) {
+				if (ch != '\t')
+					buf[k - n->left] = ch;
+				fl[k - n->left] = insel ? 2 : 1;
+			}
+		col = nc;
+		if (i == e)
+			break;
+	}
+}
+
+/* the column of the caret in the window, if it is drawn; else -1 */
+static int caret_col(Win *w, Note *n, int *line)
+{
+	int a, b, rows, cols, i;
+
+	if (!n->caret || win_focus() != w || sel_range(n, &a, &b))
+		return -1;
+	view_size(w, &rows, &cols);
+	*line = line_of(n, n->cur);
+	i = col_of(n, n->cur) - n->left;
+	if (*line >= n->top && *line < n->top + rows && i >= 0 && i <= cols)
+		return i;
+	return -1;
+}
+
+/*
+ * A checksum of everything that decides how row l looks: the bytes of
+ * the line as far as they can be seen (each is at least one column),
+ * whether it ends there, the part of it that is selected and the first
+ * column shown. Laying the line out would be slower. (The caret is
+ * kept apart: it blinks, and moves without changing anything else.)
+ */
+#define MIX(h, v)	(h = ((h << 5) + h) ^ (u32)(v))
+
+static u32 row_sig(Note *n, int l, int vis, int sel, int a, int b)
+{
+	u32 h = 0x811c9dc5;
+	int s, e, end, i, sb;
+	const unsigned char *p;
+
+	if (l >= n->nls)
+		return 0;
+	s = n->ls[l];
+	e = line_end(n, l);
+	end = (e - s > n->left + vis) ? s + n->left + vis : e;
+	p = (const unsigned char *)n->t + s;
+	for (i = end - s; i > 0; i--)
+		MIX(h, *p++);
+	MIX(h, end - s);
+	MIX(h, n->left);
+	sb = e + (e < n->len);			/* the newline can be selected too */
+	if (b < sb)
+		sb = b;
+	if (sel && sb > a && sb > s) {
+		MIX(h, (a > s ? a : s) - s);
+		MIX(h, sb - s);
+	}
+	return h ? h : 1;
+}
+
+static int sig_rows(Win *w)
+{
+	Rect c;
+	int vrows;
+
+	win_client(w, &c);
+	vrows = c.b > 0 ? UDIV16(c.b + NP_LINE_H - 1, NP_LINE_H) : 0;
+	return vrows > NSIG ? NSIG : vrows;
+}
+
+static void note_state(Note *n, int cl, int cc)
+{
+	n->sig_top = n->top;
+	n->sig_left = n->left;
+	n->sig_ver = n->ver;
+	n->sig_cur = n->cur;
+	n->sig_anchor = n->anchor;
+	n->sig_cl = cl;
+	n->sig_cc = cc;
+	n->sig_ok = 1;
+}
+
+/* what the rows show now */
+static void take_sigs(Win *w, Note *n)
+{
+	int i, vrows = sig_rows(w), vis = vis_cols(w), cl = -1, cc = caret_col(w, n, &cl);
+	int a, b, sel = sel_range(n, &a, &b);
+
+	for (i = 0; i < vrows; i++)
+		n->sig[i] = row_sig(n, n->top + i, vis, sel, a, b);
+	note_state(n, cl, cc);
+}
+
+/* redraw the caret's column of pixels at line l, column c */
+static void inval_caret(Win *w, Note *n, const Rect *cs, int l, int c)
+{
+	Rect r;
+	int x;
+
+	if (c < 0 || l < n->top || l - n->top >= sig_rows(w))
+		return;
+	x = cs->l + c * FIXED_W + (c == 0);
+	set_rect(&r, x, cs->t + (l - n->top) * NP_LINE_H, x + 1, cs->t + (l - n->top + 1) * NP_LINE_H);
+	if (rect_and(&r, cs))
+		invalidate_screen(&r);
+}
+
+/* redraw what changed since the last time */
+static void refresh(Win *w, Note *n)
+{
+	Rect cs, r;
+	int vrows, vis, i, d, cl = -1, cc, a, b, sel;
+	u32 old[NSIG], sg;
+
+	win_client_screen(w, &cs);
+	vrows = sig_rows(w);
+	vis = vis_cols(w);
+	cc = caret_col(w, n, &cl);
+	sel = sel_range(n, &a, &b);
+	d = n->top - n->sig_top;
+	if (!n->sig_ok || d >= vrows || d <= -vrows) {
+		invalidate_screen(&cs);
+		take_sigs(w, n);
+		return;
+	}
+	if (!d && n->ver == n->sig_ver && n->left == n->sig_left &&
+	    ((n->cur == n->sig_cur && n->anchor == n->sig_anchor) ||
+	     (n->cur == n->anchor && n->sig_cur == n->sig_anchor))) {
+		/* the same text and selection, so only the caret can differ */
+		if (cl != n->sig_cl || cc != n->sig_cc) {
+			inval_caret(w, n, &cs, n->sig_cl, n->sig_cc);
+			inval_caret(w, n, &cs, cl, cc);
+		}
+		note_state(n, cl, cc);
+		return;
+	}
+	if (d) {
+		/* move the rows that are still in view */
+		scroll_client(w, 0, -d * NP_LINE_H);
+		memcpy(old, n->sig, sizeof old);
+		for (i = 0; i < vrows; i++)
+			n->sig[i] = (i + d >= 0 && i + d < vrows) ? old[i + d] : 0xFFFFFFFF;
+		n->sig_top = n->top;
+	}
+	for (i = 0; i < vrows; i++) {
+		sg = row_sig(n, n->top + i, vis, sel, a, b);
+		if (sg != n->sig[i]) {
+			n->sig[i] = sg;
+			set_rect(&r, cs.l, cs.t + i * NP_LINE_H, cs.r, cs.t + (i + 1) * NP_LINE_H);
+			if (r.b > cs.b)
+				r.b = cs.b;
+			invalidate_screen(&r);
+		}
+	}
+	if (cl != n->sig_cl || cc != n->sig_cc) {
+		/* (its old place has moved with the rows, if they moved) */
+		inval_caret(w, n, &cs, n->sig_cl, n->sig_cc);
+		inval_caret(w, n, &cs, cl, cc);
+	}
+	note_state(n, cl, cc);
 }
 
 static void show_caret(Win *w, Note *n)
@@ -227,55 +430,52 @@ static void show_caret(Win *w, Note *n)
 	if (c < n->left) n->left = c > 4 ? c - 4 : 0;
 	if (c >= n->left + cols) n->left = c - cols + 4;
 	update_scroll(w, n);
-	invalidate(w);
+	refresh(w, n);
+}
+
+/* draw one run of a line: cols columns of buf from column x0 (window x) */
+static void paint_run(const char *buf, int n, int x, int y, int sel)
+{
+	if (sel)
+		fill(x < 1 ? 1 : x, y, x + n * FIXED_W, y + NP_LINE_H, col_hilite);
+	textn(x, y + 1, buf, n, sel ? C_WHITE : C_BLACK, F_FIXED);
 }
 
 static int note_paint(Win *w, Note *n)
 {
 	Rect c;
-	int rows, cols, l, y, a, b, sel, i, col, e;
+	int l, y, i, k, start, vis;
+	char buf[VIS_COLS], fl[VIS_COLS];
 
 	win_client(w, &c);
-	view_size(w, &rows, &cols);
-	sel = sel_range(n, &a, &b);
+	vis = vis_cols(w);
 	for (l = n->top, y = 0; l < n->nls && y < c.b; l++, y += NP_LINE_H) {
 		/* skip lines outside the clip */
 		if (org_y + y + NP_LINE_H <= clip.t || org_y + y >= clip.b)
 			continue;
-		e = line_end(n, l);
-		col = 0;
-		for (i = n->ls[l]; i <= e && i <= n->len; i++) {
-			int ch = (i < e) ? (unsigned char)n->t[i] : ' ';
-			int nc = (ch == '\t') ? (col / TABW + 1) * TABW : col + 1;
-			int x = 1 + (col - n->left) * FIXED_W;
-			int insel = sel && i >= a && i < b && i < e + (e < n->len);
-			if (nc > n->left && x < c.r) {
-				if (insel)
-					fill(x < 1 ? 1 : x, y, x + (nc - col) * FIXED_W, y + NP_LINE_H,
-					     col_hilite);
-				if (i < e && ch != '\t')
-					textn(x, y + 1, (char *)&n->t[i], 1,
-					      insel ? C_WHITE : C_BLACK, F_FIXED);
-			}
-			col = nc;
-			if (i == e)
-				break;
+		line_cells(n, l, vis, buf, fl);
+		/* draw it in runs of the same selection */
+		for (start = 0; start < vis && fl[start]; start = k) {
+			for (k = start; k < vis && fl[k] == fl[start]; k++)
+				;
+			paint_run(buf + start, k - start, 1 + start * FIXED_W, y, fl[start] == 2);
 		}
 	}
-	if (n->caret && win_focus() == w && !sel) {
-		l = line_of(n, n->cur);
-		i = col_of(n, n->cur) - n->left;
-		if (l >= n->top && l < n->top + rows && i >= 0 && i <= cols)
-			vline(1 + i * FIXED_W - 1 + (i == 0), (l - n->top) * NP_LINE_H,
-			      (l - n->top + 1) * NP_LINE_H, C_BLACK);
-	}
+	i = caret_col(w, n, &l);
+	if (i >= 0)
+		vline(1 + i * FIXED_W - 1 + (i == 0), (l - n->top) * NP_LINE_H,
+		      (l - n->top + 1) * NP_LINE_H, C_BLACK);
+	/* all of it drawn: now it's known what every row shows */
+	if (clip.l <= org_x && clip.t <= org_y && clip.r >= org_x + c.r && clip.b >= org_y + c.b)
+		take_sigs(w, n);
 	return 1;
 }
 
 static int offset_at_point(Note *n, int x, int y)
 {
-	int l = n->top + (y < 0 ? -1 : y / NP_LINE_H);
-	int col = n->left + (x + FIXED_W / 2 - 1) / FIXED_W;
+	int l = n->top + (y < 0 ? -1 : UDIV16(y, NP_LINE_H));
+	int cx = x + FIXED_W / 2 - 1;
+	int col = n->left + (cx < 0 ? -UDIV16(-cx, FIXED_W) : UDIV16(cx, FIXED_W));
 
 	if (col < 0)
 		col = 0;
@@ -326,11 +526,13 @@ static int load(Win *w, Note *n, const char *path)
 	n->len = j;
 	n->cur = n->anchor = n->top = n->left = 0;
 	n->modified = 0;
+	n->ver++;
 	strncpy(n->path, path, sizeof n->path - 1);
 	relines(n);
 	set_title(w, n);
 	update_scroll(w, n);
-	invalidate(w);
+	n->sig_ok = 0;
+	refresh(w, n);
 	return 1;
 }
 
@@ -540,14 +742,15 @@ static int note_proc(Win *w, int msg, int a, int b)
 		return note_paint(w, n);
 	case M_TIMER:
 		n->caret = !n->caret;
-		invalidate(w);
+		refresh(w, n);
 		return 1;
 	case M_ACTIVATE:
 		n->caret = 1;
 		set_timer(w, a ? 30 : 0);
-		invalidate(w);
+		refresh(w, n);
 		return 1;
 	case M_SIZE:
+		n->sig_ok = 0;
 		update_scroll(w, n);
 		return 1;
 	case M_CURSOR:
@@ -567,7 +770,7 @@ static int note_proc(Win *w, int msg, int a, int b)
 			n->anchor = n->cur;
 		n->dragging = 1;
 		n->want = -1;
-		invalidate(w);
+		refresh(w, n);
 		return 1;
 	case M_MOVE:
 		if (n->dragging) {
@@ -599,7 +802,7 @@ static int note_proc(Win *w, int msg, int a, int b)
 			if (*p < 0)
 				*p = 0;
 			update_scroll(w, n);
-			invalidate(w);
+			refresh(w, n);
 		}
 		return 1;
 	case M_KEY:
@@ -642,7 +845,7 @@ static int note_proc(Win *w, int msg, int a, int b)
 		case NM_SELALL:
 			n->anchor = 0;
 			n->cur = n->len;
-			invalidate(w);
+			refresh(w, n);
 			return 1;
 		case NM_TIME: note_key(w, n, K_F1 + 4); return 1;
 		case NM_FIND:

@@ -36,7 +36,14 @@ extern unsigned char col_desktop, col_workspace, col_title, col_title_text,
 typedef struct { short l, t, r, b; } Rect;	/* right and bottom exclusive */
 
 /* ---------------- gfx.c ---------------- */
-extern u32 fb[SCR_TILES * 8];
+/* the 68000 multiplies and divides 16-bit numbers in one instruction;
+ * with int, gcc calls a slow library routine. For values known to fit
+ * (0 - 65535 for UDIV16, -32768 - 32767 for MUL16): */
+#define UDIV16(a, b)	((int)((unsigned short)(a) / (unsigned short)(b)))
+#define MUL16(a, b)	((int)(short)(a) * (short)(b))
+
+#define FB_LONGS	(SCR_TILES * 8 + 8)	/* (8 to spare: copies read one tile on) */
+extern u32 fb[FB_LONGS];
 extern u32 dirty[DIRTY_WORDS];
 extern Rect clip;			/* screen coordinates */
 extern int org_x, org_y;		/* screen position of drawing (0, 0) */
@@ -48,6 +55,7 @@ extern int org_x, org_y;		/* screen position of drawing (0, 0) */
 void gfx_set(int ox, int oy, const Rect *c);	/* origin and clip */
 void gfx_screen(void);				/* whole screen, origin 0, 0 */
 void mark_dirty(int l, int t, int r, int b);	/* screen coordinates */
+void copy_rect(int l, int t, int r, int b, int dx, int dy);	/* screen, may overlap */
 void fill(int l, int t, int r, int b, int c);
 void hline(int x0, int x1, int y, int c);	/* x1 exclusive */
 void vline(int x, int y0, int y1, int c);	/* y1 exclusive */
@@ -77,7 +85,11 @@ int  mnemonic(const char *s);			/* the letter after '&', lower case */
 
 int  rect_and(Rect *a, const Rect *b);		/* a = a & b, 0 if empty */
 int  in_rect(const Rect *r, int x, int y);
-void set_rect(Rect *r, int l, int t, int rr, int b);
+/* (inline: it is called very often) */
+static __inline__ void set_rect(Rect *r, int l, int t, int rr, int b)
+{
+	r->l = l; r->t = t; r->r = rr; r->b = b;
+}
 
 /* ---------------- hw.c / host.c ---------------- */
 struct hw_input {
@@ -240,6 +252,8 @@ void invalidate_client(Win *w, int l, int t, int r, int b);
 void invalidate_screen(const Rect *r);
 void set_timer(Win *w, int frames);	/* 0 = off */
 void set_scroll(Win *w, int vert, int pos, int max, int page);
+void scroll_client(Win *w, int dx, int dy);
+extern int wm_copy;	/* move what it shows; the rest is redrawn */
 void set_pointer(int shape);
 void center_window(Win *w, Win *over);
 void cascade(Win *parent);

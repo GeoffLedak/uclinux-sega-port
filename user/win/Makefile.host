@@ -1,5 +1,5 @@
 # Build win on the PC for testing: make -f Makefile.host; ./win-host script
-SRC = main.c gfx.c wm.c ctl.c host.c art.c progman.c $(APPS)
+SRC = main.c gfx.c wm.c ctl.c host.c art.c progman.c bench.c $(APPS)
 APPS ?= notepad.c calc.c clock.c puzzle.c paint.c filemgr.c control.c
 win-host: $(SRC) win.h art.h
 	$(CC) -g -O1 -Wall -Wno-unused-function -DHOST -I. -Ihost-include -o $@ $(SRC)

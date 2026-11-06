@@ -899,6 +899,7 @@ delay:
  * with all registers saved there; regs is the interrupted context. */
         .global genesis_vblank_handler
 genesis_vblank_handler:
+        jsr     genesis_gfx_vblank_dma  /* graphics mode: upload while the VDP is fastest */
         jsr     genesis_read_keyboard   /* read keyboard input from port 2 */
         jsr     genesis_process_keyboard /* process keyboard and feed to TTY */
         jsr     genesis_term_vblank     /* console: settings, output, cursor, bell */
