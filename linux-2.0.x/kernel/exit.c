@@ -631,6 +631,7 @@ fake_volatile:
 	current->flags |= PF_EXITING;
 #ifdef CONFIG_68KATY
 	genesis_gfx_exit(current);	/* give the screen back to the console */
+	genesis_z80_exit(current);	/* stop its music */
 #endif
 	del_timer(&current->real_timer);
 	sem_exit();

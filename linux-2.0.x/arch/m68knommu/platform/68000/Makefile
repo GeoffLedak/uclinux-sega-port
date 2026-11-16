@@ -10,9 +10,9 @@
 
 #OBJECTS=
 
-all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/font_cp437_6x8.o $(BOARD)/genesis_keyboard.o $(BOARD)/genesis_term.o $(BOARD)/genesis_gfx.o entry.o platform.o
+all: $(BOARD)/crt0_$(MODEL).o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/font_cp437_6x8.o $(BOARD)/genesis_keyboard.o $(BOARD)/genesis_term.o $(BOARD)/genesis_gfx.o $(BOARD)/genesis_z80.o entry.o platform.o
 O_TARGET := platform.o
-O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/font_cp437_6x8.o $(BOARD)/genesis_keyboard.o $(BOARD)/genesis_term.o $(BOARD)/genesis_gfx.o $(OBJECTS)
+O_OBJS := entry.o config.o signal.o traps.o ints.o $(BOARD)/hw_md.o $(BOARD)/font_cga.o $(BOARD)/font_cp437_6x8.o $(BOARD)/genesis_keyboard.o $(BOARD)/genesis_term.o $(BOARD)/genesis_gfx.o $(BOARD)/genesis_z80.o $(OBJECTS)
 
 $(BOARD)/crt0_$(MODEL).o: $(BOARD)/crt0_$(MODEL).S
 
@@ -27,6 +27,8 @@ $(BOARD)/genesis_keyboard.o: $(BOARD)/genesis_keyboard.c
 $(BOARD)/genesis_term.o: $(BOARD)/genesis_term.c
 
 $(BOARD)/genesis_gfx.o: $(BOARD)/genesis_gfx.c
+
+$(BOARD)/genesis_z80.o: $(BOARD)/genesis_z80.c
 
 entry.o: entry.S
 

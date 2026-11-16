@@ -287,6 +287,12 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 	case GENESIS_GFX_SPEED:
 	case GENESIS_GFX_MARGIN:
 		return genesis_gfx_ioctl(tty, cmd, arg);
+
+	case GENESIS_Z80_START:
+	case GENESIS_Z80_STOP:
+	case GENESIS_Z80_READ:
+	case GENESIS_Z80_WRITE:
+		return genesis_z80_ioctl(cmd, arg);
 	}
 	return -ENOIOCTLCMD;
 }

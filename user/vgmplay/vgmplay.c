@@ -1,8 +1,8 @@
 /*
  * vgmplay -- play a VGM music log on the Sega Genesis sound chips.
  *
- *	vgmplay file.vgm
- *	vgmplay file.vgz
+ *	vgmplay [-v] file.vgm
+ *	vgmplay [-v] file.vgz
  *
  * .vgz files are gzip-compressed VGM files, about a quarter of the size;
  * zlib unpacks them as they play.  Their title tag is at the end of the
@@ -16,17 +16,16 @@
  * sampled sound (YM2612 DAC data blocks) are skipped.  The song repeats
  * from its loop point until q or Ctrl-C is pressed.
  *
- * There is no MMU, so the chips are written directly.  The YM2612 sits on
- * the Z80 bus; the kernel holds the Z80 off the bus at boot, and this
- * program requests the bus again to be sure.
+ * The Z80 plays the music (player.z80), keeping time with the YM2612's
+ * timers, so the music doesn't slow down or stutter when the 68000 is
+ * busy with other programs.  This program unpacks the file, turns it into
+ * simpler commands for the Z80 and keeps a ring buffer in the Z80's RAM
+ * topped up: about 7 KB, which is a few seconds of music.  In between it
+ * sleeps.  The kernel copies to the Z80's RAM and starts and stops the Z80
+ * (the GENESIS_Z80_* console ioctls); when this program ends, however it
+ * ends, the kernel stops the Z80 and silences the chips.
  *
- * Timing uses the YM2612's own Timer A: it overflows every TIMER_TICKS
- * ticks of the chip's sample clock (about 2 ms), and each overflow lets
- * that much music play.  The timer has only an "overflowed" flag, so
- * overflows are lost while the kernel's vblank interrupt keeps us away for
- * longer than one period.  The system tick (60 a second, from times())
- * never loses time but is far too coarse on its own, so it is used to
- * catch the music up whenever the timer falls more than a period behind.
+ * -v prints how long the song took and how often the Z80 ran out of music.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,173 +35,38 @@
 #include <signal.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <sys/time.h>
 #include <sys/times.h>
+#include <sys/types.h>
+#include <linux/genesis_console.h>
 #include "zlib.h"
+#include "z80prog.h"		/* the Z80 program, from player.z80 */
 
-#define YM_ADDR0	(*(volatile unsigned char *)0xA04000)	/* also status */
-#define YM_DATA0	(*(volatile unsigned char *)0xA04001)
-#define YM_ADDR1	(*(volatile unsigned char *)0xA04002)
-#define YM_DATA1	(*(volatile unsigned char *)0xA04003)
-#define PSG		(*(volatile unsigned char *)0xC00011)
-#define Z80_BUSREQ	(*(volatile unsigned short *)0xA11100)
-#define Z80_RESET	(*(volatile unsigned short *)0xA11200)
 #define VERSION_REG	(*(volatile unsigned char *)0xA10001)
 
 #define VGM_RATE	44100L
-#define TIMER_TICKS	106	/* Timer A period: 106 / 53267 Hz = about 2 ms */
-#define TIMER_UNITS	(TIMER_TICKS * VGM_RATE)
+#define TIMER_A		128	/* player.z80's Timer A period, in YM2612 samples */
 
-/*
- * Time is counted in units of 1/(VGM_RATE * fm_rate) s, so a song sample
- * is fm_rate units and a Timer A period is TIMER_UNITS.  A vblank lasts
- * VGM_RATE * fm_rate / vblank rate units, which works out to
- * VGM_RATE * master clocks per frame / (7 * 144), and 44100 / 1008 is
- * exactly 175 / 4.  The kernel ticks once per vblank on NTSC; on PAL it
- * ticks 6 times every 5 vblanks, so a tick is 5/6 of a frame.
- */
-#define TICK_UNITS_NTSC	(896040L * 175 / 4)	/* 262 lines x 3420 clocks */
-#define TICK_UNITS_PAL	(1070460L * 175 * 5 / 24) /* 313 x 3420, x 5/6 */
-
-static long fm_rate;		/* YM2612 sample clock: master clock / 144 */
-static long tick_units;		/* one system tick */
-static long credit;		/* time owed to the song */
-static long behind;		/* system-tick time minus Timer A time */
-static long granted;		/* Timer A time since the last system tick */
-static clock_t last_tick;
 static struct tms tms;
-static unsigned char reg27;	/* channel 3 mode bits the song set in reg 0x27 */
-static unsigned long overflows;
-
-static void prefetch(void);
-
 static struct termios saved_tty;
 static int have_tty;
 static int quit;
 
 /* ---------------------------------------------------------------- */
-/* Sound chips                                                      */
-
-static void ym_write(int port, int reg, int val)
-{
-	while (YM_ADDR0 & 0x80)		/* busy */
-		;
-	if (port) {
-		YM_ADDR1 = reg;
-		YM_DATA1 = val;
-	} else {
-		YM_ADDR0 = reg;
-		YM_DATA0 = val;
-	}
-}
-
-/* Timer A: load, enable its flag and clear it, keeping the song's mode bits */
-static void timer_restart(void)
-{
-	ym_write(0, 0x27, reg27 | 0x15);
-}
-
-static void silence(void)
-{
-	int port, r;
-
-	ym_write(0, 0x27, 0x00);		/* timers off, ch3 normal */
-	ym_write(0, 0x2B, 0x00);		/* DAC off */
-	for (r = 0; r < 7; r++)
-		if (r != 3)
-			ym_write(0, 0x28, r);	/* key off */
-	for (port = 0; port < 2; port++)
-		for (r = 0; r < 16; r++) {
-			ym_write(port, 0x40 + r, 0x7F);	/* total level: silent */
-			ym_write(port, 0x80 + r, 0xFF);	/* fastest release */
-		}
-	PSG = 0x9F; PSG = 0xBF; PSG = 0xDF; PSG = 0xFF;
-}
-
-static void restore(void)
-{
-	silence();
-	if (have_tty)
-		tcsetattr(0, TCSANOW, &saved_tty);
-}
-
-static void on_signal(int sig)
-{
-	restore();
-	_exit(0);
-}
-
-/* ---------------------------------------------------------------- */
-/* Time                                                             */
-
-static void check_key(void)
-{
-	long n = 0;
-	char c;
-
-	if (ioctl(0, FIONREAD, &n) == 0 && n > 0 && read(0, &c, 1) == 1)
-		if (c == 'q' || c == 'Q')
-			quit = 1;
-}
-
-/* Compare Timer A with the system tick; make up time the timer lost */
-static void sync_clock(void)
-{
-	clock_t now = times(&tms);
-	unsigned long ticks = now - last_tick;
-
-	if (ticks == 0)
-		return;
-	last_tick = now;
-	if (ticks > 30)		/* we didn't run for 1/2 s: pause, don't rush */
-		ticks = 30;
-	behind += ticks * tick_units - granted;
-	granted = 0;
-	if (behind > TIMER_UNITS) {
-		credit += behind - TIMER_UNITS;
-		behind = TIMER_UNITS;
-	} else if (behind < -4 * TIMER_UNITS) {
-		behind = -4 * TIMER_UNITS;
-	}
-}
-
-/* Let n samples of song time pass */
-static void wait_samples(unsigned long n)
-{
-	while (n && !quit) {
-		unsigned long m = n > 16384 ? 16384 : n;
-
-		n -= m;
-		credit -= (long)m * fm_rate;
-		while (credit < 0 && !quit) {
-			if (YM_ADDR0 & 0x01) {		/* Timer A overflowed */
-				timer_restart();
-				credit += TIMER_UNITS;
-				granted += TIMER_UNITS;
-				sync_clock();
-				if ((++overflows & 15) == 0)	/* every ~32 ms */
-					check_key();
-			} else if (credit < -2 * TIMER_UNITS) {
-				prefetch();		/* over 4 ms to spare */
-			}
-		}
-	}
-}
-
-/* ---------------------------------------------------------------- */
 /* File                                                             */
 
 /*
- * Raw file access, unpacking .vgz files on the way.  Everything is done in
- * small pieces because the music can't play while we read; zlib's own
- * gzread() reads 16KB at a time.  zlib unpacks all the input it is given
- * before it returns, whatever the room for output, so it is handed ZSTEP
- * bytes at a time: about 128 bytes out, under 1/100 s of work.
+ * Raw file access, unpacking .vgz files on the way.  The Z80 has a few
+ * seconds of music in hand, so this can take its time; what matters is
+ * how much 68000 time it takes in all, so files are read in big pieces
+ * (each read() costs about as much as copying a few hundred bytes).
+ * zlib is handed ZSTEP bytes at a time.
  */
-#define ZSTEP	32
+#define ZSTEP	512
 static int fd;
 static int packed;		/* gzip file */
 static z_stream z;
-static unsigned char zin[512];
+static unsigned char zin[4096];
 static unsigned char *zin_next;	/* not yet handed to zlib */
 static int zin_left;
 static long zstart;		/* file offset of the compressed data */
@@ -286,10 +150,21 @@ static int raw_read(unsigned char *dst, int n)
 	return n;
 }
 
+/*
+ * Read-ahead: unpacked song data waits in a ring buffer, filled 4 KB at a
+ * time when it runs out.
+ */
+#define RING	4096		/* power of 2 */
+static unsigned char ring[RING];
+static int rtail, rcount;	/* next byte out, bytes waiting */
+static long rstart;		/* file offset of the next byte out */
+static int at_eof;
+static unsigned long read_ticks, read_max;	/* -v: time music waited */
+
+/* (a .vgz is unpacked up to off into the ring, which the caller empties:
+ * zlib is only quick when it has 258 bytes or more to unpack into) */
 static void raw_seek(long off)
 {
-	unsigned char tmp[256];
-
 	if (!packed) {
 		lseek(fd, off, SEEK_SET);
 		return;
@@ -302,28 +177,18 @@ static void raw_seek(long off)
 		zpos = 0;
 	}
 	while (zpos < off)
-		if (raw_read(tmp, off - zpos > 256 ? 256 : off - zpos) <= 0)
+		if (raw_read(ring, off - zpos > RING ? RING : off - zpos) <= 0)
 			break;
 }
-
-/*
- * Read-ahead: unpacked song data waits in a ring buffer.  While the player
- * waits for the next note it unpacks a little more (prefetch()), so the
- * music rarely has to stop for get() to unpack data itself.
- */
-#define RING	4096		/* power of 2 */
-static unsigned char ring[RING];
-static int rtail, rcount;	/* next byte out, bytes waiting */
-static long rstart;		/* file offset of the next byte out */
-static int at_eof;
-static unsigned long read_ticks, read_max;	/* -v: time music waited */
 
 /*
  * A .vgz file can only be unpacked from the start, so jumping back to the
  * loop point would mean unpacking everything before it again, all at once.
  * Instead the first LOOP_KEEP bytes after the loop point are kept the first
- * time through.  At the loop they go back into the ring, and the unpacking
- * is redone in the background (fill() throws away what it has already got).
+ * time through.  At the loop they go back into the ring, and when they run
+ * out the unpacking is redone from the start, throwing away what was got
+ * before (fill(); unpacked into the empty ring, in big pieces, as zlib is
+ * slow with small ones: this once took over a second).
  */
 #define LOOP_KEEP	RING
 static unsigned char loop_keep[LOOP_KEEP];
@@ -338,10 +203,15 @@ static int fill(int max)
 	long at = rstart + rcount;	/* file offset of ring[head] */
 
 	if (packed && zpos < at) {	/* catching up after a loop */
-		unsigned char tmp[256];
-
-		n = at - zpos > max ? max : at - zpos;
-		if (raw_read(tmp, n > 256 ? 256 : n) <= 0)
+		if (rcount == 0)
+			rtail = head = 0;	/* (the whole ring is free) */
+		if (n > RING - head)
+			n = RING - head;
+		if (n > max)
+			n = max;
+		if (n > at - zpos)
+			n = at - zpos;
+		if (raw_read(ring + head, n) <= 0)	/* (not kept) */
 			at_eof = 1;
 		return 0;
 	}
@@ -370,32 +240,34 @@ static int fill(int max)
 	return n;
 }
 
-static void prefetch(void)
+/*
+ * The ring, for the conversion loop in main(), which takes bytes from it
+ * through locals of its own (see there): used bytes of the run it had are
+ * gone; returns the next run of bytes in a row, *run of them (0 at the
+ * end), reading more if the ring is empty.
+ */
+static void ring_used(int used)
 {
-	fill(64);		/* about 3 ms of unpacking on the 68000 */
+	rtail = (rtail + used) & (RING - 1);
+	rcount -= used;
+	rstart += used;
 }
 
-static int get(void)
+static unsigned char *next_run(int used, int *run)
 {
-	int c;
-
+	ring_used(used);
 	if (rcount == 0) {
 		clock_t t0 = times(&tms), t;
 
 		while (rcount == 0 && !at_eof)
-			fill(256);
+			fill(RING);
 		t = times(&tms) - t0;
 		read_ticks += t;
 		if (t > read_max)
 			read_max = t;
-		if (rcount == 0)
-			return -1;
 	}
-	c = ring[rtail];
-	rtail = (rtail + 1) & (RING - 1);
-	rcount--;
-	rstart++;
-	return c;
+	*run = rcount < RING - rtail ? rcount : RING - rtail;
+	return ring + rtail;
 }
 
 static void seek_to(long off)
@@ -478,6 +350,202 @@ static void show_tag(long off)
 }
 
 /* ---------------------------------------------------------------- */
+/* The Z80                                                          */
+
+#define Z80_RING_SIZE	(Z80_RING_END - Z80_RING)
+
+static int con = -1;		/* the console: the Z80 ioctls go to it */
+static int wr = Z80_RING;	/* where the next byte goes in the Z80's ring */
+static unsigned char z80_image[GENESIS_Z80_RAM];	/* the program, and */
+static int started;		/* the first ring full of music, until it starts */
+static unsigned long start;	/* when it started (times()) */
+static unsigned char out[512];	/* commands not yet in the ring */
+static int nout;
+
+static int z80_io(int cmd, int addr, void *data, int len)
+{
+	struct genesis_z80_io io;
+
+	io.addr = addr;
+	io.len = len;
+	io.data = data;
+	return ioctl(con, cmd, &io);
+}
+
+/* a 2 byte value the Z80 writes: read until it is the same twice, as
+ * the Z80 may have been stopped half way through writing it */
+static int z80_word(int addr)
+{
+	unsigned char a[2], b[2];
+
+	z80_io(GENESIS_Z80_READ, addr, a, 2);
+	for (;;) {
+		z80_io(GENESIS_Z80_READ, addr, b, 2);
+		if (a[0] == b[0] && a[1] == b[1])
+			return a[0] | (a[1] << 8);
+		a[0] = b[0];
+		a[1] = b[1];
+	}
+}
+
+static int z80_byte(int addr)
+{
+	unsigned char c;
+
+	z80_io(GENESIS_Z80_READ, addr, &c, 1);
+	return c;
+}
+
+/* bytes in the Z80's ring that it hasn't played yet */
+static int z80_used(void)
+{
+	int n = wr - z80_word(Z80_RD);
+
+	return n < 0 ? n + Z80_RING_SIZE : n;
+}
+
+static void check_key(void)
+{
+	long n = 0;
+	char c;
+
+	if (ioctl(0, FIONREAD, &n) == 0 && n > 0 && read(0, &c, 1) == 1)
+		if (c == 'q' || c == 'Q')
+			quit = 1;
+}
+
+/* sleep for 1/10 s, or until a key */
+static void nap(void)
+{
+	fd_set fds;
+	struct timeval tv;
+
+	FD_ZERO(&fds);
+	if (have_tty)
+		FD_SET(0, &fds);
+	tv.tv_sec = 0;
+	tv.tv_usec = 100000;
+	if (select(have_tty ? 1 : 0, &fds, 0, 0, &tv) > 0)
+		check_key();
+}
+
+static void z80_start(void)
+{
+	struct genesis_z80_io io;
+	unsigned long tick;
+	int fd;
+
+	/* the console: stdin, or (from win, with /dev/null) opened */
+	for (fd = 0; fd < 3; fd++)
+		if (ioctl(fd, GENESIS_GET_FONT, 0) >= 0) {
+			con = fd;
+			break;
+		}
+	if (con < 0)
+		con = open("/dev/ttyS0", O_RDWR | O_NOCTTY);
+
+	/* samples of the song per Timer A period, x 256: the YM2612's
+	 * sample clock is 7670453 Hz / 144 on NTSC, 7600489 / 144 on PAL */
+	tick = TIMER_A * VGM_RATE * 256 / ((VERSION_REG & 0x40) ? 52781 : 53267);
+	memcpy(z80_image, z80_prog, sizeof z80_prog);
+	z80_image[Z80_TICK] = tick;
+	z80_image[Z80_TICK + 1] = tick >> 8;
+	z80_image[Z80_WR] = wr;		/* the music so far */
+	z80_image[Z80_WR + 1] = wr >> 8;
+
+	io.addr = 0;
+	io.len = wr;
+	io.data = z80_image;
+	if (con < 0 || ioctl(con, GENESIS_Z80_START, &io) < 0) {
+		perror("vgmplay: the Z80");
+		exit(1);
+	}
+	started = 1;
+	start = times(&tms);
+}
+
+/* put out[] in the ring, waiting for room */
+static void send_out(void)
+{
+	unsigned char p[2];
+	int i = 0, n, k, room;
+
+	while (i < nout && !quit) {
+		n = nout - i;
+		if (!started) {
+			if (wr + n < Z80_RING_END) {	/* (1 byte stays free) */
+				memcpy(z80_image + wr, out + i, n);
+				wr += n;
+				i += n;
+				continue;
+			}
+			z80_start();
+		}
+		room = Z80_RING_SIZE - 1 - z80_used();
+		if (room < n && room < 1024) {
+			nap();			/* (not for every little bit) */
+			continue;
+		}
+		if (n > room)
+			n = room;
+		k = Z80_RING_END - wr;		/* to the end of the ring... */
+		if (k > n)
+			k = n;
+		z80_io(GENESIS_Z80_WRITE, wr, out + i, k);
+		if (n > k)			/* ...and on from its start */
+			z80_io(GENESIS_Z80_WRITE, Z80_RING, out + i + k, n - k);
+		wr += n;
+		if (wr >= Z80_RING_END)
+			wr -= Z80_RING_SIZE;
+		p[0] = wr;			/* then tell the Z80 */
+		p[1] = wr >> 8;
+		z80_io(GENESIS_Z80_WRITE, Z80_WR, p, 2);
+		i += n;
+	}
+	nout = 0;
+}
+
+/* out[] is filled up to op: send it, and start again */
+static unsigned char *flush_out(unsigned char *op)
+{
+	nout = op - out;
+	send_out();
+	return out;
+}
+
+/* a wait of n samples (the song's waits come in many small ones, so they
+ * are added up first), in pieces of up to 32767 */
+static unsigned char *put_wait(unsigned char *op, unsigned long n)
+{
+	unsigned long k;
+
+	while (n) {
+		if (op > out + sizeof out - 3)
+			op = flush_out(op);
+		k = n > 32767 ? 32767 : n;
+		n -= k;
+		*op++ = 3;
+		*op++ = k;
+		*op++ = k >> 8;
+	}
+	return op;
+}
+
+static void restore(void)
+{
+	if (con >= 0)
+		ioctl(con, GENESIS_Z80_STOP, 0);
+	if (have_tty)
+		tcsetattr(0, TCSANOW, &saved_tty);
+}
+
+static void on_signal(int sig)
+{
+	restore();
+	_exit(0);
+}
+
+/* ---------------------------------------------------------------- */
 
 int main(int argc, char **argv)
 {
@@ -485,15 +553,31 @@ int main(int argc, char **argv)
 	unsigned long version, data_off, loop_off, gd3_off;
 	struct termios raw;
 	struct tms tm;
-	unsigned long played = 0, start, opened;
-	int verbose = 0, c, a, b;
+	unsigned long played = 0, opened, size, wait = 0;
+	int verbose = 0, c, a, b, under;
+	/* the conversion runs for every byte of the song, so it reaches the
+	 * ring and out[] through these (in a program like this each use of
+	 * a global costs a look-up): run bytes from rp, used of them used;
+	 * commands go at op */
+	unsigned char *rp = ring, *op = out;
+	unsigned char *const oend = out + sizeof out - 3;	/* (a command fits) */
+	int run = 0, used = 0;
+
+#define GET()	(used < run ? rp[used++] : \
+		 (rp = next_run(used, &run), used = 0, run ? rp[used++] : -1))
+#define DROP()	(ring_used(used), run = used = 0)	/* before a seek */
+#define ROOM()	do { \
+			if (wait) { op = put_wait(op, wait); wait = 0; } \
+			if (op > oend) op = flush_out(op); \
+		} while (0)
+#define WAIT(n)	(played += (n), wait += (n))
 
 	if (argc > 1 && !strcmp(argv[1], "-v")) {
 		verbose = 1;
 		argc--, argv++;
 	}
 	if (argc != 2) {
-		fprintf(stderr, "usage: vgmplay file.vgm|file.vgz\n"
+		fprintf(stderr, "usage: vgmplay [-v] file.vgm|file.vgz\n"
 				"try:   vgmplay /usr/music/spacewalk.vgz\n");
 		return 1;
 	}
@@ -512,20 +596,11 @@ int main(int argc, char **argv)
 	loop_off = le32(h + 0x1C) ? 0x1C + le32(h + 0x1C) : 0;
 	gd3_off = le32(h + 0x14) ? 0x14 + le32(h + 0x14) : 0;
 
-	/* YM2612 sample clock: 7670453 Hz / 144 on NTSC, 7600489 / 144 on PAL */
-	if (VERSION_REG & 0x40) {
-		fm_rate = 52781;
-		tick_units = TICK_UNITS_PAL;
-	} else {
-		fm_rate = 53267;
-		tick_units = TICK_UNITS_NTSC;
-	}
-
 	signal(SIGINT, on_signal);
 	signal(SIGTERM, on_signal);
 	signal(SIGHUP, on_signal);
 	signal(SIGQUIT, on_signal);
-	if (tcgetattr(0, &saved_tty) == 0) {
+	if (isatty(0) && tcgetattr(0, &saved_tty) == 0) {
 		have_tty = 1;
 		raw = saved_tty;
 		raw.c_lflag &= ~(ICANON | ECHO);
@@ -551,112 +626,113 @@ int main(int argc, char **argv)
 
 	seek_to(data_off);
 	loop_at = loop_off;
-	while (fill(256))		/* read ahead before the music starts */
+	while (fill(RING))		/* read ahead before the music starts */
 		;
 
-	/* Get the Z80 off the bus so the 68000 can reach the YM2612 */
-	Z80_BUSREQ = 0x100;
-	Z80_RESET = 0x100;
-	while (Z80_BUSREQ & 0x100)
-		;
-
-	silence();
-	ym_write(0, 0x24, (1024 - TIMER_TICKS) >> 2);
-	ym_write(0, 0x25, (1024 - TIMER_TICKS) & 3);
-	timer_restart();
-	start = last_tick = times(&tm);
-
+	/* the Z80 starts once the first ring full is ready (send_out) */
 	while (!quit) {
-		c = get();
+		c = GET();
 		switch (c) {
 		case 0x4F:			/* Game Gear PSG stereo */
-			get();
+			GET();
 			break;
 		case 0x50:			/* PSG write */
-			PSG = get();
+			ROOM();
+			*op++ = 2;
+			*op++ = GET();
 			break;
 		case 0x52:			/* YM2612 port 0 write */
 		case 0x53:			/* YM2612 port 1 write */
-			a = get();
-			b = get();
+			a = GET();
+			b = GET();
 			if (c == 0x52 && a == 0x27) {
-				/* keep our timer running; take the mode bits */
-				reg27 = b & 0xC0;
-				timer_restart();
-			} else if (!(c == 0x52 && (a >= 0x24 && a <= 0x26)))
-				ym_write(c - 0x52, a, b);
+				ROOM();		/* the timers are the Z80's */
+				*op++ = 4;
+				*op++ = b;
+			} else if (!(c == 0x52 && (a >= 0x24 && a <= 0x26))) {
+				ROOM();
+				*op++ = c - 0x52;
+				*op++ = a;
+				*op++ = b;
+			}
 			break;
 		case 0x61:			/* wait n samples */
-			a = get();
-			b = get();
-			played += a | (b << 8);
-			wait_samples(a | (b << 8));
+			a = GET();
+			b = GET();
+			WAIT(a | (b << 8));
 			break;
 		case 0x62:			/* wait 1/60 s */
-			played += 735;
-			wait_samples(735);
+			WAIT(735);
 			break;
 		case 0x63:			/* wait 1/50 s */
-			played += 882;
-			wait_samples(882);
+			WAIT(882);
 			break;
 		case 0x66:			/* end of song */
 			if (!loop_off)
 				goto done;
+			DROP();
 			seek_to(loop_off);
 			break;
 		case -1:			/* end of file or read error */
 			goto done;
 		case 0x67:			/* data block: 0x66 type size data */
-			get();
-			get();
-			a = get(); b = get();
-			{
-				unsigned long size = a | (b << 8);
-				a = get(); b = get();
-				size |= ((unsigned long)a << 16) |
-					((unsigned long)b << 24);
-				skip(size);
-			}
+			GET();
+			GET();
+			size = GET();
+			size |= GET() << 8;
+			size |= (unsigned long)GET() << 16;
+			size |= (unsigned long)GET() << 24;
+			DROP();
+			skip(size);
 			break;
 		case 0xE0:			/* PCM seek */
-			get(); get(); get(); get();
+			GET(); GET(); GET(); GET();
 			break;
 		default:
 			if (c >= 0x70 && c <= 0x7F) {		/* wait 1-16 */
-				played += (c & 15) + 1;
-				wait_samples((c & 15) + 1);
+				WAIT((c & 15) + 1);
 			} else if (c >= 0x80 && c <= 0x8F) {	/* DAC + wait */
-				played += c & 15;
-				wait_samples(c & 15);
+				WAIT(c & 15);
 			} else if (c >= 0x30 && c <= 0x3F) {
-				get();
+				GET();
 			} else if ((c >= 0x40 && c <= 0x4E) ||
 				   (c >= 0x51 && c <= 0x5F) ||
 				   (c >= 0xA0 && c <= 0xBF)) {
-				get(); get();
+				GET(); GET();
 			} else if (c >= 0xC0 && c <= 0xDF) {
-				get(); get(); get();
+				GET(); GET(); GET();
 			} else if (c >= 0xE1) {
-				get(); get(); get(); get();
+				GET(); GET(); GET(); GET();
 			} else if (c >= 0x90 && c <= 0x95) {	/* DAC streams */
 				static const char len[] = { 4, 4, 5, 10, 1, 4 };
 				for (a = len[c - 0x90]; a; a--)
-					get();
+					GET();
 			}
 			break;
 		}
 	}
 done:
+	/* let the Z80 play to the end: it runs out after the last wait */
+	if (wait)
+		op = put_wait(op, wait);
+	flush_out(op);
+	if (!started)			/* (a short song) */
+		z80_start();
+	under = z80_byte(Z80_UNDER);
+	while (!quit && (z80_used() > 0 || z80_byte(Z80_UNDER) == under))
+		nap();
+	under = z80_byte(Z80_UNDER);
 	restore();
-	if (verbose)
+	if (verbose) {
 		printf("%lu samples (%lu.%02lu s) in %lu ticks of 1/60 s, "
 		       "%lu ticks to start\n",
 		       played, played / VGM_RATE,
 		       played % VGM_RATE * 100 / VGM_RATE,
 		       (unsigned long)times(&tm) - start, start - opened);
-	if (verbose)
+		/* (the last time is the end) */
+		printf("the Z80 ran out of music %d times\n", under > 0 ? under - 1 : 0);
 		printf("waited for data: %lu ticks in all, longest %lu\n",
 		       read_ticks, read_max);
+	}
 	return 0;
 }

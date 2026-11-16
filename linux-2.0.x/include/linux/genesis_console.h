@@ -153,6 +153,36 @@ struct genesis_gfx_input {
 
 #define GENESIS_GFX_MOUSE	0x8000	/* in pad: the input is a Mega Mouse */
 
+/*
+ * The Z80 (vgmplay plays music on it, so that the music keeps time
+ * however busy the 68000 is). One process at a time owns it.
+ *
+ * GENESIS_Z80_START copies len bytes (up to 8 KB) to the start of the
+ * Z80's RAM and starts the Z80 at 0 (-EBUSY if another process owns
+ * it). The Z80 has the YM2612 and the PSG to itself until
+ * GENESIS_Z80_STOP, or until the owner exits: then the Z80 is stopped
+ * (and has the YM2612 and the PSG silenced), and the 68000 keeps its
+ * bus, as at boot, so the YM2612 can be written directly again.
+ *
+ * GENESIS_Z80_READ and GENESIS_Z80_WRITE copy to and from the Z80's RAM
+ * at addr while it runs. The Z80 is stopped for each 256 bytes of it,
+ * which may be in the middle of one of its instructions: a 2 byte value
+ * it is writing may be read half old and half new.
+ *
+ * While the Z80 runs, it is also stopped while graphics mode copies
+ * the screen by DMA: the Z80 must not use the 68000's bus then (it
+ * does to write the PSG).
+ */
+#define GENESIS_Z80_START	0x4720	/* arg: struct genesis_z80_io (addr 0) */
+#define GENESIS_Z80_STOP	0x4721
+#define GENESIS_Z80_READ	0x4722
+#define GENESIS_Z80_WRITE	0x4723
+struct genesis_z80_io {
+	unsigned short addr, len;	/* within 0 - 0x1FFF */
+	unsigned char *data;
+};
+#define GENESIS_Z80_RAM		0x2000
+
 #ifdef __KERNEL__
 struct tty_struct;
 struct task_struct;
@@ -179,6 +209,13 @@ int  genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long a
 void genesis_gfx_vblank(void);
 void genesis_gfx_vblank_dma(void);
 void genesis_gfx_exit(struct task_struct *p);	/* from do_exit */
+
+/* arch/m68knommu/platform/68000/68Katy/genesis_z80.c */
+extern volatile int genesis_z80_running;
+int  genesis_z80_ioctl(unsigned int cmd, unsigned long arg);
+void genesis_z80_exit(struct task_struct *p);	/* from do_exit */
+void genesis_z80_hold(void);			/* around a DMA, interrupts off */
+void genesis_z80_release(void);
 
 /* arch/m68knommu/platform/68000/68Katy/genesis_keyboard.c */
 void genesis_tty_input(const char *s, int len);	/* feed bytes to the tty as input */

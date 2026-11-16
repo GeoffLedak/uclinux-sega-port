@@ -1,0 +1,288 @@
+; player.z80 -- the Z80 half of vgmplay: plays music the 68000 has
+; put in a ring buffer in the Z80's RAM, keeping time by itself.
+;
+;	python3 mkz80.py player.z80 z80prog.h	(by hand after a change: the
+;	build has no python3, and uses the z80prog.h in the source)
+;
+; vgmplay turns the VGM file into these commands:
+;	0 reg val	write the YM2612, port 0 (channels 1-3, the rest)
+;	1 reg val	write the YM2612, port 1 (channels 4-6)
+;	2 val		write the PSG
+;	3 lo hi		wait lo + 256 * hi samples (1/44100 s), up to 32767
+;	4 bits		channel 3's mode bits (YM2612 register 0x27, bits 6-7)
+; and adds them at WR, while the Z80 takes them from RD; both go round
+; RING - RING_END. Either side changes only its own pointer, after the
+; data. The Z80 can be stopped at any moment (the 68000 takes its bus
+; to reach this RAM, and while the screen is copied by DMA), even half
+; way through writing RD, so vgmplay reads RD until it gets the same
+; value twice, and the Z80 does the same with WR.
+;
+; Time: the YM2612's Timer A overflows every 128 of its samples (about
+; 2.4 ms) and lets TICK more samples (8.8 fixed point; vgmplay sets it
+; for NTSC or PAL) of the song play. It has only an "overflowed" flag,
+; so while the Z80 is stopped for longer than that some overflows are
+; lost. Timer B overflows every 32 Timer A periods (77 ms) and never
+; while stopped that long, so each time it does, the Timer A periods
+; that went missing are made up.
+;
+; Interrupts stay off: the Z80 polls the timers.
+
+YM0	equ 0x4000		; address port 0, and the status
+YM1	equ 0x4001
+YM2	equ 0x4002
+YM3	equ 0x4003
+PSG	equ 0x7F11
+
+TIMER_A	equ 1024 - 128		; 128 samples
+STACK	equ 0x0400
+RINGLO	equ 0x04		; the ring's first page
+RINGHI	equ 0x20		; the page after its last
+
+	org 0
+	di
+	ld sp,STACK
+	jp start
+
+	org 0x38		; (the vblank interrupt, if it were on)
+	ret
+
+start:
+	call resync
+
+; ---------------------------------------------------------------- the commands
+main:
+	call getb
+	cp 2
+	jr c,c_ym		; 0, 1
+	jr z,c_psg
+	cp 3
+	jr z,c_wait
+	cp 4
+	jr z,c_mode
+	jr main			; (nothing else is sent)
+
+c_ym:
+	ld b,a			; port
+	call getb
+	ld c,a			; register
+	call getb
+	ld d,a			; value
+	call ymw
+	jr main
+
+c_psg:
+	call getb
+	ld (PSG),a
+	jr main
+
+c_wait:
+	call getb
+	ld c,a
+	call getb
+	ld b,a
+	call wait
+	jr main
+
+c_mode:
+	call getb
+	and 0xC0
+	ld (MODE),a
+	or 0x0F			; timers keep running, flags kept
+	ld d,a
+	ld bc,0x0027
+	call ymw
+	jr main
+
+; ---------------------------------------------------------------- the YM2612
+; write value d to register c of port b (0 or 1)
+ymw:
+	ld a,(YM0)
+	rlca
+	jr c,ymw		; busy
+	ld a,b
+	or a
+	jr nz,ymw1
+	ld a,c
+	ld (YM0),a
+	ld a,d
+	ld (YM1),a
+	ret
+ymw1:
+	ld a,c
+	ld (YM2),a
+	ld a,d
+	ld (YM3),a
+	ret
+
+; start both timers from now, with nothing owed either way
+resync:
+	ld bc,0x0024
+	ld d,TIMER_A >> 2
+	call ymw
+	ld c,0x25
+	ld d,TIMER_A & 3
+	call ymw
+	ld c,0x26
+	ld d,0			; Timer B: 256 x 16 samples
+	call ymw
+	ld a,(MODE)
+	or 0x30			; both stopped, flags cleared
+	ld d,a
+	ld c,0x27
+	call ymw
+	ld a,(MODE)
+	or 0x0F			; both started, flags on
+	ld d,a
+	call ymw
+	xor a
+	ld (ACOUNT),a
+	ld (BEHIND),a
+	ld (FRAC),a
+	ld h,a
+	ld l,a
+	ld (CREDIT),hl
+	ret
+
+; ---------------------------------------------------------------- time
+; let bc samples of the song pass
+wait:
+	ld hl,(CREDIT)
+	or a
+	sbc hl,bc
+	ld (CREDIT),hl
+wait1:
+	ld hl,(CREDIT)
+	bit 7,h
+	ret z			; nothing owed: carry on
+	call poll
+	jr wait1
+
+; credit += TICK
+addtick:
+	ld a,(FRAC)
+	ld hl,TICK
+	add a,(hl)
+	ld (FRAC),a
+	inc hl
+	ld e,(hl)
+	ld d,0
+	ld hl,(CREDIT)
+	adc hl,de
+	ld (CREDIT),hl
+	ret
+
+poll:
+	ld a,(YM0)
+	bit 0,a
+	jr z,poll_b
+	ld a,(MODE)		; Timer A overflowed
+	or 0x1F			; clear its flag
+	ld d,a
+	ld bc,0x0027
+	call ymw
+	call addtick
+	ld hl,ACOUNT
+	inc (hl)
+	ld hl,ALIVE
+	inc (hl)
+poll_b:
+	ld a,(YM0)
+	bit 1,a
+	ret z
+	ld a,(MODE)		; Timer B overflowed
+	or 0x2F			; clear its flag
+	ld d,a
+	ld bc,0x0027
+	call ymw
+	ld hl,ACOUNT		; behind += 32 - Timer A periods seen
+	ld a,(hl)
+	ld (hl),0
+	cp 40
+	jr c,poll_b1
+	ld a,40
+poll_b1:
+	ld b,a
+	ld a,(BEHIND)
+	add a,32
+	sub b
+	bit 7,a
+	jr nz,poll_neg
+	cp 2
+	jr c,poll_set		; 0 or 1 behind: the timers' jitter
+	dec a			; make up all but one
+	ld b,a
+poll_more:
+	push bc
+	call addtick
+	pop bc
+	djnz poll_more
+	ld a,1
+	jr poll_set
+poll_neg:
+	cp 0xFC			; ahead: no more than 4 counts
+	jr nc,poll_set
+	ld a,0xFC
+poll_set:
+	ld (BEHIND),a
+	ret
+
+; ---------------------------------------------------------------- the ring
+; de = WR, read until it is the same twice
+readwr:
+	ld de,(WR)
+	ld a,(WR)
+	cp e
+	jr nz,readwr
+	ld a,(WR + 1)
+	cp d
+	jr nz,readwr
+	ret
+
+; a = the next byte; waits for one (an underrun: the music stops, and
+; starts again from where it was)
+getb:
+	call readwr
+	ld hl,(RD)
+	or a
+	sbc hl,de
+	jr z,getb_empty
+	add hl,de
+	ld e,(hl)
+	inc hl
+	ld a,h
+	cp RINGHI
+	jr nz,getb1
+	ld h,RINGLO
+getb1:
+	ld (RD),hl
+	ld a,e
+	ret
+getb_empty:
+	ld hl,UNDER
+	inc (hl)
+getb_wait:
+	call readwr
+	ld hl,(RD)
+	or a
+	sbc hl,de
+	jr z,getb_wait
+	call resync
+	jr getb
+
+; ---------------------------------------------------------------- shared
+	org 0x0300
+WR:	dw RING			; vgmplay's: the next byte it adds
+RD:	dw RING			; ours: the next byte to play
+TICK:	dw 27129		; samples per Timer A period x 256 (NTSC)
+UNDER:	db 0			; underruns, for vgmplay -v
+ALIVE:	db 0			; + 1 every Timer A period
+MODE:	db 0
+ACOUNT:	db 0
+BEHIND:	db 0
+FRAC:	db 0
+CREDIT:	dw 0			; samples the song may play (< 0: wait)
+VARS_END:
+
+	org 0x0400		; (the stack is below here)
+RING	equ 0x0400
+RING_END equ 0x2000

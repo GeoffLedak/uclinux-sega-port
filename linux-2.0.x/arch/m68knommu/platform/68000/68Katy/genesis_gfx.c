@@ -26,6 +26,9 @@
  * the vblank interrupt itself sends queued pieces first thing, while the
  * VDP is fastest.
  *
+ * While a program runs the Z80 (vgmplay), it is stopped during each DMA:
+ * it must not use the 68000's bus then (genesis_z80.c).
+ *
  * Port 1 is read every vertical blank: as a joypad first (with TR an
  * input, as a pad needs), and if no pad answers, as a Mega Mouse.
  *
@@ -413,6 +416,7 @@ static void dma(int t, int n, const unsigned long *src)
 	unsigned long addr = (unsigned long)src, vaddr = (unsigned long)t << 5;
 	unsigned long words = (unsigned long)n << 4, k, room, cmd;
 
+	genesis_z80_hold();		/* (a Z80 playing music: see genesis_z80.c) */
 	while (words > 0) {
 		/* a piece can't cross a 128 KB boundary of the source:
 		 * the VDP's source counter wraps there */
@@ -436,6 +440,7 @@ static void dma(int t, int n, const unsigned long *src)
 		vaddr += k << 1;
 		words -= k;
 	}
+	genesis_z80_release();
 }
 
 /* send the next run of queued tiles, at most max words; interrupts off.
