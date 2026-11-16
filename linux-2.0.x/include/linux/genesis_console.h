@@ -1,18 +1,18 @@
 /*
  * genesis_console.h -- ioctls for the Sega Genesis VDP text console
  *
- * Used by drivers/char/genesis_vdp.c and by the sash "font" and "color"
- * built-in commands (user/sash/genesis.c). Issue them on the console tty,
- * e.g. ioctl(1, GENESIS_SET_FONT, 6).
+ * Used by drivers/char/genesis_vdp.c and by the sash "font", "color" and
+ * "margin" built-in commands (user/sash/genesis.c). Issue them on the
+ * console tty, e.g. ioctl(1, GENESIS_SET_FONT, 6).
  *
- * The console is a VT100/ANSI-style terminal of 24 rows and 36 or 48
- * columns; TIOCGWINSZ reports the current size.
+ * The console is a VT100/ANSI-style terminal; its size depends on the font
+ * and the margin (36x24 at boot) and TIOCGWINSZ reports it.
  */
 #ifndef _LINUX_GENESIS_CONSOLE_H
 #define _LINUX_GENESIS_CONSOLE_H
 
-/* arg = 8 for the 8x8 font (36 columns) or 6 for the 6x8 font (48 columns).
- * Switching font clears the screen. */
+/* arg = 8 for the 8x8 font or 6 for the 6x8 font (36 or 48 columns with the
+ * boot margin). Switching font clears the screen. */
 #define GENESIS_SET_FONT	0x4701
 /* returns the current font width (8 or 6) */
 #define GENESIS_GET_FONT	0x4702
@@ -22,6 +22,20 @@
 #define GENESIS_SET_COLOR	0x4703
 /* returns the current text colour */
 #define GENESIS_GET_COLOR	0x4704
+
+/* arg = the blank margin round the text, in pixels: 0, 8, 16, 24 or 32 (16
+ * at boot, which keeps the text clear of a CRT's overscan; 0 suits a
+ * screen that shows the whole picture). The screen size this gives:
+ *   margin   8x8 font   6x8 font
+ *      0      40x28      53x28
+ *      8      38x26      50x26
+ *     16      36x24      48x24
+ *     24      34x22      45x22
+ *     32      32x20      42x20
+ * Changing it clears the screen. The font keeps the margin and vice versa. */
+#define GENESIS_SET_MARGIN	0x4706
+/* returns the current margin */
+#define GENESIS_GET_MARGIN	0x4707
 
 /* Test one 256-byte block of the cartridge RAM in place (see memtest in
  * user/memtest): arg = pointer to struct genesis_memtest, addr filled in.
@@ -144,6 +158,8 @@ void genesis_term_set_font(int width);		/* applied at the next vblank */
 int  genesis_term_get_font(void);
 void genesis_term_set_color(int color);
 int  genesis_term_get_color(void);
+void genesis_term_set_margin(int margin);	/* applied at the next vblank */
+int  genesis_term_get_margin(void);
 int  genesis_term_cols(void);
 int  genesis_term_rows(void);
 

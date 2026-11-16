@@ -7,7 +7,11 @@
  * characters and VT100/ANSI escape sequences. Characters are stored in
  * text_charmap and drawn into tiles by the routines in hw_md.S.
  *
- * Screen: 24 rows x 36 columns (8x8 font) or 48 columns (6x8 font).
+ * Screen: the text is centred inside a margin (GENESIS_SET_MARGIN: 0 - 32
+ * pixels in steps of 8, 16 at boot so that a CRT's overscan doesn't hide
+ * any of it). With the 8x8 font that gives 40x28 (margin 0), 38x26 (8),
+ * 36x24 (16), 34x22 (24) or 32x20 (32); the 6x8 font fits 53, 50, 48, 45
+ * or 42 columns in the same rows.
  * Each screen row shows one "block" of tiles (row_block[]); scrolling
  * rotates the blocks and rewrites the name table instead of copying pixels.
  *
@@ -38,20 +42,22 @@
 
 /* Boot font and colour (keep TEXT_COLOR in hw_md.S the same as the colour) */
 #define TERM_DEFAULT_FONT	8		/* 8 = 8x8 font, 6 = 6x8 font */
+#define TERM_DEFAULT_MARGIN	16		/* pixels; the boot layout in hw_md.S */
 #define TERM_DEFAULT_COLOR	0x0EEE		/* Genesis CRAM 0x0BGR */
 
 /* Must match hw_md.S */
-#define ROWS		24			/* TEXT_ROWS */
-#define CURSOR_TILES	865			/* CURSOR_TILES */
-#define CELL(b, x)	text_charmap[((b) << 5) + ((b) << 4) + (x)]	/* TEXT_COLS = 48 */
-#define ATTR(b, x)	text_attrmap[((b) << 5) + ((b) << 4) + (x)]	/* 1 = reverse */
+#define MAX_ROWS	28			/* TEXT_MAX_ROWS */
+#define CURSOR_TILES	1121			/* CURSOR_TILES */
+#define CELL(b, x)	text_charmap[((b) << 6) - ((b) << 3) + (x)]	/* TEXT_STRIDE = 56 */
+#define ATTR(b, x)	text_attrmap[((b) << 6) - ((b) << 3) + (x)]	/* 1 = reverse */
 
 /* hw_md.S */
 extern void text_refresh(int block, int from, int to);
 extern void text_zero_block(int block);
 extern void text_map_row(int row, int block);
 extern unsigned char text_charmap[], text_attrmap[];
-extern long fontWidth, textCols;
+extern long fontWidth, textCols, textRows;
+extern long textFirstRow, textFirstCol, textTileCols;
 extern void genesis_load_cursor_tiles(void);
 
 extern struct tty_struct *genesis_tty_table[];
@@ -130,10 +136,11 @@ int genesis_term_chars_in_buffer(void)
 /* Terminal state                                                    */
 /* ---------------------------------------------------------------- */
 
-static int cols = 36;				/* 36 or 48 */
+static int cols = 36, rows = 24;		/* the screen size (see the top) */
+static int left_px = 16, top_px = 16;		/* where the text starts on screen */
 static int cx, cy;				/* cursor column / row */
 static char wrapnext;				/* cursor is past the last column */
-static int top, bot = ROWS - 1;			/* scroll region (inclusive) */
+static int top, bot = 24 - 1;			/* scroll region (inclusive) */
 static char autowrap = 1;
 static char insert_mode;			/* CSI 4h */
 static char cursor_shown = 1;			/* CSI ?25h */
@@ -142,11 +149,11 @@ static int saved_x, saved_y;
 static char attr;				/* for new characters: 1 = reverse */
 static char saved_attr;
 
-static unsigned char row_block[ROWS] = {
-	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-	12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+static unsigned char row_block[MAX_ROWS] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+	14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
 };
-static unsigned char dirty_from[ROWS], dirty_to[ROWS];	/* per block */
+static unsigned char dirty_from[MAX_ROWS], dirty_to[MAX_ROWS];	/* per block */
 
 /* escape sequence parser */
 #define S_NORMAL	0
@@ -161,10 +168,12 @@ static char priv;				/* '?', '>' ... after CSI */
 static char inter;				/* intermediate byte (' ' for SP q) */
 
 /* requests from the console driver, applied at the next vblank */
-static volatile int pending_font = TERM_DEFAULT_FONT;
+static volatile char pending_layout = 1;	/* font or margin set */
 static volatile int pending_color;
 static int cur_font = TERM_DEFAULT_FONT;
+static int cur_margin = TERM_DEFAULT_MARGIN;
 static int cur_color = TERM_DEFAULT_COLOR;
+static int shown_margin = 16;			/* the layout on screen (hw_md.S's) */
 
 static volatile char restore_pending;		/* graphics mode has ended */
 static int budget;				/* work allowed this frame */
@@ -192,7 +201,7 @@ static void flush_dirty(void)
 {
 	int b;
 
-	for (b = 0; b < ROWS; b++) {
+	for (b = 0; b < MAX_ROWS; b++) {
 		if (dirty_from[b] < dirty_to[b]) {
 			text_refresh(b, dirty_from[b], dirty_to[b]);
 			dirty_from[b] = dirty_to[b] = 0;
@@ -274,7 +283,7 @@ static void clear_screen(void)
 {
 	int r;
 
-	for (r = 0; r < ROWS; r++)
+	for (r = 0; r < rows; r++)
 		zero_block(row_block[r]);
 }
 
@@ -282,7 +291,7 @@ static void linefeed(void)
 {
 	if (cy == bot)
 		scroll_up(top, bot, 1);
-	else if (cy < ROWS - 1)
+	else if (cy < rows - 1)
 		cy++;
 }
 
@@ -335,7 +344,7 @@ static void reset_terminal(void)
 	cx = cy = 0;
 	wrapnext = 0;
 	top = 0;
-	bot = ROWS - 1;
+	bot = rows - 1;
 	autowrap = 1;
 	insert_mode = 0;
 	cursor_shown = 1;
@@ -346,17 +355,60 @@ static void reset_terminal(void)
 	clear_screen();
 }
 
-static void apply_font(int width)
-{
-	int r;
+/* the screen size for a font and margin (0 - 32, a multiple of 8) */
+static const unsigned char cols_8x8[5] = { 40, 38, 36, 34, 32 };
+static const unsigned char cols_6x8[5] = { 53, 50, 48, 45, 42 };
 
-	fontWidth = width;
-	cols = (width == 6) ? 48 : 36;
+static int layout_cols(int font, int margin)
+{
+	return (font == 6) ? cols_6x8[margin >> 3] : cols_8x8[margin >> 3];
+}
+
+static int layout_rows(int margin)
+{
+	return 28 - (margin >> 2);		/* (224 - 2 * margin) / 8 */
+}
+
+/* plane B's horizontal scroll: the pixels a 6x8 layout leaves over */
+static void set_hscroll(void)
+{
+	VDP_CTRL16 = 0x8F02;			/* INC = 2 */
+	VDP_CTRL32 = 0x6C020002;		/* write VRAM 0xAC02 (plane B) */
+	VDP_DATA16 = left_px & 7;
+}
+
+/* switch to a font and margin: lay the text out afresh, clear the screen */
+static void apply_layout(int font, int margin)
+{
+	int r, width;
+
+	fontWidth = font;
+	cols = layout_cols(font, margin);
+	rows = layout_rows(margin);
+	width = (font == 6) ? (cols << 2) + (cols << 1) : cols << 3;
+	left_px = (320 - width) >> 1;
+	top_px = margin;
 	textCols = cols;
-	for (r = 0; r < ROWS; r++) {
+	textRows = rows;
+	textFirstRow = top_px >> 3;
+	textFirstCol = left_px >> 3;
+	textTileCols = (width + 7) >> 3;
+	shown_margin = margin;
+
+	/* plane B: blank, then the text rows */
+	VDP_CTRL16 = 0x8F02;
+	VDP_CTRL32 = 0x60000003;		/* write VRAM 0xE000 */
+	for (r = 0; r < 64 * 32 / 2; r++)
+		VDP_DATA32 = 0;
+	set_hscroll();
+	for (r = 0; r < MAX_ROWS; r++)
 		row_block[r] = r;
+	for (r = 0; r < rows; r++)
 		text_map_row(r, r);
-	}
+	/* blocks off the screen are blanked too: one could still hold
+	 * characters past the new last column */
+	for (r = rows; r < MAX_ROWS; r++)
+		zero_block(r);
 	reset_terminal();
 }
 
@@ -384,8 +436,8 @@ static void clamp_cursor(void)
 		cx = cols - 1;
 	if (cy < 0)
 		cy = 0;
-	if (cy > ROWS - 1)
-		cy = ROWS - 1;
+	if (cy > rows - 1)
+		cy = rows - 1;
 }
 
 static void do_csi(unsigned char f)
@@ -429,7 +481,7 @@ static void do_csi(unsigned char f)
 	case 'B':				/* cursor down */
 	case 'e':
 	case 'E':				/* cursor down, column 1 */
-		lim = (cy <= bot) ? bot : ROWS - 1;
+		lim = (cy <= bot) ? bot : rows - 1;
 		cy += P(0, 1);
 		if (cy > lim)
 			cy = lim;
@@ -459,7 +511,7 @@ static void do_csi(unsigned char f)
 		n = npar ? par[0] : 0;
 		if (n == 0) {
 			erase(cy, cx, cols);
-			for (i = cy + 1; i < ROWS; i++)
+			for (i = cy + 1; i < rows; i++)
 				erase(i, 0, cols);
 		} else if (n == 1) {
 			for (i = 0; i < cy; i++)
@@ -523,8 +575,8 @@ static void do_csi(unsigned char f)
 		break;
 	case 'r':				/* set scroll region */
 		i = P(0, 1) - 1;
-		n = P(1, ROWS) - 1;
-		if (i >= 0 && i < n && n < ROWS) {
+		n = P(1, rows) - 1;
+		if (i >= 0 && i < n && n < rows) {
 			top = i;
 			bot = n;
 		}
@@ -712,7 +764,7 @@ static void draw_cursor(void)
 	shape = (cursor_style <= 2) ? 0 : (cursor_style <= 4) ? 2 : 4;
 	steady = cursor_style && !(cursor_style & 1);
 	tile = CURSOR_TILES + shape;
-	if (shape != 4 && cols == 48)
+	if (shape != 4 && fontWidth == 6)
 		tile++;				/* 6 pixel wide version */
 
 	if (!cursor_shown || (!steady && blink >= 16))
@@ -720,8 +772,8 @@ static void draw_cursor(void)
 	else if (ATTR(row_block[cy], cx))
 		tile |= 0x2000;			/* palette 1, colour 1 = black: shows on reverse video */
 
-	x = 128 + 16 + ((cols == 48) ? (cx << 2) + (cx << 1) : (cx << 3));
-	y = 128 + 16 + (cy << 3);
+	x = 128 + left_px + ((fontWidth == 6) ? (cx << 2) + (cx << 1) : (cx << 3));
+	y = 128 + top_px + (cy << 3);
 
 	VDP_CTRL16 = 0x8F02;			/* INC = 2 */
 	VDP_CTRL32 = 0x68000002;		/* write VRAM 0xA800 (sprite table) */
@@ -756,8 +808,9 @@ static void restore_screen(void)
 	VDP_CTRL32 = 0xC0420000;		/* entry 33: red */
 	VDP_DATA16 = 0x000A;
 	genesis_load_cursor_tiles();
-	for (b = 0; b < ROWS; b++)		/* and all the text */
-		mark(b, 0, cols);
+	set_hscroll();				/* graphics mode zeroes it */
+	for (b = 0; b < rows; b++)		/* and all the text */
+		mark(row_block[b], 0, cols);
 }
 
 /* called by genesis_gfx.c when graphics mode ends */
@@ -799,14 +852,14 @@ void genesis_term_vblank(void)
 		VDP_DATA16 = pending_color & 0x0EEE;
 		pending_color = 0;
 	}
-	if (pending_font) {
-		if (pending_font != fontWidth)
-			apply_font(pending_font);
-		pending_font = 0;
+	if (pending_layout) {
+		pending_layout = 0;
+		if (cur_font != fontWidth || cur_margin != shown_margin)
+			apply_layout(cur_font, cur_margin);
 	}
 
 	/* draw up to a frame's worth of output (6x8 is slower to draw) */
-	budget = (cols == 48) ? 64 : 160;
+	budget = (fontWidth == 6) ? 64 : 160;
 	while (budget > 0 && otail != ohead) {
 		c = obuf[otail];
 		otail = (otail + 1) & OBUF_MASK;
@@ -839,7 +892,7 @@ void genesis_term_vblank(void)
 void genesis_term_set_font(int width)
 {
 	cur_font = width;
-	pending_font = width;
+	pending_layout = 1;
 }
 
 int genesis_term_get_font(void)
@@ -858,12 +911,25 @@ int genesis_term_get_color(void)
 	return cur_color;
 }
 
+/* margin: 0 - 32, a multiple of 8 (checked by the caller) */
+void genesis_term_set_margin(int margin)
+{
+	cur_margin = margin;
+	pending_layout = 1;
+}
+
+int genesis_term_get_margin(void)
+{
+	return cur_margin;
+}
+
+/* the size as of the last setting (it shows from the next vblank) */
 int genesis_term_cols(void)
 {
-	return (cur_font == 6) ? 48 : 36;
+	return layout_cols(cur_font, cur_margin);
 }
 
 int genesis_term_rows(void)
 {
-	return ROWS;
+	return layout_rows(cur_margin);
 }

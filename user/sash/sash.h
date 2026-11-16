@@ -49,7 +49,7 @@ extern	void	do_kill(), do_grep(), do_ed(), do_hexdump(), do_pid();
 extern	void	do_df(), do_ps(), do_reboot(), do_cat(), do_time(), do_free();
 extern	void	do_hostname(), do_sleep();
 extern	void	do_date();
-extern	void	do_font(), do_color();
+extern	void	do_font(), do_color(), do_margin();
 extern	void	do_history(), do_clear();
 
 /* lineedit.c */

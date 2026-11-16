@@ -11,9 +11,10 @@
  *   0xC000           name table of plane A, and of plane B too, so both
  *                    planes show the screen and colour 0 (transparent)
  *                    shows the backdrop, palette entry 0
- * The text console's tiles (1 - 869) and its name table at 0xE000 are
- * overwritten or left alone; genesis_term_restore() redraws them when
- * graphics mode ends.
+ * The text console's tiles (1 - 1125) and its name table at 0xE000 are
+ * overwritten or left alone, and plane B's horizontal scroll (which the
+ * console may use to centre its text) is zeroed; genesis_term_restore()
+ * puts them back when graphics mode ends.
  *
  * The program's frame buffer is copied to video memory by DMA, a piece
  * at a time with interrupts off, so that the vblank interrupt (which
@@ -309,6 +310,8 @@ static int gfx_enter(void)
 		for (c = 0; c < 64; c++)
 			VDP_DATA16 = (r < GENESIS_GFX_ROWS && c < GENESIS_GFX_COLS) ? t++ : 0;
 	VDP_CTRL16 = 0x8406;			/* plane B name table = 0xC000 too */
+	VDP_CTRL32 = vram_write(0xAC00);	/* no horizontal scroll */
+	VDP_DATA32 = 0;
 
 	/* all colours black until the program sets its palette */
 	VDP_CTRL32 = 0xC0000000;

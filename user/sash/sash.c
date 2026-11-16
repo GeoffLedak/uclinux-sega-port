@@ -128,6 +128,9 @@ CMDTAB	cmdtab[] = {
 	"ls",		"[-lidC] filename ...",	do_ls,
 	1,		MAXARGS,
 
+	"margin",	"[0|8|16|24|32]",	do_margin,
+	1,		2,
+
 	"mkdir",	"dirname ...",		do_mkdir,
 	2,		MAXARGS,
 

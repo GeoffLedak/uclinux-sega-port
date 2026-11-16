@@ -252,6 +252,18 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 	case GENESIS_GET_FONT:
 		return genesis_term_get_font();
 
+	case GENESIS_SET_MARGIN:
+		if (arg > 32 || (arg & 7))
+			return -EINVAL;
+		genesis_term_set_margin(arg);
+		genesis_set_winsize(tty);	/* new size, as for the font */
+		if (tty->pgrp > 0)
+			kill_pg(tty->pgrp, SIGWINCH, 1);
+		return 0;
+
+	case GENESIS_GET_MARGIN:
+		return genesis_term_get_margin();
+
 	case GENESIS_SET_COLOR:
 		if (arg > 0xFFF)
 			return -EINVAL;

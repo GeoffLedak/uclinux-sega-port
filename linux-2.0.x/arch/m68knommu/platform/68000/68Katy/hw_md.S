@@ -13,30 +13,34 @@
 
 /* Text console layout (software rendered, 8x8 or 6x8 font)                */
 /*                                                                          */
-/* The screen shows 24 text rows (plane B rows 2-25) with 16 pixels of      */
-/* padding all round. Each text row is drawn into a "block" of 36 tiles;    */
-/* the name table row for screen row r points at block rowBlock[r]          */
-/* (text_map_row). Scrolling just rotates which block each screen row uses  */
-/* and rewrites the name table, so no pixels are copied.                    */
+/* The text is centred on plane B inside a margin (the sash "margin"        */
+/* command: 0 - 32 pixels in steps of 8; 16 at boot, which keeps it clear   */
+/* of a CRT's overscan). genesis_term.c works out the layout and sets       */
+/* textRows, textFirstRow and textFirstCol (where the text starts on plane  */
+/* B) and textTileCols; the few pixels the 6x8 font leaves over are split   */
+/* with plane B's horizontal scroll. Each text row is drawn into a "block"  */
+/* of tiles, TEXT_TILE_STRIDE apart (room for the widest layout); the name  */
+/* table row for screen row r points at block row_block[r] (text_map_row).  */
+/* Scrolling just rotates which block each screen row uses and rewrites     */
+/* the name table, so no pixels are copied.                                 */
 /* text_charmap holds the characters of each block, and characters are      */
 /* drawn into the tiles in software (text_refresh):                         */
-/*   8x8 font (font_cga.c):       36 columns, one character = one tile.     */
-/*   6x8 font (font_cp437_6x8.c): 48 columns. The VDP can only place whole  */
-/*     8x8 tiles, so a character overlaps 1 or 2 tiles, which are rebuilt   */
-/*     from text_charmap. 4 characters fit exactly in 3 tiles (24 pixels).  */
+/*   8x8 font (font_cga.c):       32 - 40 columns, one character = a tile.  */
+/*   6x8 font (font_cp437_6x8.c): 42 - 53 columns. The VDP can only place   */
+/*     whole 8x8 tiles, so a character overlaps 1 or 2 tiles, which are     */
+/*     rebuilt from text_charmap. 4 characters fit exactly in 3 tiles.      */
 /* text_attrmap has one byte per character too: nonzero = reverse video,   */
 /* drawn by swapping the text colour (1) and the background (0).            */
 /* The terminal logic (cursor, escape sequences, scrolling) is in           */
 /* genesis_term.c; the constants marked (*) must match it.                  */
-        .equ TEXT_COLS_8X8,             36              /* (320 - 2*16) / 8 */
-        .equ TEXT_COLS_6X8,             48              /* (320 - 2*16) / 6 */
-        .equ TEXT_COLS,                 48              /* (*) text_charmap row length (widest mode) */
-        .equ TEXT_ROWS,                 24              /* (*) text rows = tile blocks */
-        .equ TEXT_TILE_COLS,            36              /* text tiles per row (288 px) */
-        .equ TEXT_FIRST_PLANE_ROW,      2               /* plane B row of text row 0 (16 px) */
-        .equ TEXT_FIRST_PLANE_COL,      2               /* plane B column of the first text tile (16 px) */
+        .equ TEXT_STRIDE,               56              /* (*) text_charmap row length (53 columns max, rounded up to longs) */
+        .equ TEXT_MAX_ROWS,             28              /* (*) blocks: rows with no margin (224 / 8) */
+        .equ TEXT_TILE_STRIDE,          40              /* tiles per block: 320 / 8 */
+        .equ BOOT_ROWS,                 24              /* boot layout, margin 16, 8x8 font: */
+        .equ BOOT_COLS,                 36              /* 36 x 24 from plane B row 2, column 2 */
+        .equ BOOT_FIRST_PLANE,          2
         .equ TEXT_FIRST_TILE,           1               /* tile 0 stays blank */
-        .equ CURSOR_TILES,              TEXT_FIRST_TILE + TEXT_TILE_COLS * TEXT_ROWS   /* (*) 865 */
+        .equ CURSOR_TILES,              TEXT_FIRST_TILE + TEXT_TILE_STRIDE * TEXT_MAX_ROWS   /* (*) 1121 */
                                         /* +0 block 8px, +1 block 6px, +2 underline 8px, */
                                         /* +3 underline 6px, +4 bar                       */
 
@@ -155,34 +159,36 @@ init_hardware:
         move.b  (a5)+,0x0011(a0)
         move.b  (a5),0x0011(a0)
 
-/* set up plane B: text row r (plane row r+2) shows block r, i.e. tiles     */
-/* TEXT_FIRST_TILE + r*TEXT_TILE_COLS + t; everything else is blank. The     */
-/* tiles themselves are already blank because VRAM was cleared.             */
+/* set up plane B in the boot layout: text row r (plane row r+2) shows      */
+/* block r, i.e. tiles TEXT_FIRST_TILE + r*TEXT_TILE_STRIDE + t; everything  */
+/* else is blank. The tiles themselves are already blank because VRAM was    */
+/* cleared, and so is the horizontal scroll.                                 */
         move.w  #0x8F02,(a4)            /* INC = 2 */
         move.l  #0x60000003,(a4)        /* write VRAM 0xE000 (plane B name table) */
         moveq   #0,d0                   /* blank name table entry */
-        move.w  #TEXT_FIRST_PLANE_ROW*64-1,d3
+        move.w  #BOOT_FIRST_PLANE*64-1,d3
 7:
         move.w  d0,(a3)                 /* blank rows above the text */
         dbra    d3,7b
         moveq   #TEXT_FIRST_TILE,d1     /* next text tile number */
-        moveq   #TEXT_ROWS-1,d2
+        moveq   #BOOT_ROWS-1,d2
 8:
-        moveq   #TEXT_FIRST_PLANE_COL-1,d3
+        moveq   #BOOT_FIRST_PLANE-1,d3
 9:
         move.w  d0,(a3)                 /* left padding: blank */
         dbra    d3,9b
-        moveq   #TEXT_TILE_COLS-1,d3
+        moveq   #BOOT_COLS-1,d3
 10:
         move.w  d1,(a3)                 /* text tile, palette 0 */
         addq.w  #1,d1
         dbra    d3,10b
-        moveq   #64-TEXT_FIRST_PLANE_COL-TEXT_TILE_COLS-1,d3
+        addq.w  #TEXT_TILE_STRIDE-BOOT_COLS,d1  /* the next block */
+        moveq   #64-BOOT_FIRST_PLANE-BOOT_COLS-1,d3
 11:
         move.w  d0,(a3)                 /* right padding and off-screen columns: blank */
         dbra    d3,11b
         dbra    d2,8b
-        move.w  #(32-TEXT_FIRST_PLANE_ROW-TEXT_ROWS)*64-1,d3
+        move.w  #(32-BOOT_FIRST_PLANE-BOOT_ROWS)*64-1,d3
 12:
         move.w  d0,(a3)                 /* blank rows below the text */
         dbra    d3,12b
@@ -408,7 +414,7 @@ vram_write_cmd:
 /* trashes d0-d1 */
 tile_write_cmd:
         move.w  d2,d0
-        mulu.w  #TEXT_TILE_COLS,d0
+        mulu.w  #TEXT_TILE_STRIDE,d0
         add.w   d3,d0
         addq.w  #TEXT_FIRST_TILE,d0     /* tile number */
         lsl.l   #5,d0                   /* * 32 bytes per tile */
@@ -422,7 +428,7 @@ tile_write_cmd:
 text_render_tile8:
         bsr     tile_write_cmd
         move.w  d2,d0
-        mulu.w  #TEXT_COLS,d0
+        mulu.w  #TEXT_STRIDE,d0
         add.w   d3,d0
         moveq   #0,d6                   /* d6 = pixels to flip: none, */
         lea     text_attrmap,a2
@@ -458,7 +464,7 @@ text_render_tile8:
 
 /* text_render_tile6 */
 /* 6x8 font: rebuild one tile from the two characters that overlap it. */
-/* entry: d2.w = block, d3.w = tile column (0 - 35) */
+/* entry: d2.w = block, d3.w = tile column (0 - 39) */
 /* trashes d0-d1, d4-d7, a0, a2-a5 (d2, d3 preserved) */
 /*                                                             */
 /* The first character in tile t is k = 4t/3 and it starts      */
@@ -483,7 +489,7 @@ text_render_tile6:
 
         lea     text_charmap,a2
         move.w  d2,d0
-        mulu.w  #TEXT_COLS,d0
+        mulu.w  #TEXT_STRIDE,d0
         add.w   d4,d0
         adda.w  d0,a2                   /* a2 = &text_charmap[block][k] */
         lea     text_attrmap,a0
@@ -612,52 +618,53 @@ text_refresh:
         .global text_zero_block
 text_zero_block:
         move.l  4(sp),d0                /* block */
-        mulu.w  #TEXT_COLS,d0
+        mulu.w  #TEXT_STRIDE,d0
         lea     text_charmap,a0
         adda.w  d0,a0
         lea     text_attrmap,a1
         adda.w  d0,a1
-        moveq   #TEXT_COLS/4-1,d1
+        moveq   #TEXT_STRIDE/4-1,d1
         moveq   #0,d0
 1:
-        move.l  d0,(a0)+                /* TEXT_COLS is a multiple of 4 and rows are long aligned */
+        move.l  d0,(a0)+                /* TEXT_STRIDE is a multiple of 4 and rows are long aligned */
         move.l  d0,(a1)+
         dbra    d1,1b
 
         lea     0xC00000,a1
         move.w  #0x8F02,4(a1)           /* set INC to 2 */
         move.l  4(sp),d0
-        mulu.w  #TEXT_TILE_COLS,d0
+        mulu.w  #TEXT_TILE_STRIDE,d0
         addq.w  #TEXT_FIRST_TILE,d0
         lsl.l   #5,d0
         bsr     vram_write_cmd
         move.l  d0,4(a1)                /* write VRAM at the block's first tile */
         moveq   #0,d0
-        move.w  #TEXT_TILE_COLS*8-1,d1  /* the block's tiles are contiguous */
+        move.w  #TEXT_TILE_STRIDE*8-1,d1 /* all of the block's tiles, contiguous */
 2:
         move.l  d0,(a1)
         dbra    d1,2b
         rts
 
 /* void text_map_row(int row, int block); */
-/* Point screen text row `row` (0 - 23) at the tiles of `block`. */
+/* Point screen text row `row` (0 - textRows-1) at the tiles of `block`. */
         .global text_map_row
 text_map_row:
         lea     0xC00000,a1
         move.w  #0x8F02,4(a1)           /* set INC to 2 */
         move.l  4(sp),d0                /* row */
-        addq.w  #TEXT_FIRST_PLANE_ROW,d0
+        add.w   textFirstRow+2,d0
         lsl.w   #6,d0                   /* 64 cells per plane row */
-        addq.w  #TEXT_FIRST_PLANE_COL,d0
+        add.w   textFirstCol+2,d0
         add.w   d0,d0                   /* 2 bytes per cell */
         andi.l  #0xFFFF,d0
         addi.l  #0xE000,d0              /* plane B name table */
         bsr     vram_write_cmd
         move.l  d0,4(a1)
         move.l  8(sp),d1                /* block */
-        mulu.w  #TEXT_TILE_COLS,d1
+        mulu.w  #TEXT_TILE_STRIDE,d1
         addq.w  #TEXT_FIRST_TILE,d1     /* first tile of the block */
-        moveq   #TEXT_TILE_COLS-1,d0
+        move.w  textTileCols+2,d0
+        subq.w  #1,d0
 1:
         move.w  d1,(a1)
         addq.w  #1,d1
@@ -673,11 +680,11 @@ put_str:
         movea.l 44(sp),a0               /* string pointer */
         move.l  52(sp),d3               /* x (column) */
         move.l  56(sp),d2               /* y (row) */
-        cmpi.l  #TEXT_ROWS,d2
+        cmp.l   textRows,d2
         bcc.s   9f
         lea     text_charmap,a2
         move.w  d2,d0
-        mulu.w  #TEXT_COLS,d0
+        mulu.w  #TEXT_STRIDE,d0
         add.w   d3,d0
         adda.w  d0,a2
         move.w  d3,d4
@@ -703,13 +710,13 @@ put_chr:
         movem.l d2-d7/a2-a5,-(sp)       /* 40 bytes */
         move.l  52(sp),d3               /* x (column) */
         move.l  56(sp),d2               /* y (row) */
-        cmpi.l  #TEXT_ROWS,d2
+        cmp.l   textRows,d2
         bcc.s   9f
         cmp.l   textCols,d3
         bcc.s   9f
         lea     text_charmap,a2
         move.w  d2,d0
-        mulu.w  #TEXT_COLS,d0
+        mulu.w  #TEXT_STRIDE,d0
         add.w   d3,d0
         move.b  47(sp),0(a2,d0.w)       /* character (low byte of the first arg) */
         move.w  d3,d4
@@ -915,24 +922,43 @@ genesis_vblank_handler:
 gTicks:
         .long   0
 
-/* Current font, set by genesis_term.c: width in pixels (8 or 6) and columns */
+/* Current layout, set by genesis_term.c: font width in pixels (8 or 6),   */
+/* columns and rows, where the text starts on plane B (in tiles) and how    */
+/* many tiles wide each row is. Boot: 8x8 font, margin 16.                  */
         .global fontWidth
 fontWidth:
         .long   8
 
         .global textCols
 textCols:
-        .long   TEXT_COLS_8X8
+        .long   BOOT_COLS
+
+        .global textRows
+textRows:
+        .long   BOOT_ROWS
+
+        .global textFirstRow
+textFirstRow:
+        .long   BOOT_FIRST_PLANE
+
+        .global textFirstCol
+textFirstCol:
+        .long   BOOT_FIRST_PLANE
+
+        .global textTileCols
+textTileCols:
+        .long   BOOT_COLS
 
         .section .bss
         .align  2
 
-/* Characters of each block, [TEXT_ROWS][TEXT_COLS] (zeroed at boot = blank) */
+/* Characters of each block, [TEXT_MAX_ROWS][TEXT_STRIDE] (zeroed at boot = */
+/* blank; the columns past the last one in use stay blank)                  */
         .global text_charmap
 text_charmap:
-        .space  TEXT_COLS*TEXT_ROWS
+        .space  TEXT_STRIDE*TEXT_MAX_ROWS
 
 /* Attributes of each character, same layout: nonzero = reverse video */
         .global text_attrmap
 text_attrmap:
-        .space  TEXT_COLS*TEXT_ROWS
+        .space  TEXT_STRIDE*TEXT_MAX_ROWS
