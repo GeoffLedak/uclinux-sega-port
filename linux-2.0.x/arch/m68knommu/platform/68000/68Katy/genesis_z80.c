@@ -11,6 +11,11 @@
  * GENESIS_Z80_READ / WRITE (with interrupts off, so that the Z80 can't
  * be left stopped while some other process runs), and each piece of
  * the screen that graphics mode copies by DMA (genesis_z80_hold()).
+ *
+ * The Z80's RAM can't be reached while the Z80 is held in reset (the
+ * bus is only granted once it is out of reset; BlastEm allows it, real
+ * hardware doesn't), so a program is copied with the Z80 out of reset
+ * but stopped, and the Z80 is reset after that.
  */
 
 #include <linux/kernel.h>
@@ -61,7 +66,8 @@ void genesis_z80_release(void)
 		bus_give();
 }
 
-/* hold the Z80 in reset for a moment: that resets the YM2612 too */
+/* hold the Z80 in reset for a moment: that resets the YM2612 too (it
+ * needs 192 68000 cycles of it); it then starts again at 0 */
 static void reset_pulse(void)
 {
 	volatile int i;
@@ -98,6 +104,7 @@ static void z80_stop(void)
 	bus_take();
 	restore_flags(flags);
 	reset_pulse();
+	bus_take();			/* (granted again once out of reset) */
 
 	/* (in case the reset doesn't reach the YM2612 on every model) */
 	ym_write(0, 0x27, 0x00);		/* timers off, ch3 normal */
@@ -145,12 +152,11 @@ static int z80_start(unsigned long arg)
 	save_flags(flags);
 	cli();
 	genesis_z80_running = 0;
-	bus_take();
+	bus_take();			/* (it is never left in reset) */
 	restore_flags(flags);
-	Z80_RESET = 0;			/* held in reset while it is loaded */
 	for (i = 0; i < io.len; i++)	/* (no MMU: the program's memory is ours) */
 		Z80_RAM[i] = io.data[i];
-	Z80_RESET = 0x100;		/* (it waits for the bus) */
+	reset_pulse();			/* (it waits for the bus) */
 
 	save_flags(flags);
 	cli();
