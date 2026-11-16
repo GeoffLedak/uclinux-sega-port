@@ -256,7 +256,9 @@ void progman_start(void)
 {
 	int i;
 
-	pm = win_create(root, 12, 6, 296, 176, S_OVERLAPPED, "Program Manager", pm_proc, 0);
+	/* (296 x 176 on the whole screen) */
+	pm = win_create(root, 12, 6, SCR_W - 24, SCR_H - 48, S_OVERLAPPED,
+			"Program Manager", pm_proc, 0);
 	pm->menu = &pm_bar;
 	pm->icon = icon_progman;
 	pm->bg = col_workspace;

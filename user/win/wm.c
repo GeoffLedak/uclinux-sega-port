@@ -64,7 +64,7 @@ static Win *dead_list[128];
 static int depth;			/* nested dialogs */
 static int ndead;
 
-static int ptr_x = SCR_W / 2, ptr_y = SCR_H / 2, buttons;
+static int ptr_x = FB_W / 2, ptr_y = FB_H / 2, buttons;
 static int pointer_shape = -1, busy_count;
 
 static Win *last_click_win;
@@ -797,6 +797,21 @@ static void link_top(Win *w)
 	w->next = 0;
 }
 
+/* move r onto the screen, and if it is too big and can be sized, make
+ * it smaller */
+static void fit_screen(Rect *r, int sizable)
+{
+	int wd = r->r - r->l, ht = r->b - r->t, x = r->l, y = r->t;
+
+	if (sizable && wd > SCR_W) wd = SCR_W;
+	if (sizable && ht > SCR_H) ht = SCR_H;
+	if (x + wd > SCR_W) x = SCR_W - wd;
+	if (y + ht > SCR_H) y = SCR_H - ht;
+	if (x < 0) x = 0;
+	if (y < 0) y = 0;
+	set_rect(r, x, y, x + wd, y + ht);
+}
+
 Win *win_create(Win *parent, int x, int y, int wd, int ht, int style,
 		const char *title, Proc proc, void *data)
 {
@@ -806,6 +821,8 @@ Win *win_create(Win *parent, int x, int y, int wd, int ht, int style,
 		return 0;
 	w->parent = parent;
 	set_rect(&w->r, x, y, x + wd, y + ht);
+	if (parent == root)
+		fit_screen(&w->r, style & S_THICK);	/* (a small screen) */
 	w->nr = w->r;
 	w->ix = w->iy = -1;
 	w->style = style;
@@ -2634,6 +2651,57 @@ void arrange_icons(Win *p)
 		}
 }
 
+/*
+ * The screen changes size (Control Panel, Display): maximized windows
+ * fill the new one, the others keep their place on the TV if they can,
+ * or are moved onto the screen (and made smaller if they have to be and
+ * can be), and icons stay at the same distance from the bottom.
+ */
+static void shift_rect(Rect *r, int d)
+{
+	set_rect(r, r->l + d, r->t + d, r->r + d, r->b + d);
+}
+
+int screen_margin;
+
+void set_screen_margin(int m)
+{
+	int old_h = SCR_H, copy = wm_copy, b, d = screen_margin - m;
+	Win *w;
+	Rect r, c;
+
+	if (m == screen_margin)
+		return;
+	screen_margin = m;
+	hw_margin(m);
+	set_rect(&root->r, 0, 0, SCR_W, SCR_H);
+	wm_copy = 0;
+	for (w = root->child; w; w = w->next) {
+		shift_rect(&w->nr, d);
+		fit_screen(&w->nr, w->style & S_THICK);
+		if (w->state == W_MIN) {
+			if (w->ix < 0)
+				continue;
+			w->iy += SCR_H - old_h;
+			if (w->ix > SCR_W - ICON_W) w->ix = SCR_W - ICON_W;
+			if (w->iy > SCR_H - ICON_H) w->iy = SCR_H - ICON_H;
+			if (w->ix < 0) w->ix = 0;
+			if (w->iy < 0) w->iy = 0;
+		} else if (w->state == W_MAX) {
+			b = bsize(w);
+			win_client(root, &c);
+			win_move(w, -b, -b, c.r + 2 * b, c.b + 2 * b);
+		} else {
+			r = w->r;
+			shift_rect(&r, d);
+			fit_screen(&r, w->style & S_THICK);
+			win_move(w, r.l, r.t, r.r - r.l, r.b - r.t);
+		}
+	}
+	wm_copy = copy;
+	invalidate(root);
+}
+
 /* ---------------------------------------------------------------- */
 /* Start up                                                          */
 /* ---------------------------------------------------------------- */
@@ -2641,6 +2709,8 @@ void arrange_icons(Win *p)
 void wm_init(void)
 {
 	root = calloc(1, sizeof *root);
+	screen_margin = DEFAULT_MARGIN;
+	hw_margin(screen_margin);
 	set_rect(&root->r, 0, 0, SCR_W, SCR_H);
 	root->bg = -1;
 	root->proc = root_proc;

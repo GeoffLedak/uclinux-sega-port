@@ -7,10 +7,14 @@
  * Video memory in graphics mode:
  *   0x0000 - 0x8BFF  the screen: 1120 tiles, tile t at (t % 40, t / 40)
  *   0x8C00 - 0x8FFF  pointer shapes, 4 tiles each
+ *   0x9000           a blank tile, for the border (GENESIS_GFX_MARGIN)
  *   0xA800           sprite table: sprite 0 is the pointer
  *   0xC000           name table of plane A, and of plane B too, so both
  *                    planes show the screen and colour 0 (transparent)
  *                    shows the backdrop, palette entry 0
+ * With a margin of m pixels, the screen is the top left tiles of that
+ * (40 - m/4 by 28 - m/4 of them), put m/8 cells in from the top left
+ * of the name table, with the blank tile all round.
  * The text console's tiles (1 - 1125) and its name table at 0xE000 are
  * overwritten or left alone, and plane B's horizontal scroll (which the
  * console may use to centre its text) is zeroed; genesis_term_restore()
@@ -44,6 +48,7 @@
 #define VDP_CTRL32	(*(volatile unsigned long *)0xC00004)
 
 #define PTR_TILE	GENESIS_GFX_TILES	/* first pointer tile (1120) */
+#define BLANK_TILE	(PTR_TILE + 4 * GENESIS_GFX_POINTER_SHAPES)	/* 1152 */
 #define DIRTY_LONGS	((GENESIS_GFX_TILES + 31) / 32)
 #define QSIZE		16			/* button events (power of 2) */
 
@@ -64,6 +69,8 @@ static int speed = GENESIS_GFX_SPEED_NORMAL;	/* GENESIS_GFX_SPEED */
 static int mfx, mfy;				/* mouse: quarter pixels left over */
 static unsigned short buttons, lastpad;
 static volatile char moved;
+static int margin;				/* GENESIS_GFX_MARGIN */
+static short width = GENESIS_GFX_WIDTH, height = GENESIS_GFX_HEIGHT;
 
 /* the upload queue (see "Drawing") */
 static unsigned long qdirty[DIRTY_LONGS];	/* the tiles still to send */
@@ -101,8 +108,8 @@ static void draw_pointer(void)
 	unsigned short y = 0, x = 0, tile = 0;
 
 	if (shape >= 0) {
-		y = 128 + py - hot_y[shape];
-		x = 128 + px - hot_x[shape];
+		y = 128 + margin + py - hot_y[shape];
+		x = 128 + margin + px - hot_x[shape];
 		/* high priority, palette 3, shape's 4 tiles */
 		tile = 0x8000 | 0x6000 | (PTR_TILE + (shape << 2));
 	}
@@ -226,9 +233,9 @@ void genesis_gfx_vblank(void)
 		if (dir & 0x02) y += step;	/* down */
 		if (dir & 0x01) y -= step;	/* up */
 		if (x < 0) x = 0;
-		if (x > GENESIS_GFX_WIDTH - 1) x = GENESIS_GFX_WIDTH - 1;
+		if (x > width - 1) x = width - 1;
 		if (y < 0) y = 0;
-		if (y > GENESIS_GFX_HEIGHT - 1) y = GENESIS_GFX_HEIGHT - 1;
+		if (y > height - 1) y = height - 1;
 		if (x != px || y != py) {
 			px = x;
 			py = y;
@@ -248,9 +255,9 @@ void genesis_gfx_vblank(void)
 		mfx &= 3;
 		mfy &= 3;
 		if (x < 0) x = 0;
-		if (x > GENESIS_GFX_WIDTH - 1) x = GENESIS_GFX_WIDTH - 1;
+		if (x > width - 1) x = width - 1;
 		if (y < 0) y = 0;
-		if (y > GENESIS_GFX_HEIGHT - 1) y = GENESIS_GFX_HEIGHT - 1;
+		if (y > height - 1) y = height - 1;
 		if (x != px || y != py) {
 			px = x;
 			py = y;
@@ -285,10 +292,30 @@ void genesis_gfx_vblank(void)
 /* Entering and leaving                                              */
 /* ---------------------------------------------------------------- */
 
+/* the name table (see the top); interrupts off */
+static void write_names(void)
+{
+	int r, c, m = margin >> 3, t = 0;
+	int cols = GENESIS_GFX_COLS - (m << 1), rows = GENESIS_GFX_ROWS - (m << 1);
+
+	VDP_CTRL16 = 0x8F02;			/* INC = 2 */
+	VDP_CTRL32 = vram_write(0xC000);
+	for (r = 0; r < 32; r++) {
+		if (r < m || r >= m + rows) {
+			for (c = 0; c < 64; c++)
+				VDP_DATA16 = BLANK_TILE;
+			continue;
+		}
+		for (c = 0; c < 64; c++)
+			VDP_DATA16 = (c >= m && c < m + cols) ? t++ : BLANK_TILE;
+		t += GENESIS_GFX_COLS - cols;	/* the frame buffer's next row */
+	}
+}
+
 static int gfx_enter(void)
 {
 	unsigned long flags;
-	int i, r, c, t;
+	int i;
 
 	if (genesis_gfx_active)
 		return (owner == current) ? 0 : -EBUSY;
@@ -298,17 +325,16 @@ static int gfx_enter(void)
 	VDP_CTRL16 = 0x8134;			/* display off (faster access) */
 	VDP_CTRL16 = 0x8F02;			/* INC = 2 */
 
-	/* clear the screen tiles and the pointer tiles */
+	/* clear the screen tiles, the pointer tiles and the blank tile */
 	VDP_CTRL32 = vram_write(0);
-	for (i = (PTR_TILE + 4 * GENESIS_GFX_POINTER_SHAPES) * 8; i > 0; i--)
+	for (i = (BLANK_TILE + 1) * 8; i > 0; i--)
 		VDP_DATA32 = 0;
 
 	/* name table: the 40x28 tiles in order, palette 0 */
-	VDP_CTRL32 = vram_write(0xC000);
-	t = 0;
-	for (r = 0; r < 32; r++)
-		for (c = 0; c < 64; c++)
-			VDP_DATA16 = (r < GENESIS_GFX_ROWS && c < GENESIS_GFX_COLS) ? t++ : 0;
+	margin = 0;
+	width = GENESIS_GFX_WIDTH;
+	height = GENESIS_GFX_HEIGHT;
+	write_names();
 	VDP_CTRL16 = 0x8406;			/* plane B name table = 0xC000 too */
 	VDP_CTRL32 = vram_write(0xAC00);	/* no horizontal scroll */
 	VDP_DATA32 = 0;
@@ -604,6 +630,32 @@ static int gfx_wait_frames(struct tty_struct *tty, unsigned long n)
 	return 0;
 }
 
+static void gfx_margin(int m)
+{
+	unsigned long flags;
+	int d;
+
+	save_flags(flags);
+	cli();
+	d = margin - m;
+	margin = m;
+	width = GENESIS_GFX_WIDTH - (m << 1);
+	height = GENESIS_GFX_HEIGHT - (m << 1);
+	/* the same place on the TV */
+	px += d;
+	py += d;
+	if (px < 0) px = 0;
+	if (px > width - 1) px = width - 1;
+	if (py < 0) py = 0;
+	if (py > height - 1) py = height - 1;
+	mfx = mfy = 0;
+	moved = 1;
+	write_names();
+	draw_pointer();
+	restore_flags(flags);
+	wake_up_interruptible(&gfx_wait);
+}
+
 int genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
 {
 	if (cmd == GENESIS_GFX_ENTER)
@@ -629,8 +681,7 @@ int genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long ar
 		{
 			int x = (short)(arg >> 16), y = (short)arg;
 
-			if (x < 0 || x >= GENESIS_GFX_WIDTH ||
-			    y < 0 || y >= GENESIS_GFX_HEIGHT)
+			if (x < 0 || x >= width || y < 0 || y >= height)
 				return -EINVAL;
 			px = x;
 			py = y;
@@ -640,6 +691,11 @@ int genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long ar
 		if (arg < 1 || arg > 16)
 			return -EINVAL;
 		speed = arg;
+		return 0;
+	case GENESIS_GFX_MARGIN:
+		if (arg > 32 || (arg & 7))
+			return -EINVAL;
+		gfx_margin(arg);
 		return 0;
 	}
 	return -ENOIOCTLCMD;

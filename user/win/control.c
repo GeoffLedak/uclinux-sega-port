@@ -1,5 +1,6 @@
 /*
- * control.c -- Control Panel: colours, the mouse, the date and time
+ * control.c -- Control Panel: colours, the mouse, the screen's margin,
+ * the date and time
  */
 #include <stdlib.h>
 #include <string.h>
@@ -251,6 +252,64 @@ static void mouse_dialog(Win *owner)
 }
 
 /* ---------------------------------------------------------------- */
+/* Display                                                           */
+/* ---------------------------------------------------------------- */
+
+/*
+ * The margin: a black border round the screen, for TVs that hide the
+ * edges of the picture. Choosing one shows it straight away, so it can
+ * be tried; Cancel puts it back.
+ */
+#define ID_MARGIN	100		/* + 0 - 4: 0, 8, 16, 24, 32 pixels */
+
+static const char *const margin_names[5] = {
+	"&0 pixels (320 x 224)",
+	"&8 pixels (304 x 208)",
+	"&16 pixels (288 x 192)",
+	"&24 pixels (272 x 176)",
+	"&32 pixels (256 x 160)",
+};
+
+static int display_proc(Win *w, int msg, int a, int b)
+{
+	int *old = w->data;
+
+	switch (msg) {
+	case M_PAINT:
+		text(8, 4, "Screen Margin:", C_BLACK, F_BOLD);
+		text(8, 80, "A black border round the screen,", C_GRAY, F_NORMAL);
+		text(8, 89, "for TVs that hide its edges.", C_GRAY, F_NORMAL);
+		text(8, 98, "16 suits most CRT TVs.", C_GRAY, F_NORMAL);
+		return 1;
+	case M_COMMAND:
+		if (a >= ID_MARGIN && a < ID_MARGIN + 5) {
+			set_screen_margin((a - ID_MARGIN) * 8);
+			return 1;
+		}
+		if (a == ID_CANCEL)
+			set_screen_margin(*old);
+		break;
+	}
+	return def_proc(w, msg, a, b);
+}
+
+static void display_dialog(Win *owner)
+{
+	int old = screen_margin, i;
+	Win *dlg;
+
+	dlg = dialog_create(owner, 176, 130, "Display", display_proc, &old);
+	for (i = 0; i < 5; i++)
+		ctl_check(dlg, 12, 16 + i * 12, 150, 11, margin_names[i], ID_MARGIN + i, 1);
+	i = ID_MARGIN + (old >> 3);
+	check_set(ctl_find(dlg, i), 1);
+	ctl_button(dlg, 36, 112, 44, 14, "OK", ID_OK, 1);
+	ctl_button(dlg, 96, 112, 44, 14, "Cancel", ID_CANCEL, 0);
+	win_set_focus(ctl_find(dlg, i));
+	dialog_run(dlg);
+}
+
+/* ---------------------------------------------------------------- */
 /* Date and time                                                     */
 /* ---------------------------------------------------------------- */
 
@@ -345,6 +404,7 @@ typedef struct {
 static const Applet applets[] = {
 	{ "Color", icon_cp_color, color_dialog, "Changes the screen colors" },
 	{ "Mouse", icon_cp_mouse, mouse_dialog, "Pointer and double click speed" },
+	{ "Display", icon_cp_display, display_dialog, "A border for TVs that hide the edges" },
 	{ "Date/Time", icon_cp_date, date_dialog, "Sets the date and time" },
 };
 
@@ -357,7 +417,8 @@ enum { CM_EXIT = 1, CM_ABOUT, CM_APPLET = 10 };
 static MenuItem settings_items[] = {
 	{ "&Color...", CM_APPLET + 0, 0 },
 	{ "&Mouse...", CM_APPLET + 1, 0 },
-	{ "&Date/Time...", CM_APPLET + 2, 0 },
+	{ "D&isplay...", CM_APPLET + 2, 0 },
+	{ "&Date/Time...", CM_APPLET + 3, 0 },
 	{ 0, 0, 0 },
 	{ "E&xit", CM_EXIT, 0 },
 };
@@ -445,7 +506,7 @@ void app_control(void)
 	p = calloc(1, sizeof *p);
 	if (!p)
 		return;
-	w = win_create(root, 70, 50, COUNT(applets) * CELL_W + 10, CELL_H + 46,
+	w = win_create(root, 40, 50, COUNT(applets) * CELL_W + 10, CELL_H + 46,
 		       S_CAPTION | S_SYSMENU | S_MINBOX | S_BORDER, "Control Panel", panel_proc, p);
 	w->menu = &cp_bar;
 	w->icon = icon_control;
@@ -470,6 +531,11 @@ static const char readme[] =
 	"middle button double clicks, and Start\n"
 	"is the Task List. Control Panel, Mouse\n"
 	"sets the pointer speed.\n"
+	"\n"
+	"THE SCREEN\n"
+	"  It has a black border, so a TV doesn't\n"
+	"  hide its edges. Control Panel, Display\n"
+	"  makes the border bigger or smaller.\n"
 	"\n"
 	"THE KEYBOARD (port 2)\n"
 	"  Alt+Tab     switch to the next window\n"

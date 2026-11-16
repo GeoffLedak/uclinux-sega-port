@@ -11,7 +11,8 @@
  *	drag X Y	press, move to X, Y in steps, release
  *	key TEXT	type TEXT (\e = Esc, \r = Enter, \t = Tab, \xNN)
  *	wait N		let N frames pass
- *	shot FILE	save the screen as a PNG (2x size, with the pointer)
+ *	shot FILE	save the screen as a PNG (2x size, with the pointer and
+ *			the border; X, Y above are on the screen inside it)
  *	quit		stop
  */
 #include <stdio.h>
@@ -22,7 +23,7 @@
 
 static FILE *script;
 static unsigned long frames = 1000;
-static int px = SCR_W / 2, py = SCR_H / 2, pb, shape = -1;
+static int px = FB_W / 2, py = FB_H / 2, pb, shape = -1, margin;
 static unsigned short pal[64];
 static u32 ptiles[8][32];
 static int phx[8], phy[8];
@@ -94,16 +95,20 @@ static int level(int v)			/* Genesis 3-bit level -> 8 bits */
 
 static void shot(const char *name)
 {
-	int W = SCR_W * 2, H = SCR_H * 2, x, y, c, row = 1 + W * 3;
+	int W = FB_W * 2, H = FB_H * 2, x, y, c, row = 1 + W * 3;
 	unsigned char *raw = malloc(row * H), *z, hdr[13];
 	unsigned long n = row * H, zn, a = 1, b = 0, i, pos;
 	FILE *f;
 
-	for (y = 0; y < SCR_H; y++)
-		for (x = 0; x < SCR_W; x++) {
-			int sx = x - px + (shape >= 0 ? phx[shape] : 0);
-			int sy = y - py + (shape >= 0 ? phy[shape] : 0);
-			c = get_pixel(x, y);
+	/* the whole picture: the screen in the middle, the backdrop round it */
+	for (y = 0; y < FB_H; y++)
+		for (x = 0; x < FB_W; x++) {
+			int sx = x - margin - px + (shape >= 0 ? phx[shape] : 0);
+			int sy = y - margin - py + (shape >= 0 ? phy[shape] : 0);
+			if (x < margin || x >= margin + SCR_W || y < margin || y >= margin + SCR_H)
+				c = 0;
+			else
+				c = get_pixel(x - margin, y - margin);
 			c = pal[c];
 			if (shape >= 0 && sx >= 0 && sx < 16 && sy >= 0 && sy < 16) {
 				int t = (sx >> 3) * 2 + (sy >> 3);
@@ -330,6 +335,20 @@ void hw_warp(int x, int y)
 void hw_pointer_speed(int q)
 {
 	(void)q;			/* (the PC's own mouse) */
+}
+
+void hw_margin(int m)
+{
+	px += margin - m;
+	py += margin - m;
+	margin = m;
+	scr_w = FB_W - 2 * m;
+	scr_h = FB_H - 2 * m;
+	if (px < 0) px = 0;
+	if (px > SCR_W - 1) px = SCR_W - 1;
+	if (py < 0) py = 0;
+	if (py > SCR_H - 1) py = SCR_H - 1;
+	moved = 1;
 }
 
 void hw_beep(void)

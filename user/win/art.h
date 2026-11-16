@@ -20,6 +20,7 @@ extern const unsigned char icon_control[256];
 extern const unsigned char icon_cp_color[256];
 extern const unsigned char icon_cp_mouse[256];
 extern const unsigned char icon_cp_date[256];
+extern const unsigned char icon_cp_display[256];
 extern const unsigned char icon_terminal[256];
 extern const unsigned char icon_music[256];
 extern const unsigned char icon_mb_stop[256];

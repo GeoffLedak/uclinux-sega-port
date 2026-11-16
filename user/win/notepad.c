@@ -11,7 +11,7 @@
 
 #define MAX_TEXT	32000
 #define NP_LINE_H	9
-#define NSIG		(SCR_H / NP_LINE_H + 2)
+#define NSIG		(FB_H / NP_LINE_H + 2)
 #define TABW		8
 
 typedef struct {
@@ -231,7 +231,7 @@ static void update_scroll(Win *w, Note *n)
 	set_scroll(w, 0, n->left, n->maxw + 1 - cols, cols);
 }
 
-#define VIS_COLS	(SCR_W / FIXED_W + 2)
+#define VIS_COLS	(FB_W / FIXED_W + 2)
 
 /* columns that can be seen */
 static int vis_cols(Win *w)

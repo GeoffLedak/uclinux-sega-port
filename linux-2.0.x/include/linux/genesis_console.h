@@ -143,6 +143,14 @@ struct genesis_gfx_input {
 #define GENESIS_GFX_SPEED	0x4718
 #define GENESIS_GFX_SPEED_NORMAL	4
 
+/* a black border of arg pixels (0, 8, 16, 24 or 32) all round, for TVs
+ * that hide the edges of the picture. The screen is then the top left
+ * (320 - 2 * arg) x (224 - 2 * arg) pixels of the frame buffer (whole
+ * tiles: the rest of it is not shown), shown in the middle; the pointer
+ * stays on it and its x, y are counted from its top left. The pointer
+ * keeps its place on the TV. 0 when graphics mode starts. */
+#define GENESIS_GFX_MARGIN	0x4719
+
 #define GENESIS_GFX_MOUSE	0x8000	/* in pad: the input is a Mega Mouse */
 
 #ifdef __KERNEL__

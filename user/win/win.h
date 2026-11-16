@@ -1,7 +1,8 @@
 /*
  * win.h -- a small windowing system in the style of the early 1990s
  *
- * gfx.c    drawing into the frame buffer (320x224, 16 colours)
+ * gfx.c    drawing into the frame buffer (320x224, 16 colours; the screen
+ *          is all or, with a margin for TVs, the top left part of it)
  * hw.c     the Genesis graphics mode ioctls (host.c: a test harness)
  * wm.c     windows, frames, menus, scroll bars, the event loop
  * ctl.c    controls (buttons, edit fields, list boxes), message boxes,
@@ -15,10 +16,17 @@
 
 typedef unsigned int u32;		/* 32 bits on the 68000 and the host */
 
-#define SCR_W		320
-#define SCR_H		224
+/* the frame buffer: 320x224 pixels, 40x28 tiles */
+#define FB_W		320
+#define FB_H		224
 #define SCR_COLS	40
 #define SCR_ROWS	28
+/* the screen: the frame buffer's top left SCR_W x SCR_H pixels, shown in
+ * the middle with a black border of screen_margin pixels all round
+ * (Control Panel, Display); everything works in these coordinates */
+extern int scr_w, scr_h;		/* gfx.c */
+#define SCR_W		scr_w
+#define SCR_H		scr_h
 #define SCR_TILES	(SCR_COLS * SCR_ROWS)
 #define DIRTY_WORDS	((SCR_TILES + 31) / 32)
 
@@ -110,6 +118,7 @@ void hw_wait(int frames);
 int  hw_keys(char *buf, int n);		/* non-blocking keyboard read */
 void hw_warp(int x, int y);
 void hw_pointer_speed(int q);		/* quarter pixels per mouse step, 1 - 16 */
+void hw_margin(int m);			/* the border: sets SCR_W, SCR_H */
 void hw_beep(void);
 unsigned long hw_frames(void);		/* frames since start */
 
@@ -327,5 +336,8 @@ extern int dbl_time, swap_buttons;	/* mouse settings */
 extern int pointer_speed;		/* 0 - POINTER_SPEEDS - 1 */
 #define POINTER_SPEEDS	7
 void set_pointer_speed(int s);
+extern int screen_margin;		/* 0, 8, 16, 24 or 32 pixels */
+#define DEFAULT_MARGIN	16		/* most CRT TVs hide about that much */
+void set_screen_margin(int m);		/* moves the windows onto the new screen */
 
 #endif

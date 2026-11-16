@@ -149,6 +149,13 @@ void hw_pointer_speed(int q)
 	ioctl(con, GENESIS_GFX_SPEED, q);
 }
 
+void hw_margin(int m)
+{
+	ioctl(con, GENESIS_GFX_MARGIN, m);
+	scr_w = FB_W - 2 * m;
+	scr_h = FB_H - 2 * m;
+}
+
 void hw_beep(void)
 {
 	/* PSG tone channel 0, about 800 Hz, for a tenth of a second */

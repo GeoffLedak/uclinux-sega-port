@@ -15,10 +15,11 @@
 
 u32 fb[FB_LONGS];
 u32 dirty[DIRTY_WORDS];
-Rect clip = { 0, 0, SCR_W, SCR_H };
+int scr_w = FB_W, scr_h = FB_H;
+Rect clip = { 0, 0, FB_W, FB_H };
 int org_x, org_y;
 
-static unsigned short rowbase[SCR_H];	/* fb index of pixel row y, tile column 0 */
+static unsigned short rowbase[FB_H];	/* fb index of pixel row y, tile column 0 */
 static u32 expand[256];			/* 8 pixel bits -> 8 nibble masks */
 static u32 lomask[9];			/* pixels i - 7 of a long (lomask[8] = 0) */
 static int ready;
@@ -27,7 +28,7 @@ static void setup(void)
 {
 	int i, b;
 
-	for (i = 0; i < SCR_H; i++)
+	for (i = 0; i < FB_H; i++)
 		rowbase[i] = (i >> 3) * (SCR_COLS * 8) + (i & 7);
 	for (i = 0; i < 256; i++) {
 		u32 m = 0;
@@ -153,13 +154,14 @@ int in_rect(const Rect *r, int x, int y)
 
 void gfx_set(int ox, int oy, const Rect *c)
 {
-	static const Rect screen = { 0, 0, SCR_W, SCR_H };
+	Rect screen;
 
 	if (!ready)
 		setup();
 	org_x = ox;
 	org_y = oy;
 	clip = *c;
+	set_rect(&screen, 0, 0, SCR_W, SCR_H);
 	rect_and(&clip, &screen);
 }
 

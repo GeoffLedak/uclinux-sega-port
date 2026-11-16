@@ -270,6 +270,25 @@ ICONS['cp_date'] = """
 ................
 """
 
+ICONS['cp_display'] = """
+................
+.kkkkkkkkkkkkkk.
+.kssssssssssssk.
+.kskkkkkkkkkksk.
+.kskkkkkkkkkksk.
+.kskkbbbbbbkksk.
+.kskkbwwbbbkksk.
+.kskkbbbbbbkksk.
+.kskkkkkkkkkksk.
+.kskkkkkkkkkksk.
+.kssssssssssgsk.
+.kkkkkkkkkkkkkk.
+......kkkk......
+....kkkkkkkk....
+................
+................
+"""
+
 ICONS['terminal'] = """
 ................
 kkkkkkkkkkkkkkkk
