@@ -375,7 +375,11 @@ static int gfx_flush(unsigned long arg)
 		qdirty[w] |= f.dirty[w];
 		f.dirty[w] = 0;
 	}
+#if GENESIS_GFX_TILES & 31
+	/* (no bits past the last tile; when the tiles fill the last long
+	 * exactly, as 40 x 28 does, there are none to clear) */
 	qdirty[DIRTY_LONGS - 1] &= (1UL << (GENESIS_GFX_TILES & 31)) - 1;
+#endif
 	for (w = 0; w < DIRTY_LONGS; w++) {
 		bits = qdirty[w];
 		for (; bits; bits >>= 4)

@@ -52,7 +52,8 @@ static long time_op(Op op)
 static void all_dirty(void)
 {
 	memset(dirty, 0xFF, sizeof dirty);
-	dirty[DIRTY_WORDS - 1] &= (1u << (SCR_TILES & 31)) - 1;
+	if (SCR_TILES & 31)
+		dirty[DIRTY_WORDS - 1] &= (1u << (SCR_TILES & 31)) - 1;
 }
 
 /* 10000 x 18 cycles = 180000 cycles: 23.5 ms on a 7.67 MHz 68000 */
