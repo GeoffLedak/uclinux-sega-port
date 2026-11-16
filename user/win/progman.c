@@ -36,6 +36,7 @@ static const Item acc_items[] = {
 };
 static const Item game_items[] = {
 	{ "Puzzle", icon_puzzle, app_puzzle },
+	{ "Mines", icon_mines, app_mines },
 };
 
 static Group groups[3] = {

@@ -551,7 +551,7 @@ static const char readme[] =
 	"                .vgz) to play it.\n"
 	"  Notepad       write text files.\n"
 	"  Paint         draw 16 color pictures.\n"
-	"  Calculator, Clock and Puzzle.\n"
+	"  Calculator, Clock, Puzzle and Mines.\n"
 	"\n"
 	"FILES\n"
 	"  Most of the disk is in ROM and cannot be\n"

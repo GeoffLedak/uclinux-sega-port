@@ -1,5 +1,5 @@
 EXEC = win
-OBJS = main.o gfx.o gfx68k.o wm.o ctl.o hw.o art.o progman.o bench.o notepad.o calc.o clock.o puzzle.o \
+OBJS = main.o gfx.o gfx68k.o wm.o ctl.o hw.o art.o progman.o bench.o notepad.o calc.o clock.o puzzle.o mines.o \
 	paint.o filemgr.o control.o
 
 CFLAGS += -I.

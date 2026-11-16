@@ -325,6 +325,7 @@ void app_clock(void);
 void app_filemgr(const char *dir);
 void app_paint(void);
 void app_puzzle(void);
+void app_mines(void);
 void app_control(void);
 void app_readme(void);
 int  run_program(const char *path);	/* a Linux program in the background */
