@@ -52,10 +52,14 @@ struct genesis_memtest {
  * leftmost pixel in the top bits) and copies changed tiles to the screen
  * with GENESIS_GFX_FLUSH. Colour 0 is the backdrop.
  *
- * The mouse pointer is a sprite moved by the kernel every frame with the
- * d-pad of the joypad in port 1: A is the left button, B the right
- * button, and C a quick double click of the left button. The pointer's
- * colours are palette 3 (CRAM entries 48-63; 0 is transparent).
+ * The mouse pointer is a sprite moved by the kernel every frame, by
+ * whatever is in port 1 (looked for every frame, so it can be swapped):
+ *  - a 3 or 6 button joypad: the d-pad moves it, A is the left button,
+ *    B the right button, and C a quick double click of the left button;
+ *  - a Mega Mouse: left and right are the buttons, middle the double
+ *    click, and its Start button is reported like the joypad's Start.
+ * The pointer's colours are palette 3 (CRAM entries 48-63; 0 is
+ * transparent).
  *
  * The console's text is kept but not shown; output to it waits until
  * graphics mode ends (GENESIS_GFX_LEAVE, or when the process exits).
@@ -103,7 +107,10 @@ struct genesis_gfx_pointer {
 struct genesis_gfx_input {
 	short x, y;
 	unsigned short buttons;		/* GFX_LEFT | GFX_RIGHT */
-	unsigned short pad;		/* raw joypad: 0 0 0 1 M X Y Z S A C B R L D U */
+	unsigned short pad;		/* raw joypad: 0 0 0 1 M X Y Z S A C B R L D U;
+					 * with a mouse, GENESIS_GFX_MOUSE and the
+					 * buttons as the joypad's: S start, A left,
+					 * C middle, B right */
 	unsigned long time;		/* frame number */
 };
 #define GENESIS_GFX_LEFT	1
@@ -115,6 +122,14 @@ struct genesis_gfx_input {
 
 /* move the pointer: arg = (x << 16) | y */
 #define GENESIS_GFX_WARP	0x4717
+
+/* pointer speed, arg 1 - 16: quarter pixels per step of the mouse (4 is
+ * one pixel), and a quarter of the d-pad's top speed in quarter pixels
+ * a frame (4: 4 pixels a frame). 4 when graphics mode starts. */
+#define GENESIS_GFX_SPEED	0x4718
+#define GENESIS_GFX_SPEED_NORMAL	4
+
+#define GENESIS_GFX_MOUSE	0x8000	/* in pad: the input is a Mega Mouse */
 
 #ifdef __KERNEL__
 struct tty_struct;

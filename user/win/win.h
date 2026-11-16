@@ -109,6 +109,7 @@ int  hw_input(struct hw_input *e);	/* 1 = a button event */
 void hw_wait(int frames);
 int  hw_keys(char *buf, int n);		/* non-blocking keyboard read */
 void hw_warp(int x, int y);
+void hw_pointer_speed(int q);		/* quarter pixels per mouse step, 1 - 16 */
 void hw_beep(void);
 unsigned long hw_frames(void);		/* frames since start */
 
@@ -323,5 +324,8 @@ void app_notepad_text(const char *title, const char *text);
 void clip_set(const char *s, int n);	/* the clipboard */
 const char *clip_get(int *n);
 extern int dbl_time, swap_buttons;	/* mouse settings */
+extern int pointer_speed;		/* 0 - POINTER_SPEEDS - 1 */
+#define POINTER_SPEEDS	7
+void set_pointer_speed(int s);
 
 #endif

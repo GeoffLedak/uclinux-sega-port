@@ -143,13 +143,38 @@ static void color_dialog(Win *owner)
 #define ID_MEDIUM	101
 #define ID_FAST		102
 #define ID_SWAP		103
+#define ID_PSPEED	104
 
 static const int speeds[3] = { 45, 30, 18 };	/* frames */
 
 typedef struct {
 	int lit;			/* the test box */
-	int old_dbl;
+	int old_dbl, old_speed;
 } MouseDlg;
+
+/*
+ * The pointer speed: a scroll bar on its own, Slow to Fast. It takes
+ * effect straight away, so it can be tried; Cancel puts it back.
+ */
+static int pspeed_proc(Win *w, int msg, int a, int b)
+{
+	int pos = w->hpos;
+
+	switch (msg) {
+	case M_HSCROLL:
+		switch (a) {
+		case SB_LINEUP: pos--; break;
+		case SB_LINEDOWN: pos++; break;
+		case SB_PAGEUP: pos -= 2; break;
+		case SB_PAGEDOWN: pos += 2; break;
+		case SB_THUMB: pos = b; break;
+		}
+		set_pointer_speed(pos);
+		set_scroll(w, 0, pointer_speed, POINTER_SPEEDS - 1, 1);
+		return 1;
+	}
+	return def_proc(w, msg, a, b);
+}
 
 static int mouse_proc(Win *w, int msg, int a, int b)
 {
@@ -158,17 +183,21 @@ static int mouse_proc(Win *w, int msg, int a, int b)
 
 	switch (msg) {
 	case M_PAINT:
-		text(8, 4, "Double Click Speed:", C_BLACK, F_BOLD);
-		frame(130, 16, 176, 46, C_BLACK);
-		fill(131, 17, 175, 45, d->lit ? C_NAVY : C_WHITE);
-		text(140, 26, "TEST", d->lit ? C_WHITE : C_BLACK, F_BOLD);
-		text(8, 76, "(The C button double clicks too.)", C_GRAY, F_NORMAL);
+		text(8, 4, "Pointer Speed:", C_BLACK, F_BOLD);
+		text(8, 18, "Slow", C_BLACK, F_NORMAL);
+		text(166, 18, "Fast", C_BLACK, F_NORMAL);
+		text(8, 36, "Double Click Speed:", C_BLACK, F_BOLD);
+		frame(130, 48, 176, 78, C_BLACK);
+		fill(131, 49, 175, 77, d->lit ? C_NAVY : C_WHITE);
+		text(140, 58, "TEST", d->lit ? C_WHITE : C_BLACK, F_BOLD);
+		text(8, 106, "(C, or the middle button of a", C_GRAY, F_NORMAL);
+		text(8, 115, "mouse, double clicks too.)", C_GRAY, F_NORMAL);
 		return 1;
 	case M_LDBL:
 		/* double clicking the test box, at the speed being chosen */
-		if (a >= 130 && a < 176 && b >= 16 && b < 46) {
+		if (a >= 130 && a < 176 && b >= 48 && b < 78) {
 			d->lit = !d->lit;
-			invalidate_client(w, 130, 16, 176, 46);
+			invalidate_client(w, 130, 48, 176, 78);
 		}
 		return 1;
 	case M_COMMAND:
@@ -176,8 +205,10 @@ static int mouse_proc(Win *w, int msg, int a, int b)
 			dbl_time = speeds[a - ID_SLOW];
 			return 1;
 		}
-		if (a == ID_CANCEL)
+		if (a == ID_CANCEL) {
 			dbl_time = d->old_dbl;
+			set_pointer_speed(d->old_speed);
+		}
 		if (a == ID_OK) {
 			swap_buttons = check_get(ctl_find(w, ID_SWAP));
 			for (i = 0; i < 3; i++)
@@ -195,20 +226,26 @@ static void mouse_dialog(Win *owner)
 	Win *dlg;
 	int i, best = 1;
 
+	Win *sb;
+
 	d.lit = 0;
 	d.old_dbl = dbl_time;
+	d.old_speed = pointer_speed;
 	for (i = 0; i < 3; i++)
 		if (abs(speeds[i] - dbl_time) < abs(speeds[best] - dbl_time))
 			best = i;
-	dlg = dialog_create(owner, 184, 110, "Mouse", mouse_proc, &d);
-	ctl_check(dlg, 12, 16, 100, 11, "&Slow", ID_SLOW, 1);
-	ctl_check(dlg, 12, 28, 100, 11, "&Medium", ID_MEDIUM, 1);
-	ctl_check(dlg, 12, 40, 100, 11, "&Fast", ID_FAST, 1);
+	dlg = dialog_create(owner, 196, 146, "Mouse", mouse_proc, &d);
+	sb = win_create(dlg, 34, 17, 126, 10, S_CHILD | S_BORDER | S_HSCROLL, 0, pspeed_proc, 0);
+	sb->id = ID_PSPEED;
+	set_scroll(sb, 0, pointer_speed, POINTER_SPEEDS - 1, 1);
+	ctl_check(dlg, 12, 48, 100, 11, "&Slow", ID_SLOW, 1);
+	ctl_check(dlg, 12, 60, 100, 11, "&Medium", ID_MEDIUM, 1);
+	ctl_check(dlg, 12, 72, 100, 11, "&Fast", ID_FAST, 1);
 	check_set(ctl_find(dlg, ID_SLOW + best), 1);
-	ctl_check(dlg, 8, 58, 170, 11, "S&wap A and B buttons", ID_SWAP, 0);
+	ctl_check(dlg, 8, 88, 180, 11, "S&wap left and right buttons", ID_SWAP, 0);
 	check_set(ctl_find(dlg, ID_SWAP), swap_buttons);
-	ctl_button(dlg, 40, 92, 44, 14, "OK", ID_OK, 1);
-	ctl_button(dlg, 92, 92, 44, 14, "Cancel", ID_CANCEL, 0);
+	ctl_button(dlg, 46, 128, 44, 14, "OK", ID_OK, 1);
+	ctl_button(dlg, 104, 128, 44, 14, "Cancel", ID_CANCEL, 0);
 	win_set_focus(ctl_find(dlg, ID_SLOW + best));
 	dialog_run(dlg);
 }
@@ -307,7 +344,7 @@ typedef struct {
 
 static const Applet applets[] = {
 	{ "Color", icon_cp_color, color_dialog, "Changes the screen colors" },
-	{ "Mouse", icon_cp_mouse, mouse_dialog, "Double click speed, buttons" },
+	{ "Mouse", icon_cp_mouse, mouse_dialog, "Pointer and double click speed" },
 	{ "Date/Time", icon_cp_date, date_dialog, "Sets the date and time" },
 };
 
@@ -429,6 +466,10 @@ static const char readme[] =
 	"  C       double click\n"
 	"  Start   the Task List (so does double\n"
 	"          clicking the desktop)\n"
+	"A Mega Mouse works in port 1 too: its\n"
+	"middle button double clicks, and Start\n"
+	"is the Task List. Control Panel, Mouse\n"
+	"sets the pointer speed.\n"
 	"\n"
 	"THE KEYBOARD (port 2)\n"
 	"  Alt+Tab     switch to the next window\n"

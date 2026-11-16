@@ -272,6 +272,7 @@ static int genesis_ioctl(struct tty_struct *tty, struct file *file,
 	case GENESIS_GFX_INPUT:
 	case GENESIS_GFX_WAIT:
 	case GENESIS_GFX_WARP:
+	case GENESIS_GFX_SPEED:
 		return genesis_gfx_ioctl(tty, cmd, arg);
 	}
 	return -ENOIOCTLCMD;

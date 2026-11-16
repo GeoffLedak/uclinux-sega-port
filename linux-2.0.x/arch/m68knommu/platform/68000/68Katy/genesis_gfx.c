@@ -21,6 +21,9 @@
  * the vblank interrupt itself sends queued pieces first thing, while the
  * VDP is fastest.
  *
+ * Port 1 is read every vertical blank: as a joypad first (with TR an
+ * input, as a pad needs), and if no pad answers, as a Mega Mouse.
+ *
  * Note: no 32-bit multiply or divide here (the kernel has no libgcc).
  */
 
@@ -56,6 +59,8 @@ static int shape = -1;
 static unsigned char hot_x[GENESIS_GFX_POINTER_SHAPES];
 static unsigned char hot_y[GENESIS_GFX_POINTER_SHAPES];
 static int hold, frac;				/* d-pad acceleration */
+static int speed = GENESIS_GFX_SPEED_NORMAL;	/* GENESIS_GFX_SPEED */
+static int mfx, mfy;				/* mouse: quarter pixels left over */
 static unsigned short buttons, lastpad;
 static volatile char moved;
 
@@ -109,19 +114,92 @@ static void draw_pointer(void)
 }
 
 /* ---------------------------------------------------------------- */
+/* The Mega Mouse                                                     */
+/* ---------------------------------------------------------------- */
+
+/*
+ * The console drives TH and TR; the mouse answers on D0-D3 and TL.
+ * TH low starts a read and the mouse puts out its ID, 0xB. Then for
+ * each next nibble the console flips TR and waits for TL to follow:
+ * 0xF, 0xF, the signs and overflows (bit 0 X, 1 Y, 2 X over, 3 Y over),
+ * the buttons (bit 0 left, 1 right, 2 middle, 3 start), then X and Y
+ * (how far it moved since the last read, high nibble first; Y is
+ * positive going up). TH high ends it.
+ */
+#define PORT1_DATA	(*(volatile unsigned char *)0xA10003)
+#define PORT1_CTRL	(*(volatile unsigned char *)0xA10009)
+#define MOUSE_WAIT	300		/* tries of TL (about 1.5 ms) */
+
+/* wait for TL to be tl; 0 if it doesn't come */
+static int mouse_wait(int tl)
+{
+	int i;
+
+	for (i = 0; i < MOUSE_WAIT; i++)
+		if (((PORT1_DATA >> 4) & 1) == tl)
+			return 1;
+	return 0;
+}
+
+/* read a Mega Mouse in port 1: its buttons, in the joypad's places, with
+ * GENESIS_GFX_MOUSE; or 0 if there is no mouse */
+static int read_mouse(int *dx, int *dy)
+{
+	unsigned char n[9];
+	int i, x, y, pad = 0;
+
+	PORT1_DATA = 0x60;			/* TH and TR high... */
+	PORT1_CTRL = 0x60;			/* ...and both outputs */
+	for (i = 0; i < 8; i++)			/* (a moment for it) */
+		(void)PORT1_DATA;
+	PORT1_DATA = 0x20;			/* TH low: start */
+	if (!mouse_wait(1))
+		goto done;
+	n[0] = PORT1_DATA & 0x0F;
+	if (n[0] != 0x0B)
+		goto done;			/* not a mouse */
+	for (i = 1; i < 9; i++) {
+		int tr = !(i & 1);
+		PORT1_DATA = tr ? 0x20 : 0x00;
+		if (!mouse_wait(tr))
+			goto done;
+		n[i] = PORT1_DATA & 0x0F;
+	}
+	x = (n[5] << 4) | n[6];
+	y = (n[7] << 4) | n[8];
+	if (n[3] & 1) x -= 256;
+	if (n[3] & 2) y -= 256;
+	if (n[3] & 4) x = (n[3] & 1) ? -255 : 255;
+	if (n[3] & 8) y = (n[3] & 2) ? -255 : 255;
+	*dx = x;
+	*dy = -y;				/* down the screen */
+	pad = GENESIS_GFX_MOUSE |
+	      ((n[4] & 1) ? 0x40 : 0) |		/* left: A */
+	      ((n[4] & 2) ? 0x10 : 0) |		/* right: B */
+	      ((n[4] & 4) ? 0x20 : 0) |		/* middle: C */
+	      ((n[4] & 8) ? 0x80 : 0);		/* start */
+done:
+	PORT1_DATA = 0x60;			/* TH high: the end */
+	PORT1_CTRL = 0x40;			/* back as the joypad needs */
+	PORT1_DATA = 0x40;
+	return pad;
+}
+
+/* ---------------------------------------------------------------- */
 /* Every frame, from the vblank interrupt (genesis_term_vblank)      */
 /* ---------------------------------------------------------------- */
 
 void genesis_gfx_vblank(void)
 {
-	int pad, dir, step = 0, x, y;
+	int pad, dir, step = 0, x, y, dx = 0, dy = 0, top;
 	unsigned short b;
 
 	frames++;
 	pad = get_pad(0);
 	if ((pad & 0xF000) == 0xF000)
-		pad = 0;			/* no joypad */
-	pad &= 0x1FFF;
+		pad = read_mouse(&dx, &dy);	/* no joypad: a mouse? */
+	else
+		pad &= 0x1FFF;
 
 	/* d-pad: one pixel straight away (for small adjustments), then
 	 * after a moment a steady speed that builds up to 4 pixels a frame */
@@ -132,9 +210,10 @@ void genesis_gfx_vblank(void)
 		if (hold == 1)
 			step = 1;
 		else if (hold > 10) {
+			top = speed << 2;
 			x = 4 + ((hold - 10) >> 1);	/* quarter pixels */
-			if (x > 16)
-				x = 16;
+			if (x > top)
+				x = top;
 			frac += x;
 			step = frac >> 2;
 			frac &= 3;
@@ -157,6 +236,25 @@ void genesis_gfx_vblank(void)
 	} else {
 		hold = 0;
 		frac = 0;
+	}
+
+	/* the mouse: speed quarter pixels for each step it reports */
+	if (dx || dy) {
+		mfx += (short)dx * (short)speed;	/* (16-bit multiplies) */
+		mfy += (short)dy * (short)speed;
+		x = px + (mfx >> 2);
+		y = py + (mfy >> 2);
+		mfx &= 3;
+		mfy &= 3;
+		if (x < 0) x = 0;
+		if (x > GENESIS_GFX_WIDTH - 1) x = GENESIS_GFX_WIDTH - 1;
+		if (y < 0) y = 0;
+		if (y > GENESIS_GFX_HEIGHT - 1) y = GENESIS_GFX_HEIGHT - 1;
+		if (x != px || y != py) {
+			px = x;
+			py = y;
+			moved = 1;
+		}
 	}
 
 	/* A = left button, B = right button */
@@ -221,6 +319,8 @@ static int gfx_enter(void)
 	py = GENESIS_GFX_HEIGHT / 2;
 	shape = -1;
 	hold = frac = 0;
+	mfx = mfy = 0;
+	speed = GENESIS_GFX_SPEED_NORMAL;
 	buttons = lastpad = 0;
 	qhead = qtail = 0;
 	moved = 0;
@@ -533,6 +633,11 @@ int genesis_gfx_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long ar
 			py = y;
 			return 0;
 		}
+	case GENESIS_GFX_SPEED:
+		if (arg < 1 || arg > 16)
+			return -EINVAL;
+		speed = arg;
+		return 0;
 	}
 	return -ENOIOCTLCMD;
 }

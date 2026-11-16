@@ -41,6 +41,21 @@ enum {
 Win *root, *active;
 int quit;
 int dbl_time = 30;			/* frames between the clicks of a double click */
+int pointer_speed = 3;			/* the middle one: one pixel per mouse step */
+
+/* quarter pixels for each step of the mouse (and a quarter of the d-pad's
+ * top speed, in quarter pixels a frame) */
+static const unsigned char speed_q[POINTER_SPEEDS] = { 1, 2, 3, 4, 6, 8, 12 };
+
+void set_pointer_speed(int s)
+{
+	if (s < 0)
+		s = 0;
+	if (s > POINTER_SPEEDS - 1)
+		s = POINTER_SPEEDS - 1;
+	pointer_speed = s;
+	hw_pointer_speed(speed_q[s]);
+}
 int swap_buttons;			/* A = right, B = left */
 static Win *modal;			/* the dialog that has to be answered */
 static Win *capture;			/* gets the mouse until the button is up */

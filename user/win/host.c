@@ -327,6 +327,11 @@ void hw_warp(int x, int y)
 	py = y;
 }
 
+void hw_pointer_speed(int q)
+{
+	(void)q;			/* (the PC's own mouse) */
+}
+
 void hw_beep(void)
 {
 	fprintf(stderr, "(beep)\n");

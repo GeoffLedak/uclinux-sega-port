@@ -144,6 +144,11 @@ void hw_warp(int x, int y)
 	ioctl(con, GENESIS_GFX_WARP, (x << 16) | y);
 }
 
+void hw_pointer_speed(int q)
+{
+	ioctl(con, GENESIS_GFX_SPEED, q);
+}
+
 void hw_beep(void)
 {
 	/* PSG tone channel 0, about 800 Hz, for a tenth of a second */
